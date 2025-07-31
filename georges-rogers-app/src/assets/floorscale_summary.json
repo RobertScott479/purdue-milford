@@ -1,0 +1,10 @@
+{
+  "summary": [{ "count": 51, "net_lb": 82878, "scale": 14, "tare_lb": 4437 }],
+  "db_filename": "/tmp/db/tyson_dallas_tx_floor.db",
+  "start_timestamp": "04/09/2025 11:08:19",
+  "stop_timestamp": "04/10/2025 11:08:19",
+  "errorCode": 0,
+  "errorMessage": "Ok",
+  "query_time": 0.00082528963685035706,
+  "rows": 1
+}

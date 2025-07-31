@@ -1,0 +1,16 @@
+<mat-toolbar class="app-toolbar">
+  <div class="toolbar-container">
+    <button [disabled]="sideNavService.sideNavMenuDisabled" mat-icon-button aria-label="Toggle navigation menu" (click)="toggleSideNav()">
+      <mat-icon svgIcon="menu"></mat-icon>
+    </button>
+    <div class="spacer"></div>
+    <h1 class="app-title">
+      {{ homeService.serverMap.appConfig.appTitle }}
+      @if(this.homeService.serverMap.serverMapMode === 'demo'){
+      <span class="demo-indicator">(Demo Mode)</span>
+      }
+    </h1>
+
+    <div class="spacer"></div>
+  </div>
+</mat-toolbar>

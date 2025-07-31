@@ -1,0 +1,73 @@
+.sidenav-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+mat-expansion-panel {
+  margin-bottom: 5px;
+  border-radius: 0px;
+  background-color: var(--mat-sys-surface-container) !important;
+}
+
+mat-card-header {
+  font-size: medium;
+  padding: 12px;
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+}
+
+.sidenav-header {
+  height: 70px;
+}
+
+.logo-link {
+  display: block;
+}
+
+.logo-image {
+  height: 65px;
+  width: auto;
+}
+
+.nav-section-header {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 12px;
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+}
+
+.nav-section-item:hover {
+  background-color: var(--mat-sidenav-hover-bg, rgba(0, 0, 0, 0.04));
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 56px;
+  width: 100%;
+  text-decoration: none;
+
+  border-radius: 0;
+  margin-right: 8px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.nav-item mat-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+mat-list {
+  background-color: var(--mat-sys-surface-container) !important;
+  height: 100%;
+  margin: 0px;
+  padding: 1px;
+}

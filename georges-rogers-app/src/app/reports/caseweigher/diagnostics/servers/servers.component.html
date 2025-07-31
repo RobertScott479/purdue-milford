@@ -1,0 +1,42 @@
+
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Server Status</mat-card-title>   
+    
+  </mat-card-header>
+  <mat-card-content>
+    <app-alert [alert]="homeService.alert"></app-alert>
+
+   
+
+    <table mat-table [dataSource]="homeService.serverMap.dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="server">
+        <th mat-header-cell *matHeaderCellDef width="20%">Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.server }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef width="20%">URL</th>
+        <td mat-cell *matCellDef="let d">{{ d.url }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="updated">
+        <th mat-header-cell *matHeaderCellDef width="20%">Updated</th>
+        <td mat-cell *matCellDef="let d">{{ d.updated | date : "M/d/yy h:mm:ss a" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef width="40%">Status</th>
+        <td mat-cell *matCellDef="let d">{{ d.status }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="serverMapFields"></tr>
+      <tr mat-row *matRowDef="let row; columns: serverMapFields"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="9999">No data available</td>
+      </tr>
+    </table>
+
+  </mat-card-content>
+</mat-card>
+

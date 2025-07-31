@@ -1,0 +1,129 @@
+{
+  "serverMap": [
+    {
+      "server": "Checkweigher #1 Demo",
+      "url": "",
+      "group": "caseweigher"
+    },
+    {
+      "server": "Checkweigher #2 Demo",
+      "url": "",
+      "group": "caseweigher"
+    },
+    {
+      "server": "Floor Scale  #1 Demo",
+      "url": "",
+      "group": "condemned"
+    },
+    {
+      "server": "Trimline #1 Demo",
+      "url": "",
+      "group": "trimline"
+    },
+    {
+      "server": "Trimline #2 Demo",
+      "url": "",
+      "group": "trimline"
+    },
+    {
+      "server": "Front Half Distribution #1 Demo",
+      "url": "",
+      "group": "fronts"
+    },
+    {
+      "server": "Fillet Sizer #1 Demo",
+      "url": "",
+      "group": "sizer,xyz,fillets"
+    },
+    {
+      "server": "Tenders #1 Demo",
+      "url": "",
+      "group": "tenders"
+    },
+    {
+      "server": "Wings #1 Demo",
+      "url": "",
+      "group": "wings"
+    },
+    {
+      "server": "Shells #1 Demo",
+      "url": "",
+      "group": "floorscale,shells"
+    },
+    {
+      "server": "Skin #1 Demo",
+      "url": "",
+      "group": "floorscale,skins"
+    }
+  ],
+  "serverMapDemo": [
+    {
+      "server": "Checkweigher #1 Demo",
+      "url": "",
+      "group": "caseweigher"
+    },
+    {
+      "server": "Checkweigher #2 Demo",
+      "url": "",
+      "group": "caseweigher"
+    },
+    {
+      "server": "Floor Scale  #1 Demo",
+      "url": "",
+      "group": "condemned"
+    },
+    {
+      "server": "Trimline #1 Demo",
+      "url": "",
+      "group": "trimline"
+    },
+    {
+      "server": "Trimline #2 Demo",
+      "url": "",
+      "group": "trimline"
+    },
+    {
+      "server": "Front Half Distribution #1 Demo",
+      "url": "",
+      "group": "fronts"
+    },
+    {
+      "server": "Fillet Sizer #1 Demo",
+      "url": "",
+      "group": "sizer,xyz,fillets"
+    },
+    {
+      "server": "Tenders #1 Demo",
+      "url": "",
+      "group": "tenders"
+    },
+    {
+      "server": "Wings #1 Demo",
+      "url": "",
+      "group": "wings"
+    },
+    {
+      "server": "Shells #1 Demo",
+      "url": "",
+      "group": "floorscale,shells"
+    },
+    {
+      "server": "Skin #1 Demo",
+      "url": "",
+      "group": "floorscale,skins"
+    }
+  ],
+  "shifts": [
+    {
+      "name": "Day",
+      "start": { "hour": 7, "minute": 30, "offset": 0 },
+      "stop": { "hour": 15, "minute": 30, "offset": 0 }
+    },
+    {
+      "name": "Night",
+      "start": { "hour": 15, "minute": 30, "offset": 0 },
+      "stop": { "hour": 0, "minute": 0, "offset": 1 }
+    }
+  ],
+  "appTitle": "Georges Rogers"
+}

@@ -1,0 +1,11 @@
+<mat-sidenav-container>
+  <mat-sidenav class="sidenav" position="start" #sidenav [mode]="sideNavService.mode" [opened]="sideNavService.sideNavOpened()">
+    <app-sidenav></app-sidenav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <app-topbar></app-topbar>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

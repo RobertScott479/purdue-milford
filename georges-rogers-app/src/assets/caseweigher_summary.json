@@ -1,0 +1,27 @@
+{
+  "summary": [
+    {
+      "close": 1707,
+      "count": 6968,
+      "error": 749,
+      "max": 11.0,
+      "mean": 10.4912270378875,
+      "min": 10.0,
+      "missed": 0,
+      "over": 3538,
+      "scale": 1,
+      "std_dev": 0.29256959950458217,
+      "total": 73102.8700000001,
+      "under": 3760,
+      "updated": 1658431582,
+      "runtime": 14400
+    }
+  ],
+  "db_filename": "/tmp/db/tyson_dallas_tx_floor.db",
+  "start_timestamp": "04/09/2025 11:08:19",
+  "stop_timestamp": "04/10/2025 11:08:19",
+  "errorCode": 0,
+  "errorMessage": "Ok",
+  "query_time": 0.00082528963685035706,
+  "rows": 1
+}

@@ -1,0 +1,31 @@
+Georges Rogers
+
+based on tyson-North-Richland-Hills build 8
+
+
+
+Build 1, rss, 6/18/2025
+
+Modified TNRH build 8
+added light/dark theme
+changed the build name and app title
+added status indicators like tyson-clarksville.
+added matsortdirective to allow sort directions to be save/recalled to maintain previous sort state.
+
+
+
+Reports:
+-	Summary
+-	Details 
+-   Rate
+
+JSON:
+data.json (used when timeframe selection is "Live")
+servermap.json (using fresno format incase they want to define shift start/stop times to query database)
+
+API:
+-	api/db/summary?start=1729137600&stop=1729166400
+-	api/db/details?start=1729137600&stop=1729166400
+-   api/db/rate?start=1747137600&stop=1747184400
+
+

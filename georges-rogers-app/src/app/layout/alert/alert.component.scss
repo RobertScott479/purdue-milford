@@ -1,0 +1,107 @@
+.alert-wrapper {
+  height: 56px; /* Set this to match your alert height */
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.alert-hidden {
+  display: none;
+}
+
+.alert-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-10px);
+  visibility: hidden;
+}
+
+.alert-visible .alert-container {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* Rest of your existing CSS */
+.alert-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.alert-icon {
+  margin-right: 16px;
+}
+
+.alert-message {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.alert-close {
+  margin-left: 16px;
+}
+
+/* Material Design 3 color tokens */
+.alert-error {
+  background-color: #fdeeee;
+  color: #b3261e;
+
+  .alert-icon {
+    color: #b3261e;
+  }
+}
+
+.alert-info {
+  background-color: #e7f0ff;
+  color: #0a59c0;
+
+  .alert-icon {
+    color: #0a59c0;
+  }
+}
+
+.alert-success {
+  background-color: #ddf4e4;
+  color: #146c2e;
+
+  .alert-icon {
+    color: #146c2e;
+  }
+}
+
+.alert-warning {
+  background-color: #fff7e8;
+  color: #874800;
+
+  .alert-icon {
+    color: #874800;
+  }
+}
+
+.alert-dark {
+  background-color: #e0e0e0;
+  color: #1d1b20;
+
+  .alert-icon {
+    color: #1d1b20;
+  }
+}
+
+.alert-light {
+  background-color: #f7f2fa;
+  color: #49454f;
+
+  .alert-icon {
+    color: #49454f;
+  }
+}

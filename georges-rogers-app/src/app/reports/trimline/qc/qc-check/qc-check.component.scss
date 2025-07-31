@@ -1,0 +1,115 @@
+.content-container {
+  height: calc(100vh - (70px + 70px ));
+  overflow: auto;
+  box-shadow: 0px 0px 15px 1px lightgray;
+}
+
+
+mat-card{
+  height: 100%;   
+}
+
+
+mat-card-content{
+  height: 100%;
+}
+
+
+
+.stations-column {
+  flex: 1;
+}
+
+.row-space-between{
+  display: flex;
+  justify-content: space-between;  
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.row-space-around {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+
+
+
+.check-detail-block {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  margin: 5px;
+  background-color:var(--mat-sys-surface-container) !important;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.detail-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--mat-sys-on-surface);
+  font-size: 14px;
+}
+
+.detail-value {
+  font-size: 18px;
+  color: var(--mat-sys-on-surface);
+}
+
+
+
+.action-button {
+  display: inline-block;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  width: 400px;
+  height: 250px;
+  margin: 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.disabled, &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.pass-button {
+  @extend .action-button;
+  background-color: #4CAF50;
+  color: white;
+  
+  &:hover:not(.disabled):not(:disabled) {
+    background-color: #45a049;
+  }
+}
+
+.fail-button {
+  @extend .action-button;
+  background-color: #f44336;
+  color: white;
+  
+  &:hover:not(.disabled):not(:disabled) {
+    background-color: #d32f2f;
+  }
+}
+
+button {
+  margin: 15px
+}

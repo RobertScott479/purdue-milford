@@ -1,0 +1,42 @@
+
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Diagnostics</mat-card-title>   
+    
+  </mat-card-header>
+  <mat-card-content>    
+
+    
+    <form [formGroup]="floorscaleService.frmGroup">
+    
+      <div class="mat-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Server</mat-label>
+          <mat-select #lineSelect class="" formControlName="serverIndex"  (selectionChange)="floorscaleService.onFrmGroupChange()">
+            <mat-option [value]="-1">All</mat-option>
+            @for(s of floorscaleService.servers; track s.index; let idx = $index  ){
+            <mat-option [value]="s.index">{{ s.server }}</mat-option>
+            }
+           
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+
+
+    <app-floorscale-comm-counters></app-floorscale-comm-counters>
+
+    <app-floorscale-scale-info></app-floorscale-scale-info>
+    <!-- <app-scale-info></app-scale-info>
+    <app-scale-health></app-scale-health>
+    <app-server-info></app-server-info> -->
+    
+
+    <!-- <ng-container *ngIf="homeService.appConfig.hasModbus">
+      <app-modbus-tcp-map></app-modbus-tcp-map>
+      <app-modbus></app-modbus>
+    </ng-container> -->
+
+    <!-- <app-servers></app-servers> -->
+  </mat-card-content>
+</mat-card>

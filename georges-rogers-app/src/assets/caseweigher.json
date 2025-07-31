@@ -1,0 +1,983 @@
+{
+  "comm": [
+    {
+      "crc": 0,
+      "delay": 0.2730873740001698,
+      "in": 300,
+      "latency": 0.01764015200024005,
+      "out": 300,
+      "reply": 1658431583,
+      "rescan": 0,
+      "rx": 45197,
+      "scale": 1,
+      "timeout": 0,
+      "tx": 9623
+    }
+  ],
+  "last": [
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16723,
+      "status": "Over",
+      "timestamp": 1658431582,
+      "weight": 11.39900016784668
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16722,
+      "status": "Ok",
+      "timestamp": 1658431581,
+      "weight": 10.190999984741211
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16721,
+      "status": "Under",
+      "timestamp": 1658431580,
+      "weight": 9.932999610900879
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16720,
+      "status": "Ok",
+      "timestamp": 1658431579,
+      "weight": 10.845999717712402
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16719,
+      "status": "Under",
+      "timestamp": 1658431578,
+      "weight": 9.668000221252441
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16718,
+      "status": "Over",
+      "timestamp": 1658431577,
+      "weight": 11.241999626159668
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16717,
+      "status": "Error",
+      "timestamp": 1658431576,
+      "weight": -11.059000015258789
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16716,
+      "status": "Ok",
+      "timestamp": 1658431575,
+      "weight": 10.668999671936035
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16715,
+      "status": "Over",
+      "timestamp": 1658431574,
+      "weight": 11.21399974822998
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16714,
+      "status": "Under",
+      "timestamp": 1658431573,
+      "weight": 9.868000030517578
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16713,
+      "status": "Over",
+      "timestamp": 1658431572,
+      "weight": 11.303000450134277
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16712,
+      "status": "Over",
+      "timestamp": 1658431571,
+      "weight": 11.467000007629395
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16711,
+      "status": "Ok",
+      "timestamp": 1658431570,
+      "weight": 10.092000007629395
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16710,
+      "status": "Ok",
+      "timestamp": 1658431569,
+      "weight": 10.824000358581543
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16709,
+      "status": "Too close",
+      "timestamp": 1658431568,
+      "weight": -11.260000228881836
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16708,
+      "status": "Over",
+      "timestamp": 1658431567,
+      "weight": 11.201000213623047
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16707,
+      "status": "Over",
+      "timestamp": 1658431566,
+      "weight": 11.305000305175781
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16706,
+      "status": "Error",
+      "timestamp": 1658431565,
+      "weight": -11.373000144958496
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16705,
+      "status": "Ok",
+      "timestamp": 1658431564,
+      "weight": 10.694999694824219
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16704,
+      "status": "Over",
+      "timestamp": 1658431563,
+      "weight": 11.307000160217285
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16703,
+      "status": "Too close",
+      "timestamp": 1658431562,
+      "weight": -10.86400032043457
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16702,
+      "status": "Over",
+      "timestamp": 1658431561,
+      "weight": 11.104999542236328
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16701,
+      "status": "Error",
+      "timestamp": 1658431560,
+      "weight": -9.722999572753906
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16700,
+      "status": "Under",
+      "timestamp": 1658431559,
+      "weight": 9.506999969482422
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16699,
+      "status": "Error",
+      "timestamp": 1658431558,
+      "weight": -11.222999572753906
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16698,
+      "status": "Ok",
+      "timestamp": 1658431557,
+      "weight": 10.128999710083008
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16697,
+      "status": "Ok",
+      "timestamp": 1658431556,
+      "weight": 10.324999809265137
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16696,
+      "status": "Ok",
+      "timestamp": 1658431555,
+      "weight": 10.989999771118164
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16695,
+      "status": "Too close",
+      "timestamp": 1658431554,
+      "weight": 10.98799991607666
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16694,
+      "status": "Too close",
+      "timestamp": 1658431553,
+      "weight": 9.946000099182129
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16693,
+      "status": "Under",
+      "timestamp": 1658431552,
+      "weight": 9.798999786376953
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16692,
+      "status": "Ok",
+      "timestamp": 1658431551,
+      "weight": 10.53499984741211
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16691,
+      "status": "Over",
+      "timestamp": 1658431550,
+      "weight": 11.217000007629395
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16690,
+      "status": "Over",
+      "timestamp": 1658431549,
+      "weight": 11.348999977111816
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16689,
+      "status": "Under",
+      "timestamp": 1658431548,
+      "weight": 9.543000221252441
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16688,
+      "status": "Over",
+      "timestamp": 1658431547,
+      "weight": 11.439000129699707
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16687,
+      "status": "Under",
+      "timestamp": 1658431546,
+      "weight": 9.512999534606934
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16686,
+      "status": "Under",
+      "timestamp": 1658431545,
+      "weight": 9.942000389099121
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16685,
+      "status": "Under",
+      "timestamp": 1658431544,
+      "weight": 9.829000473022461
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16684,
+      "status": "Under",
+      "timestamp": 1658431543,
+      "weight": 9.777999877929688
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16683,
+      "status": "Under",
+      "timestamp": 1658431542,
+      "weight": 9.9350004196167
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16682,
+      "status": "Under",
+      "timestamp": 1658431541,
+      "weight": 9.954999923706055
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16681,
+      "status": "Under",
+      "timestamp": 1658431540,
+      "weight": 9.517999649047852
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16680,
+      "status": "Over",
+      "timestamp": 1658431539,
+      "weight": 11.430999755859375
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16679,
+      "status": "Under",
+      "timestamp": 1658431538,
+      "weight": 9.62600040435791
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16678,
+      "status": "Ok",
+      "timestamp": 1658431537,
+      "weight": 10.788999557495117
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16677,
+      "status": "Ok",
+      "timestamp": 1658431536,
+      "weight": 10.770999908447266
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16676,
+      "status": "Under",
+      "timestamp": 1658431535,
+      "weight": 9.951000213623047
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16675,
+      "status": "Over",
+      "timestamp": 1658431534,
+      "weight": 11.234999656677246
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16674,
+      "status": "Under",
+      "timestamp": 1658431533,
+      "weight": 9.711999893188477
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16673,
+      "status": "Under",
+      "timestamp": 1658431532,
+      "weight": 9.97599983215332
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16672,
+      "status": "Ok",
+      "timestamp": 1658431531,
+      "weight": 10.8100004196167
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16671,
+      "status": "Under",
+      "timestamp": 1658431530,
+      "weight": 9.585000038146973
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16670,
+      "status": "Too close",
+      "timestamp": 1658431529,
+      "weight": 10.256999969482422
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16669,
+      "status": "Ok",
+      "timestamp": 1658431528,
+      "weight": 10.364999771118164
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16668,
+      "status": "Under",
+      "timestamp": 1658431527,
+      "weight": 9.993000030517578
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16667,
+      "status": "Under",
+      "timestamp": 1658431526,
+      "weight": 9.833999633789063
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16666,
+      "status": "Ok",
+      "timestamp": 1658431525,
+      "weight": 10.795999526977539
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16665,
+      "status": "Under",
+      "timestamp": 1658431524,
+      "weight": 9.998000144958496
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16664,
+      "status": "Ok",
+      "timestamp": 1658431523,
+      "weight": 10.774999618530273
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16663,
+      "status": "Under",
+      "timestamp": 1658431522,
+      "weight": 9.545999526977539
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16662,
+      "status": "Under",
+      "timestamp": 1658431521,
+      "weight": 9.906000137329102
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16661,
+      "status": "Under",
+      "timestamp": 1658431520,
+      "weight": 9.642000198364258
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16660,
+      "status": "Over",
+      "timestamp": 1658431519,
+      "weight": 11.093999862670898
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16659,
+      "status": "Ok",
+      "timestamp": 1658431518,
+      "weight": 10.5600004196167
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16658,
+      "status": "Under",
+      "timestamp": 1658431517,
+      "weight": 9.812000274658203
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16657,
+      "status": "Ok",
+      "timestamp": 1658431516,
+      "weight": 10.5649995803833
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16656,
+      "status": "Over",
+      "timestamp": 1658431515,
+      "weight": 11.369999885559082
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16655,
+      "status": "Error",
+      "timestamp": 1658431514,
+      "weight": -9.531999588012695
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16654,
+      "status": "Ok",
+      "timestamp": 1658431513,
+      "weight": 10.170000076293945
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16653,
+      "status": "Over",
+      "timestamp": 1658431512,
+      "weight": 11.197999954223633
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16652,
+      "status": "Over",
+      "timestamp": 1658431511,
+      "weight": 11.335000038146973
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16651,
+      "status": "Ok",
+      "timestamp": 1658431510,
+      "weight": 10.571000099182129
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16650,
+      "status": "Ok",
+      "timestamp": 1658431509,
+      "weight": 10.720999717712402
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16649,
+      "status": "Under",
+      "timestamp": 1658431508,
+      "weight": 9.630999565124512
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16648,
+      "status": "Ok",
+      "timestamp": 1658431507,
+      "weight": 10.187999725341797
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16647,
+      "status": "Too close",
+      "timestamp": 1658431506,
+      "weight": 10.685999870300293
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16646,
+      "status": "Under",
+      "timestamp": 1658431505,
+      "weight": 9.878999710083008
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16645,
+      "status": "Ok",
+      "timestamp": 1658431504,
+      "weight": 10.439000129699707
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16644,
+      "status": "Error",
+      "timestamp": 1658431503,
+      "weight": -11.387999534606934
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16643,
+      "status": "Ok",
+      "timestamp": 1658431502,
+      "weight": 10.251999855041504
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16642,
+      "status": "Ok",
+      "timestamp": 1658431501,
+      "weight": 10.039999961853027
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16641,
+      "status": "Over",
+      "timestamp": 1658431500,
+      "weight": 11.241000175476074
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16640,
+      "status": "Under",
+      "timestamp": 1658431499,
+      "weight": 9.822999954223633
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16639,
+      "status": "Under",
+      "timestamp": 1658431498,
+      "weight": 9.965999603271484
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16638,
+      "status": "Ok",
+      "timestamp": 1658431497,
+      "weight": 10.854000091552734
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16637,
+      "status": "Over",
+      "timestamp": 1658431496,
+      "weight": 11.20199966430664
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16636,
+      "status": "Over",
+      "timestamp": 1658431495,
+      "weight": 11.100000381469727
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16635,
+      "status": "Over",
+      "timestamp": 1658431494,
+      "weight": 11.411999702453613
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16634,
+      "status": "Ok",
+      "timestamp": 1658431493,
+      "weight": 10.649999618530273
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16633,
+      "status": "Under",
+      "timestamp": 1658431492,
+      "weight": 9.947999954223633
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16632,
+      "status": "Ok",
+      "timestamp": 1658431491,
+      "weight": 10.692000389099121
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16631,
+      "status": "Under",
+      "timestamp": 1658431490,
+      "weight": 9.97700023651123
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16630,
+      "status": "Ok",
+      "timestamp": 1658431489,
+      "weight": 10.300000190734863
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16629,
+      "status": "Ok",
+      "timestamp": 1658431488,
+      "weight": 10.805999755859375
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16628,
+      "status": "Too close",
+      "timestamp": 1658431487,
+      "weight": 11.166999816894531
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16627,
+      "status": "Over",
+      "timestamp": 1658431486,
+      "weight": 11.050999641418457
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16626,
+      "status": "Ok",
+      "timestamp": 1658431485,
+      "weight": 10.194999694824219
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16625,
+      "status": "Under",
+      "timestamp": 1658431484,
+      "weight": 9.743000030517578
+    },
+    {
+      "high_limit": 11.0,
+      "low_limit": 10.0,
+      "scale": 1,
+      "serial": 16624,
+      "status": "Ok",
+      "timestamp": 1658431483,
+      "weight": 10.760000228881836
+    }
+  ],
+  "modbus": [
+    {
+      "clients": 0,
+      "connections": 0,
+      "disconnections": 0,
+      "missed_trays": 0,
+      "reads": 0,
+      "scale": 1,
+      "short_reads": 0,
+      "writes": 0
+    }
+  ],
+  "scale": [
+    {
+      "app": "v1.1",
+      "boot": "v0.0",
+      "build_time": 1658318201,
+      "cleared": 18000,
+      "cycle": "On",
+      "firmware": "caseweigher_tray",
+      "health_coin_cell_ok": true,
+      "health_nvram_defaulted": false,
+      "health_nvram_reloaded": false,
+      "health_rtc_running": true,
+      "health_rtc_sane": true,
+      "scale": 1,
+      "scale_uptime": 10425.180541992188,
+      "silicon_serial_number": "ID: 78 00 00 16 A4 1D 16 01"
+    }
+  ],
+  "server": [
+    {
+      "app": "web_35, Build: 1.1 (07/19/2022, 13:12:08)",
+      "bios_info": "American Megatrends Inc., vFLT2.NBR.0.46.01.00 (09/26/2018)",
+      "cpu_temp": 40.0,
+      "db_dupe": 972,
+      "db_error": 0,
+      "db_fail": 0,
+      "db_insert": 163,
+      "dev": "/dev/ttyUSB0",
+      "poll": 1658431583,
+      "restarts": 0,
+      "serial_number": "1190926-01078",
+      "uptime": 112
+    }
+  ],
+  "stats": [
+    {
+      "close": 1707,
+      "count": 6968,
+      "error": 749,
+      "max": 11.0,
+      "mean": 10.4912270378875,
+      "min": 10.0,
+      "missed": 0,
+      "over": 3538,
+      "scale": 1,
+      "std_dev": 0.29256959950458217,
+      "total": 73102.8700000001,
+      "under": 3760,
+      "updated": 1658431582,
+      "runtime": 14400
+    }
+  ]
+}

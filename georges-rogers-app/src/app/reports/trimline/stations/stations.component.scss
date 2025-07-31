@@ -1,0 +1,77 @@
+.content-container {
+  height: calc(100vh - (70px + 70px ));
+  overflow: auto;
+  box-shadow: 0px 0px 15px 1px lightgray;
+}
+
+
+
+mat-card {
+  height: 100%;  
+  border: 0px;
+}
+
+mat-card-content {
+  height: 100%;  
+ 
+}
+
+.stations-container {
+    display: flex;
+    gap: 16px;
+    margin: 5px 0;
+  }
+  
+  .stations-column {
+    flex: 1;
+  
+    mat-list {
+      padding: 0;
+    }
+  
+    mat-list-item {
+      height: auto;
+      margin-bottom: 5px;
+      
+      background-color:var(--mat-sys-surface-container) !important;
+      color: var(--mat-sys-on-surface);
+      
+      &::ng-deep {
+        .mdc-list-item__content {
+          padding: 12px 0;
+        }
+      }
+    }
+  }
+
+   .mat-mdc-slide-toggle {
+    transform: scale(1);    
+  }
+
+  
+  mat-card-footer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;  // Allows items to wrap to next line
+  }
+  
+  
+
+
+.mat-col {
+  flex: 1;  
+  margin-top: 10px;
+  margin-left: 5px; 
+  margin-right: 5px; 
+  text-align: center;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+button {
+  margin-bottom: 15px
+}
+
+  

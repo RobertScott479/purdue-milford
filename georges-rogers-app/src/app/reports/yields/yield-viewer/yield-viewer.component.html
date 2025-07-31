@@ -1,0 +1,132 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ reportname }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="yieldService.frmGroup">
+      <div class="row-space-between">
+        <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Server</mat-label>
+            <mat-select class="" formControlName="serverIndex" (selectionChange)="yieldService.onFrmGroupChange('server')">
+              @if(yieldService.allowAllServersSelection()) {
+              <mat-option [value]="-1">All</mat-option>
+              }
+              <!-- <mat-option *ngFor="let s of yieldService.servers" [value]="s.index">{{ s.server }}</mat-option> -->
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="yieldService.showTimeFrame()" class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Timeframe</mat-label>
+            <mat-select formControlName="timeframe" (selectionChange)="yieldService.onFrmGroupChange('timeframe')">
+              <!-- <mat-option [value]="TimeFrameEnum.Live">{{ TimeFrameEnum.Live }}</mat-option> -->
+              <mat-option [value]="TimeFrameEnum.DateShift">{{ TimeFrameEnum.DateShift }}</mat-option>
+              <mat-option [value]="TimeFrameEnum.Custom">{{ TimeFrameEnum.Custom }}</mat-option>
+              <!-- <mat-option *ngFor="let tf of homeService.timeFrameOptions; let idx = index" [value]="tf">{{ tf }}</mat-option> -->
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="td-container">
+        <div
+          *ngIf="yieldService.showTimeFrame() && (timeFrame === TimeFrameEnum.Archive || timeFrame === TimeFrameEnum.DateShift)"
+          class="row-space-between"
+        >
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Date</mat-label>
+              <input
+                #dateInput
+                (click)="picker.open()"
+                matInput
+                [matDatepicker]="picker"
+                formControlName="date"
+                (dateChange)="dateChange($event.value)"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Shift</mat-label>
+              <mat-select #shiftSelect id="shiftSelection" formControlName="shift" (selectionChange)="yieldService.onFrmGroupChange('timeframe')">
+                <mat-option *ngFor="let shift of shifts; let idx = index" [value]="idx + 1"
+                  >{{ shift.name }} {{ homeService.getShiftTime(dateInput.value, shift) }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="yieldService.showTimeFrame() && timeFrame === TimeFrameEnum.Custom" class="row-space-between">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Date</mat-label>
+              <input (click)="picker.open()" matInput [matDatepicker]="picker" formControlName="date" (dateChange)="dateChange($event.value)" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>From time</mat-label>
+              <input matInput formControlName="fromTime" (change)="yieldService.onFrmGroupChange('timeframe')" />
+              <mat-error> Invalid time</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>To time</mat-label>
+              <input matInput formControlName="toTime" (change)="yieldService.onFrmGroupChange('timeframe')" />
+              <mat-error> Invalid time</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <app-mat-progress-spinner [visible]="yieldService.showSpinner()"></app-mat-progress-spinner>
+    <div *ngIf="homeService.serverMap.servermapLoaded()" class="table-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <div class="footer-container">
+      <div class="button-group">
+        <button [disabled]="yieldService.showSpinner() || yieldService.disableRefresh()" mat-raised-button (click)="onRefresh()">
+          <mat-icon svgIcon="refresh"></mat-icon>Refresh
+        </button>
+        <button
+          [disabled]="yieldService.showSpinner() || yieldService.disableExport()"
+          *ngIf="yieldService.showExportButton()"
+          mat-raised-button
+          (click)="onExport()"
+        >
+          <mat-icon svgIcon="download"></mat-icon>
+          Export
+        </button>
+      </div>
+
+      <div class="status-indicators-container">
+        <div *ngFor="let server of this.yieldService.servers" class="status-indicator">
+          <div
+            class="indicator-dot"
+            [ngClass]="{
+              'status-online': server.enabled && server.state === 'online',
+              'status-offline': server.enabled && server.state === 'offline',
+              'status-unknown': server.enabled && server.state === 'unknown',
+              pulse: server.enabled && server.state === 'online',
+              'status-disabled': !server.enabled
+            }"
+          ></div>
+          <span class="status-name">{{ server.server }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-footer>
+</mat-card>

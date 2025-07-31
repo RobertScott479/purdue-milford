@@ -1,0 +1,19 @@
+#OpenApi/swagger install:
+dotnet add tyson-clarksville-api.csproj package Swashbuckle.AspNetCore -v 5.5.0
+
+
+#sqlClient
+https://www.nuget.org/packages/Microsoft.Data.SqlClient/
+
+dotnet add package Microsoft.Data.SqlClient --version 1.1.3
+
+
+eval $(ssh-agent -s)
+ ssh-add "c:/users/Robert Scott/.ssh/robert_rsa"
+ git push -u origin master
+
+
+Build 1-5, rss, 10/30/2024
+tyson-clarksville backend
+
+

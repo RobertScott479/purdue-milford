@@ -1,0 +1,54 @@
+<div class="content-container">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>QC Check</mat-card-title>  
+          
+        </mat-card-header>
+        <mat-card-content>
+    <app-alert [alert]="alert"></app-alert>
+ 
+    <app-mat-progress-spinner [visible]="showSpinner" mode="indeterminate"></app-mat-progress-spinner>
+    
+    <div class="row-space-between">
+      <div class="check-detail-block">
+        <div class="detail-name">Station</div>
+        <div class="detail-value">{{checkInfo().station || '--'}}</div>
+      </div>
+      
+      <div class="check-detail-block">
+        <div class="detail-name">Weight</div>
+        <div class="detail-value">{{checkInfo().weight || '--'}}</div>
+      </div>
+      
+      <div class="check-detail-block">
+        <div class="detail-name">Count</div>
+        <div class="detail-value">{{checkInfo().index || '--'}}</div>
+      </div>
+      
+      <div class="check-detail-block">
+        <div class="detail-name">Duration</div>
+        <div class="detail-value">{{checkInfo().duration || '--'}}</div>
+      </div>
+      
+      <!-- <div class="check-detail-block">
+        <div class="detail-name">Time</div>
+        <div class="detail-value">{{ checkInfo().timestamp?(checkInfo().timestamp | date : "M/dd/yyyy h:mm a") :'--' }}</div>
+      </div> -->
+    </div>
+    
+    
+      <div class="row-space-around">
+      <div class="pass-button" [class.disabled]="showSpinner || !checkInProgress()" (click)="submitCheck('pass')">Pass</div>  
+    
+      <div class="fail-button" [class.disabled]="showSpinner|| !checkInProgress()" (click)="submitCheck('fail')">Fail</div>  
+    </div>
+    
+    
+    
+        </mat-card-content>
+        <mat-card-footer>
+            <button [disabled]="showSpinner" mat-raised-button  (click)="logout()">Logout</button>
+            
+        </mat-card-footer>
+    </mat-card>
+    </div>

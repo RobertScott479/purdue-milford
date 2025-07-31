@@ -1,0 +1,58 @@
+mat-form-field {
+  width: 100%;
+}
+table {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 400px;
+  background-color: var(--mat-sys-surface) !important;
+}
+
+mat-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 400px;
+  background-color: var(--mat-sys-surface) !important;
+}
+
+th,
+mat-header-cell {
+  background-color: var(--mat-sys-surface-container) !important;
+  color: var(--mat-sys-on-surface) !important;
+  font-size: medium;
+  font-weight: bold;
+  border-top: 2.5px solid var(--mat-sys-surface) !important;
+  border-left: 2.5px solid var(--mat-sys-surface) !important;
+  border-right: 2.5px solid var(--mat-sys-surface) !important;
+  border-bottom: 2.5px solid var(--mat-sys-surface) !important;
+  padding-left: 5px;
+}
+
+td,
+mat-cell {
+  background-color: var(--mat-sys-surface-container) !important;
+  color: var(--mat-sys-on-surface) !important;
+  font-size: medium;
+  font-weight: normal;
+  border-top: 2.5px solid var(--mat-sys-surface) !important;
+  border-left: 2.5px solid var(--mat-sys-surface) !important;
+  border-right: 2.5px solid var(--mat-sys-surface) !important;
+  border-bottom: 2.5px solid var(--mat-sys-surface) !important;
+  padding-left: 5px;
+}
+
+tr,
+mat-row {
+  height: 40px !important;
+  // border-left: 5px solid #223f92 !important;
+}
+
+mat-paginator {
+  background-color: var(--mat-sys-surface-container) !important;
+  color: var(--mat-sys-on-surface) !important;
+}
+
+.example-margin {
+  margin: 0 12px;
+}

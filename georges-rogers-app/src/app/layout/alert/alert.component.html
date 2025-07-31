@@ -1,0 +1,38 @@
+<div class="alert-wrapper" [class.alert-hidden]="alertHidden && alert.message() === ''" [class.alert-visible]="alert.message() !== ''">
+  <div
+    class="alert-container"
+    [ngClass]="{
+      'alert-error': alert.type() === 'error',
+      'alert-info': alert.type() === 'info',
+      'alert-success': alert.type() === 'success',
+      'alert-warning': alert.type() === 'warning',
+      'alert-dark': alert.type() === 'dark',
+      'alert-light': alert.type() === 'light'
+    }"
+  >
+    <div class="alert-content">
+      <mat-icon
+        class="alert-icon"
+        [svgIcon]="
+          alert.type() === 'error'
+            ? 'error'
+            : alert.type() === 'info'
+            ? 'info'
+            : alert.type() === 'success'
+            ? 'check_circle'
+            : alert.type() === 'warning'
+            ? 'warning'
+            : 'info'
+        "
+      >
+      </mat-icon>
+      <span class="alert-message">{{ alert.message() }}</span>
+    </div>
+
+    <!-- @if (alert.type === 'error') {
+    <button mat-icon-button class="alert-close" (click)="onErrorAck()" aria-label="Close">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+    } -->
+  </div>
+</div>

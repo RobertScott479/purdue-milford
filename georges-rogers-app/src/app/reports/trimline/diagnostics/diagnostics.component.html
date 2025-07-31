@@ -1,0 +1,438 @@
+
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Diagnostics</mat-card-title>   
+    
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="trimlineService.frmGroup">
+    
+      <div class="mat-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Server</mat-label>
+          <mat-select #lineSelect class="" formControlName="serverIndex"  (selectionChange)="onFrmGroupChange()">
+          
+            @for(s of trimlineService.trimline.servers; track s.index; let idx = $index  ){
+            <mat-option [value]="s.index">{{ s.server }}</mat-option>
+            }
+           
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+
+    
+    <!-- <div  *ngIf="homeService.alert.message !==''"  >
+      <app-alert [alert]="homeService.alert"></app-alert>      
+    </div>
+
+    <div   *ngIf="homeService.alert.message === ''">
+      {{homeService.lastRefreshed}}
+    </div> -->
+
+
+
+  <mat-expansion-panel expanded="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Comm Counters
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceComm" class="mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+
+        <ng-container matColumnDef="serverName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+          <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="scale">
+          <th mat-header-cell *matHeaderCellDef>Scale</th>
+          <td mat-cell *matCellDef="let d"> {{d.scale}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="tx">
+          <th mat-header-cell *matHeaderCellDef>Tx</th>
+          <td mat-cell *matCellDef="let d"> {{d.tx.toFixed(0)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rx">
+          <th mat-header-cell *matHeaderCellDef>Rx</th>
+          <td mat-cell *matCellDef="let d"> {{d.rx.toFixed(0)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="out">
+          <th mat-header-cell *matHeaderCellDef>Out</th>
+          <td mat-cell *matCellDef="let d"> {{d.out.toFixed(0)}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="in">
+          <th mat-header-cell *matHeaderCellDef>In</th>
+          <td mat-cell *matCellDef="let d"> {{d.in.toFixed(0)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="crc">
+          <th mat-header-cell *matHeaderCellDef>CRC</th>
+          <td mat-cell *matCellDef="let d"> {{d.crc.toFixed(0)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timeout">
+          <th mat-header-cell *matHeaderCellDef>Timeout</th>
+          <td mat-cell *matCellDef="let d"> {{d.timeout.toFixed(0)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reply">
+          <th mat-header-cell *matHeaderCellDef>Reply</th>
+          <td mat-cell *matCellDef="let d"> {{d.reply * 1000 | date: 'short' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="latency">
+          <th mat-header-cell *matHeaderCellDef>Latency</th>
+          <td mat-cell *matCellDef="let d"> {{(d.latency).toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delay">
+          <th mat-header-cell *matHeaderCellDef>Delay</th>
+          <td mat-cell *matCellDef="let d"> {{(d.delay).toFixed(2)}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsComm"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsComm;"></tr>
+
+      </table>
+
+  </mat-expansion-panel>
+
+
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Scale Info
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceScale" class="mat-elevation-z8" >
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="app">
+        <th mat-header-cell *matHeaderCellDef>Firmware</th>
+        <td mat-cell *matCellDef="let d">{{ d.app }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="boot">
+        <th mat-header-cell *matHeaderCellDef>Bootloader</th>
+        <td mat-cell *matCellDef="let d">{{ d.boot }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="silicon_serial_number">
+        <th mat-header-cell *matHeaderCellDef>HW serial#</th>
+        <td mat-cell *matCellDef="let d">{{ d.silicon_serial_number }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operating_mode">
+        <th mat-header-cell *matHeaderCellDef>Operating mode</th>
+        <td mat-cell *matCellDef="let d">{{ d.operating_mode }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsScale"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsScale"></tr>
+    </table>
+
+
+
+    <br>
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceServer" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="infeed_cleared">
+        <th mat-header-cell *matHeaderCellDef>Infeed cleared </th>
+        <td mat-cell *matCellDef="let d"> {{d.infeed_cleared * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="infeed_updated">
+        <th mat-header-cell *matHeaderCellDef>Infeed updated </th>
+        <td mat-cell *matCellDef="let d"> {{d.infeed_updated * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="outfeed_cleared">
+        <th mat-header-cell *matHeaderCellDef>Outfeed cleared </th>
+        <td mat-cell *matCellDef="let d"> {{d.outfeed_cleared * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="outfeed_updated">
+        <th mat-header-cell *matHeaderCellDef>Outfeed updated </th>
+        <td mat-cell *matCellDef="let d"> {{d.outfeed_updated * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="qc_cleared">
+        <th mat-header-cell *matHeaderCellDef>QC cleared </th>
+        <td mat-cell *matCellDef="let d"> {{d.qc_cleared * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="qc_updated">
+        <th mat-header-cell *matHeaderCellDef>QC updated </th>
+        <td mat-cell *matCellDef="let d"> {{d.qc_updated * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsServerExt2"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsServerExt2;"></tr>
+    </table>
+
+
+
+
+  </mat-expansion-panel>
+
+<!-- 
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Scale Health
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceScale" class="mat-elevation-z8" >
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="scale">
+        <th mat-header-cell *matHeaderCellDef>Scale</th>
+        <td mat-cell *matCellDef="let d">{{ d.scale }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="health_nvram_defaulted">
+        <th mat-header-cell *matHeaderCellDef>NVRAM defaulted</th>
+        <td mat-cell *matCellDef="let d">{{ d.health_nvram_defaulted | yesNoPipe }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="health_nvram_reloaded">
+        <th mat-header-cell *matHeaderCellDef>NVRAM reloaded</th>
+        <td mat-cell *matCellDef="let d">{{ d.health_nvram_reloaded  | yesNoPipe}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="health_rtc_running">
+        <th mat-header-cell *matHeaderCellDef>RTC running</th>
+        <td mat-cell *matCellDef="let d">{{ d.health_rtc_running  | yesNoPipe}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="health_rtc_sane">
+        <th mat-header-cell *matHeaderCellDef>RTC sane</th>
+        <td mat-cell *matCellDef="let d">{{ d.health_rtc_sane  | yesNoPipe}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="health_coin_cell_ok">
+        <th mat-header-cell *matHeaderCellDef>Coin cell</th>
+        <td mat-cell *matCellDef="let d">{{ d.health_coin_cell_ok | okFailed}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsScaleHealth"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsScaleHealth"></tr>
+    </table>
+
+  </mat-expansion-panel>
+
+
+
+
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Server Info
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceServer" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="dev">
+        <th mat-header-cell *matHeaderCellDef>Device</th>
+        <td mat-cell *matCellDef="let d"> {{d.dev}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="uptime">
+        <th mat-header-cell *matHeaderCellDef>Uptime</th>
+        <td mat-cell *matCellDef="let d"> {{d.uptime | elapsedTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="poll">
+        <th mat-header-cell *matHeaderCellDef>Last poll time </th>
+        <td mat-cell *matCellDef="let d"> {{d.poll * 1000 | date: 'short' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cpu_temp">
+        <th mat-header-cell *matHeaderCellDef>CPU temp</th>
+        <td mat-cell *matCellDef="let d"> {{d.cpu_temp}} </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsServer"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsServer;"></tr>
+    </table>
+
+
+
+
+<br>
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceServer" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="app">
+        <th mat-header-cell *matHeaderCellDef>Webserver version</th>
+        <td mat-cell *matCellDef="let d"> {{d.app}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="serial_number">
+        <th mat-header-cell *matHeaderCellDef>Serial number</th>
+        <td mat-cell *matCellDef="let d"> {{d.serial_number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bios_info">
+        <th mat-header-cell *matHeaderCellDef>BIOS info</th>
+        <td mat-cell *matCellDef="let d"> {{d.bios_info}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsServerExt"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsServerExt;"></tr>
+    </table>
+
+
+
+  </mat-expansion-panel> -->
+
+
+  <!-- <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Modbus/TCP Map
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <table mat-table [dataSource]="trimlineService.trimline.dataSourceRegisters" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="serverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Server</th>
+        <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="bits">
+        <th mat-header-cell *matHeaderCellDef>Bits </th>
+        <td mat-cell *matCellDef="let d"> {{d.bits}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="contents">
+        <th mat-header-cell *matHeaderCellDef>Contents (hex) </th>
+        <td mat-cell *matCellDef="let d"> {{d.contents}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description </th>
+        <td mat-cell *matCellDef="let d"> {{d.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef>Index </th>
+        <td mat-cell *matCellDef="let d"> {{d.index}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="offset">
+        <th mat-header-cell *matHeaderCellDef>Offset </th>
+        <td mat-cell *matCellDef="let d"> {{d.offset}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="read_write">
+        <th mat-header-cell *matHeaderCellDef>R/W </th>
+        <td mat-cell *matCellDef="let d"> {{d.read_write}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="registers">
+        <th mat-header-cell *matHeaderCellDef>Modbus register </th>
+        <td mat-cell *matCellDef="let d"> {{d.registers}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type </th>
+        <td mat-cell *matCellDef="let d"> {{d.type}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value </th>
+        <td mat-cell *matCellDef="let d"> {{d.value}} </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsRegisters"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsRegisters;"></tr>
+    </table>
+    
+<mat-action-row>
+<div class="card-body">
+   <p><a  href="../../assets/tags.json" target="_blank" >Tags.json</a></p>
+    <p><a href="../../assets/device_address_config.csv" >Device_address_config.csv</a></p>
+  </div>
+</mat-action-row>
+
+</mat-expansion-panel> -->
+
+</mat-card-content>
+</mat-card>
+

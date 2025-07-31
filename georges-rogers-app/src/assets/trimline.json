@@ -1,0 +1,283 @@
+{
+  "comm": {
+    "crc": 7,
+    "delay": 0.5812036395072937,
+    "in": 889,
+    "latency": 0.046575795859098434,
+    "out": 889,
+    "reply": 1618607871,
+    "rescan": 0,
+    "rx": 497840,
+    "timeout": 11,
+    "tx": 24892
+  },
+  "cutters": [
+    {
+      "in_lbs": 9.039955139160156,
+      "index": 1,
+      "out_lbs": 6.938417911529541,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A01",
+      "work_seconds": 1369,
+      "yield_percent": 76.75279141013685
+    },
+    {
+      "in_lbs": 39.77788543701172,
+      "index": 2,
+      "out_lbs": 32.49623107910156,
+      "qc_fail_count": 0,
+      "qc_pass_count": 1,
+      "station_name": "B01",
+      "work_seconds": 1349,
+      "yield_percent": 81.69421456693404
+    },
+    {
+      "in_lbs": 81.59219360351563,
+      "index": 3,
+      "out_lbs": 67.36304473876953,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A02",
+      "work_seconds": 1329,
+      "yield_percent": 82.56064920390497
+    },
+    {
+      "in_lbs": 29.198162078857422,
+      "index": 4,
+      "out_lbs": 24.9847354888916,
+      "qc_fail_count": 0,
+      "qc_pass_count": 1,
+      "station_name": "B02",
+      "work_seconds": 1309,
+      "yield_percent": 85.56954859492068
+    },
+    {
+      "in_lbs": 36.73160171508789,
+      "index": 5,
+      "out_lbs": 29.913043975830078,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A03",
+      "work_seconds": 1289,
+      "yield_percent": 81.43680803209566
+    },
+    {
+      "in_lbs": 87.09884643554688,
+      "index": 6,
+      "out_lbs": 71.80940246582031,
+      "qc_fail_count": 1,
+      "qc_pass_count": 1,
+      "station_name": "B03",
+      "work_seconds": 1269,
+      "yield_percent": 82.4458708749481
+    },
+    {
+      "in_lbs": 46.54793167114258,
+      "index": 7,
+      "out_lbs": 37.497074127197266,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A04",
+      "work_seconds": 1249,
+      "yield_percent": 80.5558330542184
+    },
+    {
+      "in_lbs": 55.79212188720703,
+      "index": 8,
+      "out_lbs": 44.08510971069336,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B04",
+      "work_seconds": 1229,
+      "yield_percent": 79.01672892065062
+    },
+    {
+      "in_lbs": 35.47836685180664,
+      "index": 9,
+      "out_lbs": 27.779617309570313,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A05",
+      "work_seconds": 1209,
+      "yield_percent": 78.30015802476463
+    },
+    {
+      "in_lbs": 38.01738357543945,
+      "index": 10,
+      "out_lbs": 31.202003479003906,
+      "qc_fail_count": 0,
+      "qc_pass_count": 1,
+      "station_name": "B05",
+      "work_seconds": 1189,
+      "yield_percent": 82.07299015485506
+    },
+    {
+      "in_lbs": 59.38142395019531,
+      "index": 11,
+      "out_lbs": 48.329437255859375,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A06",
+      "work_seconds": 1169,
+      "yield_percent": 81.38814134264359
+    },
+    {
+      "in_lbs": 42.240211486816406,
+      "index": 12,
+      "out_lbs": 34.72509002685547,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B06",
+      "work_seconds": 1149,
+      "yield_percent": 82.20860834869048
+    },
+    {
+      "in_lbs": 22.591957092285156,
+      "index": 13,
+      "out_lbs": 16.57600212097168,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A07",
+      "work_seconds": 1129,
+      "yield_percent": 73.37125355391258
+    },
+    {
+      "in_lbs": 16.32331085205078,
+      "index": 14,
+      "out_lbs": 13.603089332580566,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B07",
+      "work_seconds": 1109,
+      "yield_percent": 83.3353567537528
+    },
+    {
+      "in_lbs": 28.512859344482422,
+      "index": 15,
+      "out_lbs": 22.113630294799805,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A08",
+      "work_seconds": 1089,
+      "yield_percent": 77.55669127263118
+    },
+    {
+      "in_lbs": 14.946573257446289,
+      "index": 16,
+      "out_lbs": 12.117088317871094,
+      "qc_fail_count": 0,
+      "qc_pass_count": 1,
+      "station_name": "B08",
+      "work_seconds": 1069,
+      "yield_percent": 81.06934017022554
+    },
+    {
+      "in_lbs": 27.846158981323242,
+      "index": 17,
+      "out_lbs": 22.428319931030273,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "A09",
+      "work_seconds": 1049,
+      "yield_percent": 80.54367550682025
+    },
+    {
+      "in_lbs": 33.35377502441406,
+      "index": 18,
+      "out_lbs": 26.233701705932617,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B09",
+      "work_seconds": 1029,
+      "yield_percent": 78.65287118693539
+    },
+    {
+      "in_lbs": 48.29106140136719,
+      "index": 19,
+      "out_lbs": 40.02714920043945,
+      "qc_fail_count": 1,
+      "qc_pass_count": 0,
+      "station_name": "A10",
+      "work_seconds": 1009,
+      "yield_percent": 82.88728397944517
+    },
+    {
+      "in_lbs": 3.92586088180542,
+      "index": 20,
+      "out_lbs": 2.7450883388519287,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B10",
+      "work_seconds": 989,
+      "yield_percent": 69.92321993818388
+    },
+    {
+      "in_lbs": 41.24614334106445,
+      "index": 21,
+      "out_lbs": 33.337928771972656,
+      "qc_fail_count": 0,
+      "qc_pass_count": 2,
+      "station_name": "A11",
+      "work_seconds": 969,
+      "yield_percent": 80.8267781457802
+    },
+    {
+      "in_lbs": 12.715670585632324,
+      "index": 22,
+      "out_lbs": 8.527817726135254,
+      "qc_fail_count": 0,
+      "qc_pass_count": 2,
+      "station_name": "B11",
+      "work_seconds": 949,
+      "yield_percent": 67.06541875794578
+    },
+    {
+      "in_lbs": 16.038658142089844,
+      "index": 23,
+      "out_lbs": 12.37164306640625,
+      "qc_fail_count": 0,
+      "qc_pass_count": 3,
+      "station_name": "A12",
+      "work_seconds": 929,
+      "yield_percent": 77.1363973020889
+    },
+    {
+      "in_lbs": 34.18339157104492,
+      "index": 24,
+      "out_lbs": 27.70735740661621,
+      "qc_fail_count": 0,
+      "qc_pass_count": 0,
+      "station_name": "B12",
+      "work_seconds": 909,
+      "yield_percent": 81.05502740718612
+    }
+  ],
+  "scale": {
+    "app": "Build 1",
+    "boot": "Boot 2",
+    "health_coin_cell_ok": false,
+    "health_nvram_defaulted": false,
+    "health_nvram_reloaded": false,
+    "health_rtc_running": false,
+    "health_rtc_sane": false,
+    "operating_mode": "Idle",
+    "silicon_serial_number": "123456"
+  },
+  "server": {
+    "app": "sbc_trim_web, Build: 1.1 (04/16/2021, 14:37:39)",
+    "bios_info": "EFI Development Kit II / OVMF , v0.0.0  (02/06/2015 )",
+    "cpu_temp": 0.0,
+    "dev": "simulator",
+    "infeed_cleared": 1618606981,
+    "infeed_updated": 1618607871,
+    "outfeed_cleared": 1618606971,
+    "outfeed_updated": 1618607866,
+    "poll": 1618607871,
+    "qc_cleared": 1618606961,
+    "qc_updated": 1618607861,
+    "restarts": 0,
+    "serial_number": " ",
+    "uptime": 890
+  }
+}

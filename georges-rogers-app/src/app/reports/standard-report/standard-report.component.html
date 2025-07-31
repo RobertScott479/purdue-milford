@@ -1,0 +1,321 @@
+<table mat-table [dataSource]="dataSource" matSort [matSortActive]="sortBy" [matSortDirection]="sortDirection" appMatSortCache>
+  <ng-container matColumnDef="serverName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("serverName") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.serverName }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="serverGroup">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("serverGroup") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.serverGroup }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="station_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("station_name") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.station_name }}</td>
+    <td mat-footer-cell *matFooterCellDef>TOTALS</td>
+  </ng-container>
+
+  <ng-container matColumnDef="in_lbs">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("in_lbs") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.in_lbs.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.in_lbs.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="out_lbs">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("out_lbs") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.out_lbs.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.out_lbs.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="yield_percent">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("yield_percent") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.yield_percent.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.yield_percent.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="qc_fail_count">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("qc_fail_count") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.qc_fail_count }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.qc_fail_count.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="qc_pass_count">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("qc_pass_count") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.qc_pass_count }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.qc_pass_count.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="qc_score">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("qc_score") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.qc_score }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.qc_score.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="work_seconds">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("work_seconds") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.work_seconds.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.work_seconds.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="hours">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("hours") }}</th>
+    <td mat-cell *matCellDef="let d">{{ (d.work_seconds / 3600).toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ (grandTotals.summary.work_seconds / 3600).toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="ppmh">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("ppmh") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.ppmh.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.ppmh.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("count") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.count }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.count }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="mean">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("mean") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.mean.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.mean.toFixed(2) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="over">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("over") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.over }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.over }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="under">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("under") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.under }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.under }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="cpm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("cpm") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.cpm.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.cpm.toFixed(2) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="updated">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("updated") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.updated * 1000 | date : "M/d/yy h:mm:ss a" }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="high_limit">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("high_limit") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.high_limit.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.high_limit?.toFixed(2) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="low_limit">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("low_limit") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.low_limit.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.low_limit?.toFixed(2) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="net_lb">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("net_lb") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.net_lb.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.net_lb?.toFixed(2) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="gross_lb">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("gross_lb") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.gross_lb.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.gross_lb?.toFixed(0) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="tare_lb">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("tare_lb") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.tare_lb.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.tare_lb?.toFixed(0) }}</td>
+  </ng-container>
+
+  <!-- <ng-container matColumnDef="total_lb">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("total_lb") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.total_lb.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.total_lb?.toFixed(2) || "" }}</td>
+  </ng-container> -->
+
+  <!-- <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("total") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.total.toFixed(2) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.total?.toFixed(2) || "" }}</td>
+  </ng-container> -->
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("status") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.status }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="timestamp">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("timestamp") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.timestamp * 1000 | date : "M/d/yy h:mm:ss a" }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="scale">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("scale") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.scale }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="serial">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("serial") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.serial }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="machine_state">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("machine_state") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.machine_state }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="reason_code">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("reason_code") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.reason_code }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="resolution">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("resolution") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.resolution }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="units">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("units") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.units }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="cleared">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("cleared") }}</th>
+    <td mat-cell *matCellDef="let d">
+      @if(d.cleared === 0) {
+      <span> -- </span>
+      } @else {
+      {{ d.cleared * 1000 | date : "M/d/yy h:mm:ss a" }}
+      }
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="gate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("gate") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.gate }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="high_g">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("high_g") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.high_g }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.high_g }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="low_g">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("low_g") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.low_g }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals.summary.low_g }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="net_g">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("net_g") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.net_g }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="line">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("line") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.line }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="birds">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("birds") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.birds }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.birds || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="fronts">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("fronts") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.fronts.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.fronts.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="fillets">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("fillets") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.fillets.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.fillets.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="filletYield">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("filletYield") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.filletYield?.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.filletYield?.toFixed(1) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="tenders">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("tenders") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.tenders.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.tenders.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="tenderYield">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("tenderYield") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.tenderYield?.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.tenderYield?.toFixed(1) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="skins">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("skins") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.skins.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.skins.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="skinYield">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("skinYield") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.skinYield?.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.skinYield?.toFixed(1) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="wings">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("wings") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.wings.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.wings.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="wingsYield">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("wingsYield") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.wingsYield?.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.wingsYield?.toFixed(1) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="shells">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("shells") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.shells.toFixed(0) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.shells.toFixed(0) || "" }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="shellsYield">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("shellsYield") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.shellsYield?.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.shellsYield?.toFixed(1) || "" }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+  <tr class="row-space-between" *matNoDataRow>
+    <td class="mat-cell" colspan="9999">No data available</td>
+  </tr>
+</table>

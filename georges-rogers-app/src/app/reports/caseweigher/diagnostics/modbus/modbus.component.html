@@ -1,0 +1,51 @@
+<!-- <mat-expansion-panel expanded="false">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Modbus </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <table mat-table [dataSource]="caseweigherService.dataSourceModbus" class="mat-table mat-elevation-z8">
+    <ng-container matColumnDef="scale">
+      <th mat-header-cell *matHeaderCellDef>Scale</th>
+      <td mat-cell *matCellDef="let d">{{ d.scale }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="clients">
+      <th mat-header-cell *matHeaderCellDef>Clients</th>
+      <td mat-cell *matCellDef="let d">{{ d.clients }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="connections">
+      <th mat-header-cell *matHeaderCellDef>Connections</th>
+      <td mat-cell *matCellDef="let d">{{ d.connections }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="disconnections">
+      <th mat-header-cell *matHeaderCellDef>Disconnects</th>
+      <td mat-cell *matCellDef="let d">{{ d.disconnections }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="reads">
+      <th mat-header-cell *matHeaderCellDef>Reads</th>
+      <td mat-cell *matCellDef="let d">{{ d.reads }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="writes">
+      <th mat-header-cell *matHeaderCellDef>Writes</th>
+      <td mat-cell *matCellDef="let d">{{ d.writes }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="short_reads">
+      <th mat-header-cell *matHeaderCellDef>Short reads</th>
+      <td mat-cell *matCellDef="let d">{{ d.short_reads }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="missed_trays">
+      <th mat-header-cell *matHeaderCellDef>Missed trays</th>
+      <td mat-cell *matCellDef="let d">{{ d.missed_trays }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="modbusFields"></tr>
+    <tr mat-row *matRowDef="let row; columns: modbusFields"></tr>
+  </table>
+</mat-expansion-panel> -->

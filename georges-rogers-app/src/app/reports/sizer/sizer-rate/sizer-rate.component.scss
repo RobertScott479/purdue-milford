@@ -1,0 +1,11 @@
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 400px);
+
+  canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
