@@ -21,6 +21,7 @@ export class Trimline implements IDatasources {
   }
 
   moduleID = 'trimline';
+  serverGroups = ['trimline'];
   servers: ServerMapInterface[] = [];
   tmr: any;
   httpCancelService = inject(HttpCancelService);
@@ -36,7 +37,8 @@ export class Trimline implements IDatasources {
   lastCleared = 0;
 
   init(timeFrame: TimeFrame | null | undefined) {
-    this.servers = this.serverMap.dataSource.data.filter((x) => x.group === this.moduleID && x.enabled === true);
+    this.servers = this.serverMap.getServersByGroup(this.serverGroups);
+
     if (timeFrame === this.TimeFrameEnum.Live) {
       this.startRefreshTimer();
     } else {

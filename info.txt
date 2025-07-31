@@ -3,6 +3,17 @@ Georges Rogers
 based on tyson-North-Richland-Hills build 8
 
 
+Build 2, rss, 7/31/2025
+in addtion to caseweigher:
+added coneline
+added distribution
+added sizer
+added floorscale
+
+
+
+
+
 
 Build 1, rss, 6/18/2025
 
