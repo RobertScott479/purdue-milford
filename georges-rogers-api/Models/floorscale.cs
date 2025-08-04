@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 namespace weightech_api.Models
 {
 
-    public class FloorscaleModel
+    public class FloorscaleTableModel
     {
         public long Id { get; set; }
-        public long ServerIndex { get; set; }
+        //public long ServerIndex { get; set; }
         public string ServerGroup { get; set; }
         public long Serial { get; set; }
         public double Net_lb { get; set; }
@@ -20,7 +20,7 @@ namespace weightech_api.Models
 
     public class FloorscaleDetailRes : ResInfo
     {
-        public List<FloorscaleModel> Details { get; set; }
+        public List<FloorscaleTableModel> Details { get; set; }
     }
 
 

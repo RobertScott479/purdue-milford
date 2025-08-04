@@ -52,7 +52,7 @@ namespace weightech_api.Controllers
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 stopwatch.Start();
 
-                var q = db.Bags
+                var q = db.Caseweigher
                 .Where(b => b.Timestamp >= start && b.Timestamp < stop)
                 // .Select(g => new Bag
                 // {
@@ -94,7 +94,7 @@ namespace weightech_api.Controllers
             {
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 stopwatch.Start();
-                var rate = db.Bags
+                var rate = db.Caseweigher
                     .Where(b => b.Timestamp >= start && b.Timestamp < stop)
                     .GroupBy(b => b.Timestamp - (b.Timestamp % 60)) //round to nearest minute
                     .Select(g => new CaseweigherRate { Timestamp = g.Key, Count = g.Count() })
@@ -132,7 +132,7 @@ namespace weightech_api.Controllers
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 stopwatch.Start();
                 // Get the filtered bags
-                var filteredBags = db.Bags
+                var filteredBags = db.Caseweigher
                     .Where(x => x.Timestamp >= start && x.Timestamp <= stop)
                     .ToList();
 

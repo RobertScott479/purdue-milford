@@ -29,7 +29,7 @@ export class DistributionService {
   showSpinner = signal(false);
   showExportButton = signal(false);
   showTimeFrame = signal(true);
-  allowAllServersSelection = signal(true);
+  allowAllServersSelection = signal(false);
   disableRefresh = signal(false);
   disableExport = signal(false);
 
@@ -99,7 +99,7 @@ export class DistributionService {
       const frm = this.frmGroup.value;
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.updateFilters(frm.serverIndex);
-      this.init();
+      this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
       if (name === 'timeframe') {
         this.resetDataSource();
       }
@@ -114,17 +114,10 @@ export class DistributionService {
     this.dataSourceDetails.data = [];
   }
 
-  init() {
-    this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
-    //this.servers = this.homeService.serverMap.dataSource.data.filter((x) => this.serverGroups.includes(x.group) && x.enabled === true);
-    //this.servers = this.homeService.serverMap.dataSource.data.filter((x) => x.group === this.moduleID && x.enabled === true);
-  }
-
   private standardfilterPredicate() {
     const myFilterPredicate = (data: any, filterStr: string): boolean => {
       const filter: any = JSON.parse(filterStr);
-      const result = data.serverIndex === filter.serverIndex || filter.serverIndex === -1;
-      //&& (data.product_code === filter.product_code || filter.product_code === '') &&
+      const result = (data.serverIndex === filter.serverIndex || filter.serverIndex === -1) && data.gate !== 0;
 
       return result;
     };

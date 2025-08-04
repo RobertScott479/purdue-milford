@@ -94,6 +94,7 @@ export class TrimlineViewerComponent {
   }
 
   ngOnDestroy() {
+    this.trimlineService.trimline.stopRefreshTimer();
     this.routerSubscription && this.routerSubscription.unsubscribe();
     this.routeSubstription && this.routeSubstription.unsubscribe();
     this.httpCancelService.cancelPendingRequests();

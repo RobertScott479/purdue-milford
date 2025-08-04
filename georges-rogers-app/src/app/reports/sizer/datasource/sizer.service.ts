@@ -86,7 +86,7 @@ export class SizerService {
       const frm = this.frmGroup.value;
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.updateFilters(frm.serverIndex);
-      this.init();
+      this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
       if (name === 'timeframe') {
         this.resetDataSource();
       }
@@ -99,10 +99,6 @@ export class SizerService {
     this.dataSourceDetails.data = [];
     this.grandTotalsSummary.reset();
     this.grandTotalsDetails.reset();
-  }
-
-  init() {
-    this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
   }
 
   private standardfilterPredicate() {

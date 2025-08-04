@@ -48,12 +48,7 @@
     {
       "server": "Shells #1 Demo",
       "url": "",
-      "group": "floorscale,shells"
-    },
-    {
-      "server": "Skin #1 Demo",
-      "url": "",
-      "group": "floorscale,skins"
+      "group": "floorscale,shells,skins"
     }
   ],
   "serverMapDemo": [
@@ -105,24 +100,19 @@
     {
       "server": "Shells #1 Demo",
       "url": "",
-      "group": "floorscale,shells"
-    },
-    {
-      "server": "Skin #1 Demo",
-      "url": "",
-      "group": "floorscale,skins"
+      "group": "floorscale,shells,skins"
     }
   ],
   "shifts": [
     {
       "name": "Day",
-      "start": { "hour": 7, "minute": 30, "offset": 0 },
-      "stop": { "hour": 15, "minute": 30, "offset": 0 }
+      "start": { "hour": 6, "minute": 30, "offset": 0 },
+      "stop": { "hour": 15, "minute": 45, "offset": 0 }
     },
     {
       "name": "Night",
-      "start": { "hour": 15, "minute": 30, "offset": 0 },
-      "stop": { "hour": 0, "minute": 0, "offset": 1 }
+      "start": { "hour": 15, "minute": 45, "offset": 0 },
+      "stop": { "hour": 1, "minute": 30, "offset": 1 }
     }
   ],
   "appTitle": "Georges Rogers"

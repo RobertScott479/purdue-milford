@@ -19,7 +19,7 @@ export class CaseweigherDetailsComponent {
   homeService = inject(HomeService);
   caseweigherService = inject(CaseweigherService);
 
-  displayedColumns = ['serverName', 'high_limit', 'low_limit', 'net_g', 'status', 'timestamp'];
+  displayedColumns = ['serverName', 'high_limit', 'low_limit', 'net_lb', 'status', 'timestamp'];
 
   exportSignal: Subject<IExportCriteria> = new Subject();
   sortBy: string = 'timestamp';

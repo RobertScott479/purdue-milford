@@ -143,11 +143,13 @@ export class YieldService {
 
       for (let gate = 1; gate < 7; gate++) {
         var server = 0;
+        var birds = Math.floor(fronts[server][gate]?.net_lb / 3.5) || 0;
         yieldSummary.push({
           serverIndex: -1,
           serverName: '',
           line: gate,
-          birds: Math.floor(fronts[server][gate]?.net_lb / 3.5) || 0,
+          birds: birds,
+          bpm: birds / 14,
           fronts: fronts[server][gate]?.net_lb ?? 0,
           fillets: fillets[server][gate]?.net_lb ?? 0,
           tenders: tenders[server][gate]?.net_lb ?? 0,

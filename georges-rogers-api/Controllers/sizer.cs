@@ -55,12 +55,12 @@ namespace weightech_api.Models
             {
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 stopwatch.Start();
-                var q = db.Sizer.Where(b => b.Timestamp >= start && b.Timestamp < stop).Select(g => new SizerTray
+                var q = db.Sizer.Where(b => b.Timestamp >= start && b.Timestamp < stop).Select(g => new SizerTableModel
                 {
                     Serial = g.Serial,
                     Net_g = g.Net_g,
                     Timestamp = g.Timestamp,
-                    Gate = g.Gate,
+                    Gate = g.Gate + 1,
                     Scale = g.Scale
                 }).ToList();
 
@@ -135,7 +135,7 @@ namespace weightech_api.Models
                     .GroupBy(b => b.Gate)
                     .Select(g => new SizerSummary
                     {
-                        Gate = g.Key,
+                        Gate = g.Key + 1,
                         net_g = g.Sum(b => b.Net_g),
                         net_lb = g.Sum(b => b.Net_g * 0.00220462), // Convert grams to pounds
                         Count = g.Count(),

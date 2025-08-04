@@ -92,7 +92,7 @@ export class FloorscaleService {
       const frm = this.frmGroup.value;
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.updateFilters(frm.serverIndex);
-      this.init();
+      this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
       if (name === 'timeframe') {
         this.resetDataSource();
       }
@@ -105,11 +105,6 @@ export class FloorscaleService {
 
     this.dataSourceSummary.data = [];
     this.dataSourceDetails.data = [];
-  }
-
-  init() {
-    this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
-    //this.servers = this.homeService.serverMap.dataSource.data.filter((x) => this.serverGroups.includes(x.group) && x.enabled === true);
   }
 
   private standardfilterPredicate() {

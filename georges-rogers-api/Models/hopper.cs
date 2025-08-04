@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace weightech_api.Models
 {
 
-    public class HopperModel
+    public class HopperTableModel
     {
         public long Id { get; set; }
         //public long ServerIndex { get; set; }
@@ -36,7 +36,7 @@ namespace weightech_api.Models
 
     public class HopperDetailRes : ResInfo
     {
-        public List<HopperModel> Details { get; set; }
+        public List<HopperTableModel> Details { get; set; }
 
     }
 

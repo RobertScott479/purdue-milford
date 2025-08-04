@@ -19,12 +19,12 @@ namespace weightech_api.Models
             // sqliteConnection = configuration["sqliteConnection"];
         }
 
-        public virtual DbSet<HopperModel> Hopper { get; set; }
+        public virtual DbSet<HopperTableModel> Hopper { get; set; }
 
-        public virtual DbSet<FloorscaleModel> Floorscale { get; set; }
+        public virtual DbSet<FloorscaleTableModel> Floorscale { get; set; }
 
-        public virtual DbSet<SizerTray> Sizer { get; set; }
-        public virtual DbSet<Bag> Bags { get; set; }
+        public virtual DbSet<SizerTableModel> Sizer { get; set; }
+        public virtual DbSet<CaseweigherTableModel> Caseweigher { get; set; }
         public virtual DbSet<StatusName> StatusNames { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,14 +37,14 @@ namespace weightech_api.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Bag>(entity =>
+            modelBuilder.Entity<CaseweigherTableModel>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Id);
 
-                entity.ToTable("bags");
+                entity.ToTable("caseweigher");
 
-                entity.HasIndex(e => new { e.Net_lb, e.Timestamp, e.Serial }, "IX_bags_weight_timestamp_serial")
-                    .IsUnique();
+                entity.HasIndex(e => new { e.Timestamp }, "IX_caseweigher_timestamp");
+
 
                 // entity.Property(e => e.High_limit).HasColumnName("high");
 
@@ -61,7 +61,7 @@ namespace weightech_api.Models
 
             modelBuilder.Entity<StatusName>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.StatusIndex);
 
                 entity.ToTable("status_names");
 
@@ -73,16 +73,16 @@ namespace weightech_api.Models
                 entity.Property(e => e.StatusIndex).HasColumnName("status_index");
             });
 
-            modelBuilder.Entity<SizerTray>(entity =>
+            modelBuilder.Entity<SizerTableModel>(entity =>
            {
-               entity.HasNoKey();
+               entity.HasKey(e => e.Id);
 
                entity.ToTable("sizer");
 
-               entity.HasIndex(e => new { e.Serial, e.Timestamp }, "IX_sizer_serial_timestamp")
-                   .IsUnique();
+               entity.HasIndex(e => new { e.Scale, e.Timestamp }, "IX_sizer_scale_timestamp");
 
-               entity.HasIndex(e => e.Timestamp, "index_timestamp");
+
+               entity.HasIndex(e => new { e.Scale, e.Gate, e.Timestamp }, "index_scale_gate_timestamp");
 
                //    entity.Property(e => e.Gate).HasColumnName("gate");
 
@@ -95,7 +95,7 @@ namespace weightech_api.Models
                //    entity.Property(e => e.Timestamp).HasColumnName("timestamp");
            });
 
-            modelBuilder.Entity<HopperModel>(entity =>
+            modelBuilder.Entity<HopperTableModel>(entity =>
           {
 
               entity.HasKey("Id");
@@ -120,7 +120,7 @@ namespace weightech_api.Models
               //   entity.Property(e => e.Timestamp).HasColumnName("timestamp");
           });
 
-            modelBuilder.Entity<FloorscaleModel>(entity =>
+            modelBuilder.Entity<FloorscaleTableModel>(entity =>
                     {
                         entity.HasKey("Id");
 

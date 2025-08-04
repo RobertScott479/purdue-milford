@@ -55,13 +55,13 @@ namespace weightech_api.Controllers
                 var q = db.Floorscale
                 .Where(b => b.Timestamp >= start && b.Timestamp < stop)
                 // .Select(g => new Bag
-               .Select(g => new FloorscaleModel
+               .Select(g => new FloorscaleTableModel
                {
                    Net_lb = g.Net_lb,
                    Timestamp = g.Timestamp,
                    Serial = g.Serial,
                    ServerGroup = g.ServerGroup,
-                   ServerIndex = g.ServerIndex,
+                   // ServerIndex = g.ServerIndex,
                    Gate = g.Gate
                })
                 .ToList();
@@ -188,7 +188,7 @@ namespace weightech_api.Controllers
         public ActionResult PopulateHopperTable(int count = 100, int? startTimestamp = null)
         {
             db.Database.BeginTransaction();
-            db.Floorscale.RemoveRange(db.Floorscale); // Clear existing entries
+            // db.Floorscale.RemoveRange(db.Floorscale); // Clear existing entries
             var random = new Random();
 
             var globalSerial = 0;
@@ -199,24 +199,24 @@ namespace weightech_api.Controllers
             var gates = Enumerable.Range(1, 1).ToArray();
 
             int baseTimestamp = startTimestamp ?? (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            double startingWeight = 100000;
+            double startingWeight = 110000;
 
-            var floorScaleEntries = new List<FloorscaleModel>();
+            var floorScaleEntries = new List<FloorscaleTableModel>();
             var batchWeight = 0.0;
 
             while (startingWeight > 0)
             {
                 globalSerial++;
                 baseTimestamp++;
-                batchWeight += Math.Round(random.NextDouble() * 175 + 1550, 2);
-                var floorscale = new FloorscaleModel
+                batchWeight = Math.Round(random.NextDouble() * 175 + 1550, 2);
+                var floorscale = new FloorscaleTableModel
                 {
                     Timestamp = baseTimestamp,
                     ServerGroup = serverGroups[random.Next(serverGroups.Length)],
                     Gate = gates[random.Next(gates.Length)],
                     Net_lb = batchWeight,
                     Serial = globalSerial,
-                    ServerIndex = -1
+                    //ServerIndex = -1
                 };
                 floorScaleEntries.Add(floorscale);
                 startingWeight -= floorscale.Net_lb;

@@ -16,7 +16,7 @@ import { formatDate } from '@angular/common';
 })
 export class HomeService {
   title = '';
-  appVersion = '@(#)Georges Rogers build 1\n';
+  appVersion = '@(#)Georges Rogers build 2\n';
 
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }) };
   refreshDelay = 5000;

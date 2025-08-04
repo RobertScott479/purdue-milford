@@ -52,7 +52,7 @@ export class CaseweigherService {
   stopUnix = 0;
   disableRefresh = signal(false);
   disableExport = signal(false);
-  allowAllServersSelection = signal(false);
+  allowAllServersSelection = signal(true);
 
   chartImg: string = '';
   rateResponse: IRate[] = [];
@@ -92,22 +92,12 @@ export class CaseweigherService {
     // this.dataSourceServer.filterPredicate = this.standardfilterPredicate();
   }
 
-  init() {
-    this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
-    //this.servers = this.homeService.serverMap.dataSource.data.filter((x) => this.serverGroups.includes(x.group) && x.enabled === true);
-    // if (live) {
-    //   this.startRefreshTimer();
-    // } else {
-    //   this.stopRefreshTimer();
-    // }
-  }
-
   onFrmGroupChange(name: string = '') {
     if (this.frmGroup.valid) {
       const frm = this.frmGroup.value;
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.updateFilters(frm.serverIndex);
-      this.init();
+      this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
       if (name === 'timeframe') {
         this.resetDataSource();
       }

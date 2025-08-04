@@ -17,8 +17,12 @@ namespace weightech_api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
-            modelBuilder.Entity("weightech_api.Models.Bag", b =>
+            modelBuilder.Entity("weightech_api.Models.CaseweigherTableModel", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("High_limit")
                         .HasColumnType("REAL");
 
@@ -37,13 +41,14 @@ namespace weightech_api.Migrations
                     b.Property<long>("Timestamp")
                         .HasColumnType("INTEGER");
 
-                    b.HasIndex(new[] { "Net_lb", "Timestamp", "Serial" }, "IX_bags_weight_timestamp_serial")
-                        .IsUnique();
+                    b.HasKey("Id");
 
-                    b.ToTable("bags", (string)null);
+                    b.HasIndex(new[] { "Timestamp" }, "IX_caseweigher_timestamp");
+
+                    b.ToTable("caseweigher", (string)null);
                 });
 
-            modelBuilder.Entity("weightech_api.Models.FloorscaleModel", b =>
+            modelBuilder.Entity("weightech_api.Models.FloorscaleTableModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,9 +66,6 @@ namespace weightech_api.Migrations
                     b.Property<string>("ServerGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("ServerIndex")
-                        .HasColumnType("INTEGER");
-
                     b.Property<long>("Timestamp")
                         .HasColumnType("INTEGER");
 
@@ -79,7 +81,7 @@ namespace weightech_api.Migrations
                     b.ToTable("floorscale", (string)null);
                 });
 
-            modelBuilder.Entity("weightech_api.Models.HopperModel", b =>
+            modelBuilder.Entity("weightech_api.Models.HopperTableModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,8 +112,12 @@ namespace weightech_api.Migrations
                     b.ToTable("hopper", (string)null);
                 });
 
-            modelBuilder.Entity("weightech_api.Models.SizerTray", b =>
+            modelBuilder.Entity("weightech_api.Models.SizerTableModel", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<long>("Gate")
                         .HasColumnType("INTEGER");
 
@@ -124,26 +130,33 @@ namespace weightech_api.Migrations
                     b.Property<long>("Serial")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ServerGroup")
+                        .HasColumnType("TEXT");
+
                     b.Property<long>("Timestamp")
                         .HasColumnType("INTEGER");
 
-                    b.HasIndex(new[] { "Serial", "Timestamp" }, "IX_sizer_serial_timestamp")
-                        .IsUnique();
+                    b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Timestamp" }, "index_timestamp");
+                    b.HasIndex(new[] { "Scale", "Timestamp" }, "IX_sizer_scale_timestamp");
+
+                    b.HasIndex(new[] { "Scale", "Gate", "Timestamp" }, "index_scale_gate_timestamp");
 
                     b.ToTable("sizer", (string)null);
                 });
 
             modelBuilder.Entity("weightech_api.Models.StatusName", b =>
                 {
+                    b.Property<long?>("StatusIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("status_index");
+
                     b.Property<string>("Status")
                         .HasColumnType("TEXT")
                         .HasColumnName("status");
 
-                    b.Property<long?>("StatusIndex")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("status_index");
+                    b.HasKey("StatusIndex");
 
                     b.HasIndex(new[] { "StatusIndex", "Status" }, "IX_status_names_status_index_status")
                         .IsUnique();

@@ -10,6 +10,7 @@ export interface ISummeryExtended extends IYieldSummary {
   shellsYield: number;
   wingsYield: number;
   condemnedYield: number;
+  bpm: number;
 }
 
 export interface IYieldSummary extends IServerNameIndex {

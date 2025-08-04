@@ -201,15 +201,16 @@ export class ServerMap {
       server.state = 'unknown';
       server.index = index;
       server.cleared = '';
-      const url = this.getJsonData(server);
-      server.func = () => this.fetch(index, url);
+      // const url = this.getJsonData(server);
+      // server.func = () => this.fetch(index, url);
     });
 
     this.servermapLoaded.set(true);
   }
 
   getJsonData(server: ServerMapInterface): string {
-    const jsonFilename = this.serverMapMode === 'demo' ? server.group : 'data';
+    //const jsonFilename = this.serverMapMode === 'demo' ? server.group : 'data';
+    const jsonFilename = server.group;
     const datajson = `/assets/${jsonFilename}.json`;
     const filename = this.getServerHost(server).url + datajson;
     return filename;

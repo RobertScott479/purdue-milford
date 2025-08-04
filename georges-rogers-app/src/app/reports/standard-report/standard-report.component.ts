@@ -98,6 +98,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Yield/Poultry specific fields
     { column: 'birds', name: 'Birds', format: '1.0-0' },
+    { column: 'bpm', name: 'BPM', format: '1.1-1' },
     { column: 'fronts', name: 'Fronts', format: '1.0-0' },
     { column: 'fillets', name: 'Fillets', format: '1.0-0' },
     { column: 'filletYield', name: 'Fillet Yield %', format: '1.0-1' },

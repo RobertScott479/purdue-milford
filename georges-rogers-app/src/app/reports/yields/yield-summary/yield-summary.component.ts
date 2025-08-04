@@ -18,7 +18,8 @@ export class YieldSummaryComponent implements OnInit, OnDestroy {
 
   displayedColumns = [
     'line',
-    'birds',
+    //'birds',
+    'bpm',
     'fronts',
     'fillets',
     'filletYield',

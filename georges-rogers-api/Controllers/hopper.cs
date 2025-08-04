@@ -62,7 +62,17 @@ namespace weightech_api.Models
             {
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 stopwatch.Start();
-                var q = db.Hopper.Where(b => b.Timestamp >= start && b.Timestamp < stop && b.ServerGroup == servergroup).ToList();
+                var q = db.Hopper.Where(b => b.Timestamp >= start && b.Timestamp < stop && b.ServerGroup == servergroup)
+                // .Select(g => new HopperTableModel
+                // {
+                //     Id = g.Id,
+                //     ServerGroup = g.ServerGroup,
+                //     Serial = g.Serial,
+                //     Timestamp = g.Timestamp,
+                //     Net_lb = g.Net_lb,
+                //     Gate = g.Gate
+                // })
+                .ToList();
                 stopwatch.Stop();
                 res.Details = q;
                 res.ErrorCode = 0;
@@ -129,7 +139,7 @@ namespace weightech_api.Models
             var res = new HopperSummaryRes();
             var path = HttpContext.Request.Path.Value;
             var servergroup = path?.Split('/')[2]; // Gets "hopper", "distribution", "tenders", or "wings"
-            Console.WriteLine($"servergroup: {path}");
+                                                   // Console.WriteLine($"servergroup: {path}");
 
 
             try
@@ -269,7 +279,7 @@ namespace weightech_api.Models
             int baseTimestamp = startTimestamp ?? (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             double startingWeight = 100000;
 
-            var hopperEntries = new List<HopperModel>();
+            var hopperEntries = new List<HopperTableModel>();
             var batchWeight = 0.0;
 
             while (startingWeight > 0)
@@ -277,7 +287,7 @@ namespace weightech_api.Models
                 globalSerial++;
                 baseTimestamp++;
                 batchWeight += Math.Round(random.NextDouble() * 2 + 2, 2);
-                var fronts = new HopperModel
+                var fronts = new HopperTableModel
                 {
                     Timestamp = baseTimestamp,
                     ServerGroup = "fronts",
@@ -297,7 +307,7 @@ namespace weightech_api.Models
                     {
                         baseTimestamp++;
 
-                        var entrys = new HopperModel
+                        var entrys = new HopperTableModel
                         {
                             Timestamp = baseTimestamp,
                             ServerGroup = serverGroup.groupName,

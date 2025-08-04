@@ -245,6 +245,12 @@
     <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.birds || "" }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="bpm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("bpm") }}</th>
+    <td mat-cell *matCellDef="let d">{{ d.bpm.toFixed(1) }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{ grandTotals?.summary?.bpm.toFixed(1) || "" }}</td>
+  </ng-container>
+
   <ng-container matColumnDef="fronts">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ getHeaderName("fronts") }}</th>
     <td mat-cell *matCellDef="let d">{{ d.fronts.toFixed(0) }}</td>

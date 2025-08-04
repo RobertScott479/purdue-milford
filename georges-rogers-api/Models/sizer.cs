@@ -6,8 +6,10 @@ using System.Text.Json.Serialization;
 namespace weightech_api.Models
 {
 
-    public partial class SizerTray
+    public partial class SizerTableModel
     {
+
+        public long Id { get; set; }
         public long Serial { get; set; }
 
         //[JsonPropertyName("weight_g")]
@@ -15,7 +17,7 @@ namespace weightech_api.Models
         public long Timestamp { get; set; }
         public long Gate { get; set; }
         public long Scale { get; set; }
-        //        public string ServerGroup { get; set; } //added for grouping
+        public string ServerGroup { get; set; } //added for grouping
     }
 
     public class SizerSummary
@@ -32,7 +34,7 @@ namespace weightech_api.Models
 
     public class SizerDetailRes : ResInfo
     {
-        public List<SizerTray> Details { get; set; }
+        public List<SizerTableModel> Details { get; set; }
 
     }
 
