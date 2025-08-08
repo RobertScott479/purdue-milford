@@ -39,6 +39,7 @@ export class Trimline implements IDatasources {
   init(timeFrame: TimeFrame | null | undefined) {
     //this.servers = this.serverMap.dataSource.data.filter((x) => x.group === this.moduleID && x.enabled === true);
     this.servers = this.serverMap.getServersByGroup(this.serverGroups);
+
     this.servers.forEach((s) => {
       s.func = () => this.serverMap.fetch(s.index, this.serverMap.getJsonData(s));
     });

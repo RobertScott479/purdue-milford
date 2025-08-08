@@ -9,7 +9,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Server</mat-label>
             <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="trimlineService.onFrmGroupChange()">
-              <mat-option [value]="-1">All</mat-option>
+              <!-- <mat-option [value]="-1">All</mat-option> -->
               @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
               <mat-option [value]="s.index">{{ s.server }}</mat-option>
               }

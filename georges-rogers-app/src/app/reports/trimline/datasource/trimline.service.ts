@@ -31,9 +31,9 @@ export class TrimlineService {
     this.frmGroup = this.fb.group({
       serverGroups: [this.serverGroups],
       report: ['Summary'],
-      serverIndex: [0],
+      serverIndex: [-1],
       timeframe: [TimeFrame.Live],
-      date: [new Date(), Validators.required],
+      date: [new Date('8/1/2025'), Validators.required],
       toDate: [new Date(), Validators.required],
       shift: [1],
       fromTime: [
@@ -61,6 +61,9 @@ export class TrimlineService {
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.trimline.updateFilters(frm.serverIndex);
       this.trimline.init(frm.timeframe);
+      if (this.frmGroup.value.serverIndex === -1) {
+        this.frmGroup.patchValue({ serverIndex: this.trimline.servers[0]?.index || 0 }); // Ensure serverIndex is set to a valid server index
+      }
     }
   }
 

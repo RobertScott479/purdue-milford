@@ -8,9 +8,9 @@ White='\033[0;37m'        # White
 #trap 'echo SCRIPT FAILED' EXIT
 
 APPNAME="georges-rogers-api"
-DATABASE="afnl.db"
-PORT="5015"
-CUSTOMER="georges-rogers-app"
+DATABASE="georges.db"
+PORT="5017"
+CUSTOMER="georges-rogers"
 
 echo "Step 1 of 9, Building $APPNAME container..."
 if docker build -t rcm3100d/$APPNAME .

@@ -107,5 +107,5 @@ export const routes: Routes = [
   },
   { path: 'qc-login', component: QcLoginComponent },
   { path: 'qc-check', component: QcCheckComponent, canDeactivate: [SaveFormsGuard] }, //, canDeactivate: [SaveFormsGuard]
-  { path: '**', redirectTo: 'caseweigher-viewer/summary', pathMatch: 'full' },
+  { path: '**', redirectTo: 'yields-viewer/summary', pathMatch: 'full' },
 ];

@@ -67,9 +67,9 @@ export class DistributionService {
     this.frmGroup = this.fb.group({
       serverGroups: [this.serverGroups],
       report: ['Summary', Validators.required],
-      serverIndex: [0],
-      timeframe: [TimeFrame.Live],
-      date: [new Date(), Validators.required],
+      serverIndex: [-1],
+      timeframe: [TimeFrame.DateShift],
+      date: [new Date('8/1/2025'), Validators.required],
       toDate: [new Date(), Validators.required],
       shift: [1],
       fromTime: [
@@ -100,6 +100,9 @@ export class DistributionService {
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
       this.updateFilters(frm.serverIndex);
       this.servers = this.homeService.serverMap.getServersByGroup(this.serverGroups);
+      if (this.frmGroup.value.serverIndex === -1) {
+        this.frmGroup.patchValue({ serverIndex: this.servers[0]?.index || 0 }); // Ensure serverIndex is set to a valid server index
+      }
       if (name === 'timeframe') {
         this.resetDataSource();
       }
