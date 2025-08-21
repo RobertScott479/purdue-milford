@@ -10,7 +10,7 @@ White='\033[0;37m'        # White
 APPNAME="georges-rogers-api"
 DATABASE="georges.db"
 PORT="5017"
-CUSTOMER="georges-rogers"
+CUSTOMER=$APPNAME
 
 echo "Step 1 of 9, Building $APPNAME container..."
 if docker build -t rcm3100d/$APPNAME .
@@ -91,7 +91,7 @@ fi
 #COPY sqlite db TO REMOTE
 echo "${White}(Step 8 of 9) scp local $APPNAME files to remotes /var/customers/$CUSTOMER"
 ssh -t robert@192.168.0.29 "sudo mkdir -p /var/customers/$CUSTOMER && sudo chown -R robert:robert /var/customers/$CUSTOMER"
-if scp -i "C:\Users\Robert Scott\.ssh\id_rsa" Data/$DATABASE robert@192.168.0.29:/var/customers/$CUSTOMER
+if scp -i "C:\Users\rober\.ssh\id_rsa" Data/** robert@192.168.0.29:/var/customers/$CUSTOMER
 then
     echo "${Green}Step 8 completed."
 else    

@@ -53,6 +53,7 @@ namespace weightech_api.Models
             var res = new StationsResModel();
             try
             {
+
                 var fileToRead = Path.Combine(this.filePath, "stations.json");
                 if (System.IO.File.Exists(fileToRead))
                 {
@@ -64,7 +65,7 @@ namespace weightech_api.Models
                 else
                 {
                     res.errorCode = "1";
-                    res.errorMessage = "Unable to load stations.json.  This file is missing!";
+                    res.errorMessage = $"Unable to load {fileToRead}.  This file is missing!";
                 }
 
             }

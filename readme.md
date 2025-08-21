@@ -1,7 +1,3 @@
-### Georges Rogers
-
-#### build 1, 6/18/2025
-
 ### Reports:
 
 - Coneline Yield
@@ -33,9 +29,9 @@
 
 ### API:
 
-- api/db/{serverGroup}summary?start=1747137600&stop=1747184400
-- api/db/{serverGroup}details?start=1747137600&stop=1747184400
-- api/db/{serverGroup}rate?start=1747137600&stop=1747184400
+- api/{serverGroup}summary?start=1747137600&stop=1747184400
+- api/{serverGroup}details?start=1747137600&stop=1747184400
+- api/{serverGroup}rate?start=1747137600&stop=1747184400
 
 Where serverGroup can be fronts, fillets, tenders, wings, shells, skins or condemned
 

@@ -1,4 +1,10 @@
-Georges Rogers
+Build 3,rss, 8/21/2025
+added generate-version.js and placed in scripts folder.
+updated package.json scripts to add prebuild hook
+added "prebuild": "node scripts/generate-version.js"
+ running this creates file versions.js which is then imported into the homeservice to expose the build name,version,date.
+
+
 
 based on tyson-North-Richland-Hills build 8
 
@@ -39,8 +45,5 @@ API:
 -	api/db/details?start=1729137600&stop=1729166400
 -   api/db/rate?start=1747137600&stop=1747184400
 
-
-Build 2,rss, 8/4/2025
-add
 
 

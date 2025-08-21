@@ -1,23 +1,24 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertMessage } from './layout/alert/alert-message';
 import { IExportCriteria } from './reports/standard-report/standard-report.component';
 import { IShift, ServerMap, ServerMapInterface } from './serverMap';
 import { Trimline } from './reports/trimline/datasource/trimline';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { BUILD_VERSION, BUILD_DATE, BUILD_NAME, BUILD_INFO } from './version';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HomeService {
   title = '';
-  appVersion = '@(#)Georges Rogers build 2\n';
-
+  appVersion = BUILD_NAME + ' build ' + BUILD_VERSION.replace('.0.0', '');
+  buildInfo = BUILD_INFO; // e.g., "@(#)georges-rogers-app build 3.0.0" will be added to the compiled output for scott.
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }) };
   refreshDelay = 5000;
   timeoutDelay = 5000;
@@ -29,9 +30,11 @@ export class HomeService {
   //caseweigher: Caseweigher;
   isDarkMode = signal(false);
 
-  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private http: HttpClient) {
     this.serverMap = new ServerMap('../assets/serverMap.json');
     this.title = this.serverMap.appConfig.appTitle;
+    //this.appVersion = BUILD_VERSION;
+
     this.initializeTheme();
     this.registerIcons();
   }

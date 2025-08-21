@@ -11,8 +11,11 @@ White='\033[0;37m'        # White
 
 #this must be in the root of the app!!!
 APPNAME="$(node -pe "require('./package.json')['name']")"
+#APPVersion="$(node -pe "require('./package.json')['version']")"
 echo "${White}Build and deploy $APPNAME to remote server 29"
 
+# #write appname and version to a file
+# echo "$APPNAME - $APPVersion" > dist/georges-rogers-app/assets/app-info.txt
 
 #BUILD
 echo "${White}(Step 1 of 3) Building $APPNAME app..."
