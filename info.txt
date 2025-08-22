@@ -1,4 +1,4 @@
-Build 3,rss, 8/21/2025
+Build 3-5,rss, 8/21/2025
 added generate-version.js and placed in scripts folder.
 updated package.json scripts to add prebuild hook
 added "prebuild": "node scripts/generate-version.js"
