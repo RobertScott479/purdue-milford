@@ -6,9 +6,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet build",
-      "program": "${workspaceFolder}/georges-rogers-api/bin/Debug/net6.0/georges-rogers-api.dll",
+      "program": "${workspaceFolder}/purdue-milford-api/bin/Debug/net6.0/purdue-milford-api.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/georges-rogers-api",
+      "cwd": "${workspaceFolder}/purdue-milford-api",
       "stopAtEntry": false,
       "justMyCode": true, // You can change to false if you wanna debug 3rd-party code
       "logging": {
@@ -22,7 +22,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
       // "sourceFileMap": {
-      //   "/Views": "${workspaceFolder}/georges-rogers-api/Views"
+      //   "/Views": "${workspaceFolder}/purdue-milford-api/Views"
       // }
     },
     {
@@ -30,8 +30,8 @@
       "type": "msedge",
       "request": "launch",
       "url": "http://localhost:4200/caseweigher-viewer/summary/demo",
-      "webRoot": "${workspaceFolder}/georges-rogers-app",
-      "skipFiles": ["${workspaceFolder}/georges-rogers-app/node_modules/**/*.js"],
+      "webRoot": "${workspaceFolder}/purdue-milford-app",
+      "skipFiles": ["${workspaceFolder}/purdue-milford-app/node_modules/**/*.js"],
       "preLaunchTask": "npm: start"
     },
     {
@@ -39,8 +39,8 @@
       "request": "launch",
       "type": "chrome",
       "url": "http://localhost:4200/caseweigher-viewer/summary/demo",
-      "webRoot": "${workspaceFolder}/georges-rogers-app",
-      "skipFiles": ["${workspaceFolder}/georges-rogers-app/node_modules/**/*.js"],
+      "webRoot": "${workspaceFolder}/purdue-milford-app",
+      "skipFiles": ["${workspaceFolder}/purdue-milford-app/node_modules/**/*.js"],
       "preLaunchTask": "npm: start"
     }
   ],

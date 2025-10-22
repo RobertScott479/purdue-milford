@@ -7,7 +7,7 @@ White='\033[0;37m'        # White
 #set 
 #trap 'echo SCRIPT FAILED' EXIT
 
-APPNAME="georges-rogers-api"
+APPNAME="purdue-milford-api"
 DATABASE="georges.db"
 PORT="5017"
 CUSTOMER=$APPNAME
@@ -77,8 +77,8 @@ else
 fi
 
 
-# echo  "${White}(Step 7 of 9) grant +rw permissions to /var/customers/georges-rogers-app on remote..."
-# if ssh -t robert@192.168.0.29 sudo chmod 777 -R /var/customers/georges-rogers-app
+# echo  "${White}(Step 7 of 9) grant +rw permissions to /var/customers/purdue-milford-app on remote..."
+# if ssh -t robert@192.168.0.29 sudo chmod 777 -R /var/customers/purdue-milford-app
 # then
 #     echo "${Green}Step 7 completed."
 # else

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "georges-rogers-app": {
+    "purdue-milford-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -39,7 +39,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
-            "outputPath": "dist/georges-rogers-app",
+            "outputPath": "dist/purdue-milford-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -81,10 +81,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "georges-rogers-app:build:production"
+              "buildTarget": "purdue-milford-app:build:production"
             },
             "development": {
-              "buildTarget": "georges-rogers-app:build:development"
+              "buildTarget": "purdue-milford-app:build:development"
             }
           },
           "defaultConfiguration": "development"

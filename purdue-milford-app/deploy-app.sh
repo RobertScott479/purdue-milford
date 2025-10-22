@@ -15,7 +15,7 @@ APPNAME="$(node -pe "require('./package.json')['name']")"
 echo "${White}Build and deploy $APPNAME to remote server 29"
 
 # #write appname and version to a file
-# echo "$APPNAME - $APPVersion" > dist/georges-rogers-app/assets/app-info.txt
+# echo "$APPNAME - $APPVersion" > dist/purdue-milford-app/assets/app-info.txt
 
 #BUILD
 echo "${White}(Step 1 of 3) Building $APPNAME app..."
@@ -29,7 +29,7 @@ fi
 
 #Convert README.md to HTML and copy to the assets folder
 printf "${White}(Step 1.5 of 3) Convert README.md to HTML..."
-if markdown-it ../readme.md > dist/georges-rogers-app/assets/readme.html
+if markdown-it ../readme.md > dist/purdue-milford-app/assets/readme.html
 then
     printf "${Green}step 1.5 converion completed\n"
 else

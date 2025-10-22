@@ -19,7 +19,7 @@ namespace weightech_api
 {
     public class Startup
     {
-        const string API_TITLE = "georges-rogers-api";
+        const string API_TITLE = "purdue-milford-api";
         const string API_VERSION = "v5";
         public Startup(IConfiguration configuration, IHostEnvironment env)
         {

@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/georges-rogers-api/georges-rogers-api.csproj",
+        "${workspaceFolder}/purdue-milford-api/purdue-milford-api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/georges-rogers-api/georges-rogers-api.csproj",
+        "${workspaceFolder}/purdue-milford-api/purdue-milford-api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -32,7 +32,7 @@
       "args": [
         "watch",
         "run",
-        "${workspaceFolder}/georges-rogers-api/georges-rogers-api.csproj",
+        "${workspaceFolder}/purdue-milford-api/purdue-milford-api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -44,7 +44,7 @@
     },
     {
       "label": "npm: start",
-      "path": "georges-rogers-app",
+      "path": "purdue-milford-app",
       "type": "npm",
       "script": "start",
       "isBackground": true,
@@ -76,7 +76,7 @@
     },
     {
       "label": "npm: startremote",
-      "path": "georges-rogers-app",
+      "path": "purdue-milford-app",
       "type": "npm",
       "script": "startremote",
       "isBackground": true,

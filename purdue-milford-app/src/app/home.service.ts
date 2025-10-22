@@ -18,7 +18,7 @@ import { BUILD_VERSION, BUILD_DATE, BUILD_NAME, BUILD_INFO } from './version';
 export class HomeService {
   title = '';
   appVersion = BUILD_NAME + ' build ' + BUILD_VERSION.replace('.0.0', '');
-  buildInfo = BUILD_INFO; // e.g., "@(#)georges-rogers-app build 3.0.0" will be added to the compiled output for scott.
+  buildInfo = BUILD_INFO; // e.g., "@(#)purdue-milford-app build 3.0.0" will be added to the compiled output for scott.
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }) };
   refreshDelay = 5000;
   timeoutDelay = 5000;
