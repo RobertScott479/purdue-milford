@@ -1,21 +1,6 @@
 {
   "serverMap": [
     {
-      "server": "Checkweigher #1 Demo",
-      "url": "",
-      "group": "caseweigher"
-    },
-    {
-      "server": "Checkweigher #2 Demo",
-      "url": "",
-      "group": "caseweigher"
-    },
-    {
-      "server": "Floor Scale  #1 Demo",
-      "url": "",
-      "group": "condemned"
-    },
-    {
       "server": "Trimline #1 Demo",
       "url": "",
       "group": "trimline"
@@ -24,50 +9,10 @@
       "server": "Trimline #2 Demo",
       "url": "",
       "group": "trimline"
-    },
-    {
-      "server": "Front Half Distribution #1 Demo",
-      "url": "",
-      "group": "fronts"
-    },
-    {
-      "server": "Fillet Sizer #1 Demo",
-      "url": "",
-      "group": "sizer,xyz,fillets"
-    },
-    {
-      "server": "Tenders #1 Demo",
-      "url": "",
-      "group": "tenders"
-    },
-    {
-      "server": "Wings #1 Demo",
-      "url": "",
-      "group": "wings"
-    },
-    {
-      "server": "Floorscale #1 Demo",
-      "url": "",
-      "group": "floorscale,shells,skins"
     }
   ],
   "serverMapDemo": [
     {
-      "server": "Checkweigher #1 Demo",
-      "url": "",
-      "group": "caseweigher"
-    },
-    {
-      "server": "Checkweigher #2 Demo",
-      "url": "",
-      "group": "caseweigher"
-    },
-    {
-      "server": "Floor Scale  #1 Demo",
-      "url": "",
-      "group": "condemned"
-    },
-    {
       "server": "Trimline #1 Demo",
       "url": "",
       "group": "trimline"
@@ -76,31 +21,6 @@
       "server": "Trimline #2 Demo",
       "url": "",
       "group": "trimline"
-    },
-    {
-      "server": "Front Half Distribution #1 Demo",
-      "url": "",
-      "group": "fronts"
-    },
-    {
-      "server": "Fillet Sizer #1 Demo",
-      "url": "",
-      "group": "sizer,xyz,fillets"
-    },
-    {
-      "server": "Tenders #1 Demo",
-      "url": "",
-      "group": "tenders"
-    },
-    {
-      "server": "Wings #1 Demo",
-      "url": "",
-      "group": "wings"
-    },
-    {
-      "server": "Floorscale #1 Demo",
-      "url": "",
-      "group": "floorscale,shells,skins"
     }
   ],
   "shifts": [
@@ -115,5 +35,5 @@
       "stop": { "hour": 1, "minute": 30, "offset": 1 }
     }
   ],
-  "appTitle": "Georges Rogers"
+  "appTitle": "Purdue Milford"
 }

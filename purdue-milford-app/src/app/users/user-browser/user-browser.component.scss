@@ -1,0 +1,33 @@
+.table-container {
+  height: calc(100vh - (358px));
+  overflow: auto;
+  box-shadow: 0px 0px 15px 1px lightgray;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.example-margin {
+  margin: 0 12px;
+}
+
+mat-card {
+  background-color: var(--mat-sys-surface-container) !important;
+  height: 100%;
+  border: none;
+  // border: solid 1px var(--mat-sys-surface-container);
+  // box-shadow: 0px 0px 15px 1px lightgray;
+  border-radius: 0px;
+}
+
+mat-card-header {
+  font-size: medium;
+  padding: 12px;
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+}
+
+mat-card-content {
+  margin-top: 10px;
+}

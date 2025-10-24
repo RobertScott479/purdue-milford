@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import { MatDrawerMode } from '@angular/material/sidenav';
 
 @Injectable({

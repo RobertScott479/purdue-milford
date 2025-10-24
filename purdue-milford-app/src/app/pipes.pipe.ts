@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -37,5 +38,18 @@ export class okFailed implements PipeTransform {
   transform(value: boolean, ...args: unknown[]): unknown {
     // console.log(value)
     return value ? 'Ok' : 'Failed';
+  }
+}
+
+@Pipe({
+  name: 'Unix2ShortDate',
+})
+export class Unix2ShortDate implements PipeTransform {
+  transform(value: number, ...args: unknown[]): unknown {
+    if (value <= 0) {
+      return '';
+    }
+    const dt = formatDate(new Date(value * 1000), 'M/d/y h:mm:ss a', 'en-US');
+    return dt;
   }
 }

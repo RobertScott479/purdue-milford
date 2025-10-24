@@ -8,26 +8,18 @@ import { QcCheckComponent } from './reports/trimline/qc/qc-check/qc-check.compon
 import { Injectable } from '@angular/core';
 import { QcLoginComponent } from './reports/trimline/qc/qc-login/qc-login.component';
 import { TrimlineViewerComponent } from './reports/trimline/trimline-viewer/trimline-viewer.component';
-import { CaseweigherSummaryComponent } from './reports/caseweigher/caseweigher-summary/caseweigher-summary.component';
-import { CaseweigherDiagnosticsComponent } from './reports/caseweigher/diagnostics/diagnostics.component';
-import { CaseweigherDetailsComponent } from './reports/caseweigher/caseweigher-details/caseweigher-details.component';
-import { CaseweigherViewerComponent } from './reports/caseweigher/caseweigher-viewer/caseweigher-viewer.component';
-import { FloorscaleSummaryComponent } from './reports/floorscale/floorscale-summary/floorscale-summary.component';
-import { FloorscaleViewerComponent } from './reports/floorscale/floorscale-viewer/floorscale-viewer.component';
-import { floorscaleDiagnosticsComponent } from './reports/floorscale/floorscale-diagnostics/diagnostics.component';
-import { FloorscaleDetailsComponent } from './reports/floorscale/floorscale-details/floorscale-details.component';
+
 import { ServersComponent } from './servers/servers.component';
-import { CaseweigherRateComponent } from './reports/caseweigher/caseweigher-rate/caseweigher-rate.component';
-import { SizerSummaryComponent } from './reports/sizer/sizer-summary/sizer-summary.component';
-import { SizerDetailsComponent } from './reports/sizer/sizer-details/sizer-details.component';
-import { HistogramComponent } from './reports/sizer/histogram/histogram.component';
-import { SizerViewerComponent } from './reports/sizer/sizer-viewer/sizer-viewer.component';
-import { SizerRateComponent } from './reports/sizer/sizer-rate/sizer-rate.component';
-import { DistributionViewerComponent } from './reports/distribution/distribution-viewer/distribution-viewer.component';
-import { DistributionSummaryComponent } from './reports/distribution/distribution-summary/distribution-summary.component';
-import { DistributionDetailsComponent } from './reports/distribution/distribution-details/distribution-details.component';
-import { YieldSummaryComponent } from './reports/yields/yield-summary/yield-summary.component';
-import { YieldViewerComponent } from './reports/yields/yield-viewer/yield-viewer.component';
+
+import { EmployeeBrowserComponent } from './reports/trimline/employees/employee-browser/employee-browser.component';
+import { EmployeeNewComponent } from './reports/trimline/employees/employee-new/employee-new.component';
+import { CutsBrowserComponent } from './reports/trimline/cuts/cuts-browser/cuts-browser.component';
+import { CutEditorComponent } from './reports/trimline/cuts/cut-editor/cut-editor.component';
+import { AuthGuardService } from './users/login/auth-guard.service';
+import { UserRoleEnum } from './users/login/auth-models';
+import { UserBrowserComponent } from './users/user-browser/user-browser.component';
+import { LoginComponent } from './users/login/login.component';
+import { UserEditorComponent } from './users/user-editor/user-editor.component';
 
 @Injectable()
 export class SaveFormsGuard {
@@ -37,29 +29,52 @@ export class SaveFormsGuard {
 }
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'caseweigher-viewer/summary', pathMatch: 'full' },
+  { path: '', redirectTo: 'trimline-viewer/summary', pathMatch: 'full' },
 
   {
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: 'stations', component: StationsComponent, canDeactivate: [SaveFormsGuard] }, //
-      { path: 'diagnostics', component: DiagnosticsComponent },
-      { path: 'floorscalediagnostics', component: floorscaleDiagnosticsComponent },
+      {
+        path: 'employees',
+        component: EmployeeBrowserComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
+      },
+      { path: 'employeenew', component: EmployeeNewComponent, canDeactivate: [SaveFormsGuard] },
+      { path: 'stations', component: StationsComponent, canDeactivate: [SaveFormsGuard] },
+
+      {
+        path: 'cutsbrowser',
+        component: CutsBrowserComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super, UserRoleEnum.User] },
+      },
+      {
+        path: 'cutseditor',
+        component: CutEditorComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
+        canDeactivate: [SaveFormsGuard],
+      },
+      { path: 'login/:route', component: LoginComponent },
+      { path: 'login', component: LoginComponent },
     ],
   },
-  { path: 'caseweigherdiagnostics', component: CaseweigherDiagnosticsComponent },
-  { path: 'servers', component: ServersComponent },
   {
-    path: 'caseweigher-viewer',
-    component: CaseweigherViewerComponent,
-    children: [
-      { path: 'summary/:id', component: CaseweigherSummaryComponent },
-      { path: 'summary', component: CaseweigherSummaryComponent },
-      { path: 'details', component: CaseweigherDetailsComponent },
-      { path: 'rate', component: CaseweigherRateComponent },
-    ],
+    path: 'userbrowser',
+    component: UserBrowserComponent,
+    canActivate: [AuthGuardService],
+    data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
   },
+  {
+    path: 'edituser',
+    component: UserEditorComponent,
+    canActivate: [AuthGuardService],
+    data: { expectedRoles: [UserRoleEnum.Admin] },
+  },
+  { path: 'servers', component: ServersComponent },
+
   {
     path: 'trimline-viewer',
     component: TrimlineViewerComponent,
@@ -68,44 +83,8 @@ export const routes: Routes = [
       { path: 'summary', component: TrimlineSummaryComponent },
     ],
   },
-  {
-    path: 'floorscale-viewer',
-    component: FloorscaleViewerComponent,
-    children: [
-      { path: 'summary/:id', component: FloorscaleSummaryComponent },
-      { path: 'summary', component: FloorscaleSummaryComponent },
-      { path: 'details', component: FloorscaleDetailsComponent },
-    ],
-  },
-  {
-    path: 'sizer-viewer',
-    component: SizerViewerComponent,
-    children: [
-      { path: 'summary/:id', component: SizerSummaryComponent },
-      { path: 'summary', component: SizerSummaryComponent },
-      { path: 'details', component: SizerDetailsComponent },
-      { path: 'rate', component: SizerRateComponent },
-      { path: 'histogram', component: HistogramComponent },
-    ],
-  },
-  {
-    path: 'yields-viewer',
-    component: YieldViewerComponent,
-    children: [
-      { path: 'summary/:id', component: YieldSummaryComponent },
-      { path: 'summary', component: YieldSummaryComponent },
-    ],
-  },
-  {
-    path: 'distribution-viewer',
-    component: DistributionViewerComponent,
-    children: [
-      { path: 'summary/:id', component: DistributionSummaryComponent },
-      { path: 'summary', component: DistributionSummaryComponent },
-      { path: 'details', component: DistributionDetailsComponent },
-    ],
-  },
+
   { path: 'qc-login', component: QcLoginComponent },
   { path: 'qc-check', component: QcCheckComponent, canDeactivate: [SaveFormsGuard] }, //, canDeactivate: [SaveFormsGuard]
-  { path: '**', redirectTo: 'yields-viewer/summary', pathMatch: 'full' },
+  { path: '**', redirectTo: 'trimline-viewer/summary', pathMatch: 'full' },
 ];

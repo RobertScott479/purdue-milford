@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Please Log In</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-alert [alert]="authService.alert" [alertHidden]="false"></app-alert>
+
+    <form [formGroup]="formGrp" autocomplete="on" (keyup.enter)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username" id="username" autofocus autocomplete="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" id="password" autocomplete="current-password" />
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" class="full-width" (click)="onSubmit()">Submit</button>
+
+    <!-- <div style="margin-top:20px;border-top:solid lightgray 1px;padding: 15px;">
+      <div class="row">
+        <div class="col">
+          <a [routerLink]="['/newuser']" >Create New User</a>
+        </div>
+
+        <div class="col" style="text-align: right;">
+          <a [routerLink]="['/forgotpassword']" >Forgot Your Password?</a>
+        </div>
+      </div>
+
+    </div> -->
+  </mat-card-actions>
+</mat-card>

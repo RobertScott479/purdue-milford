@@ -1,18 +1,18 @@
-<div class="dialog-container">
-  <h1 mat-dialog-title>{{ title }}</h1>
-  <mat-dialog-content>
-    {{ content }}
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    @if (cancelButton) {
-    <button mat-raised-button (click)="onClick(cancelButton)" cdkFocusInitial>
-      {{ cancelButton }}
-    </button>
-    } @if (yesButton) {
-    <button mat-raised-button (click)="onClick(yesButton)">{{ yesButton }}</button>
-    } @if (noButton) {
-    <button mat-raised-button (click)="onClick(noButton)">{{ noButton }}</button>
-    }
-    <!--<button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>-->
-  </mat-dialog-actions>
+<h1 mat-dialog-title>{{ title }}</h1>
+
+<div mat-dialog-content class="dialog-content">
+  <h2>{{ content }}</h2>
+</div>
+<div mat-dialog-actions>
+  @if (cancelButton !== '') {
+  <button mat-button (click)="onClick(cancelButton)" cdkFocusInitial>
+    {{ cancelButton }}
+  </button>
+  } @if (yesButton !== '') {
+  <button mat-raised-button (click)="onClick(yesButton)">{{ yesButton }}</button>
+  } @if (noButton !== '') {
+  <button mat-raised-button (click)="onClick(noButton)">{{ noButton }}</button>
+  }
+
+  <!--<button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>-->
 </div>

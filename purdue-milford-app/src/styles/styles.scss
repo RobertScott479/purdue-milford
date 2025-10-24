@@ -50,3 +50,17 @@ body.dark-mode {
 mat-form-field {
   width: 100%;
 }
+
+.mat-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0px 0 0 0;
+}
+
+.mat-col {
+  flex: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+}

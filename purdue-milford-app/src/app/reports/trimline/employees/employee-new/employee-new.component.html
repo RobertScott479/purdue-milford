@@ -1,0 +1,99 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+  <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
+  <div class="table-container">
+    <mat-card-content>
+      <app-alert [alert]="employeeService.alert" [alertHidden]="true"></app-alert>
+      <form [formGroup]="formGrp" (keyup.enter)="onSubmit()" autocomplete="off">
+        <div class="mat-row mt-1">
+          <mat-form-field appearance="outline">
+            <mat-label>Cutter number</mat-label>
+            <input matInput type="text" maxlength="5" pattern="^\d((?![,\.])\d)*$" id="cutter_number" formControlName="cutter_number" />
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("cutter_number") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" maxlength="40" id="name" formControlName="name" />
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("name") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role">
+              <mat-option *ngFor="let role of employeeService.employeeRoles" [value]="role">{{ role }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("role") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Shift</mat-label>
+            <mat-select formControlName="shift">
+              @for(shift of this.homeService.serverMap.appConfig.shifts; track shift.name;let idx = $index){
+              <mat-option [value]="idx + 1">{{ shift.name }} </mat-option>
+              }
+            </mat-select>
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("shift") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="employeeCategory">
+              <mat-option value="DG">DG</mat-option>
+              <mat-option value="CC1">CC1</mat-option>
+              <mat-option value="CC2">CC2</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("shift") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Hire date</mat-label>
+            <input matInput type="text" maxlength="10" id="hireDate" formControlName="hireDate" />
+            <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("hireDate") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="inline-block">
+          <label for="status" class="me-3">Enabled:</label>
+          <mat-slide-toggle id="status" color="primary" formControlName="enabled">{{ formGrp.get("enabled").value ? "Yes" : "No" }}</mat-slide-toggle>
+        </div> -->
+      </form>
+    </mat-card-content>
+  </div>
+  <mat-card-actions>
+    <button (click)="onBack()" type="button" mat-raised-button matTooltip="Previous page" matTooltipPosition="below" matTooltipShowDelay="500">
+      <mat-icon svgIcon="arrow_back"></mat-icon>
+      Back
+    </button>
+    <button
+      [disabled]="formGrp.pristine"
+      (click)="onSubmit()"
+      mat-raised-button
+      matTooltip="Save"
+      matTooltipPosition="below"
+      matTooltipShowDelay="500"
+    >
+      <mat-icon svgIcon="save"></mat-icon>
+      Save
+    </button>
+    <button [disabled]="showSpinner" (click)="onCancel()" mat-raised-button matTooltip="Undo" matTooltipPosition="below" matTooltipShowDelay="500">
+      <mat-icon svgIcon="undo"></mat-icon>
+      Reset
+    </button>
+
+    <!-- <button type="submit" class="btn btn-primary">Submit</button>
+        <button [disabled]="cancelDisabled" class="btn btn-secondary ms-3" (click)="onCancel()">Cancel</button> -->
+  </mat-card-actions>
+</mat-card>

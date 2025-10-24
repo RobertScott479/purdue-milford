@@ -1,0 +1,321 @@
+<mat-card>
+  <form autocomplete="off" (keyup.enter)="onSave()" (submit)="onSave()" [formGroup]="frmGroupCuts">
+    <mat-card-header>
+      <mat-card-title>{{ action }} Cuts</mat-card-title>
+    </mat-card-header>
+    <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
+    <div class="table-container">
+      <mat-card-content>
+        <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
+
+        @if(cutsService.cutClipboard.code) {
+        <div class="row">
+          <button type="button" mat-raised-button color="primary" (click)="onPaste()">Paste Cut</button>
+        </div>
+        }
+
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Code</mat-label>
+              <input matInput type="text" maxlength="20" placeholder="" formControlName="code" />
+              <mat-error>{{ getErrorMessage("code") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <input matInput type="text" maxlength="200" placeholder="" formControlName="description" />
+              <mat-error>{{ getErrorMessage("description") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Customer</mat-label>
+              <input matInput type="text" maxlength="100" placeholder="" formControlName="customer" />
+              <mat-error>{{ getErrorMessage("customer") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Cut Name</mat-label>
+              <input matInput type="text" maxlength="7" placeholder="" formControlName="cutName" />
+              <mat-error>{{ getErrorMessage("cutName") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Cut($)</mat-label>
+              <input matInput type="number" min="0" max="100" placeholder="" formControlName="cutRate" step="0.01" />
+              <mat-error>{{ getErrorMessage("cutRate") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Pattern</mat-label>
+              <mat-select id="pattern" formControlName="pattern" placeholder="Select a pattern here.">
+                <mat-option *ngFor="let pattern of homeService.patterns" [value]="pattern">{{ pattern }}</mat-option>
+              </mat-select>
+              <mat-error>{{ getErrorMessage("pattern") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>PPMH Standard</mat-label>
+              <input matInput type="number" maxlength="4" placeholder="" formControlName="ppmh" />
+              <mat-error>{{ getErrorMessage("ppmh") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Primary Yield Standard</mat-label>
+              <input matInput type="number" maxlength="2" placeholder="" formControlName="standardPrimaryYield" />
+              <mat-error>{{ getErrorMessage("standardPrimaryYield") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>AQL Score Standard</mat-label>
+              <input matInput type="number" maxlength="2" placeholder="" formControlName="aqlScoreStandard" />
+              <mat-error>{{ getErrorMessage("aqlScoreStandard") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Weight Score Standard</mat-label>
+              <input matInput type="number" maxlength="2" placeholder="" formControlName="weightScoreStandard" />
+              <mat-error>{{ getErrorMessage("weightScoreStandard") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Sample Size</mat-label>
+              <input matInput maxlength="3" type="number" placeholder="" formControlName="sampleSize" />
+              <mat-error>{{ getErrorMessage("sampleSize") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Weight Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="wtConfidence" />
+              <mat-error>{{ getErrorMessage("wtConfidence") }}</mat-error>
+            </mat-form-field>
+          </div> -->
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Weight Minimum</mat-label>
+              <input matInput maxlength="3" type="number" placeholder="" formControlName="weightMinimum" />
+              <mat-error>{{ getErrorMessage("weightMinimum") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Weight Maximum</mat-label>
+              <input matInput maxlength="3" type="number" placeholder="" formControlName="weightMaximum" />
+              <mat-error>{{ getErrorMessage("weightMaximum") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 1</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question1" />
+              <mat-error>{{ getErrorMessage("question1") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q1 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q1Confidence" />
+              <mat-error>{{ getErrorMessage("q1Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 2</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question2" />
+              <mat-error>{{ getErrorMessage("question2") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q2 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q2Confidence" />
+              <mat-error>{{ getErrorMessage("q2Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 3</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question3" />
+              <mat-error>{{ getErrorMessage("question3") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q3 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q3Confidence" />
+              <mat-error>{{ getErrorMessage("q3Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 4</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question4" />
+              <mat-error>{{ getErrorMessage("question4") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q4 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q4Confidence" />
+              <mat-error>{{ getErrorMessage("q4Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 5</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question5" />
+              <mat-error>{{ getErrorMessage("question5") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q5 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q5Confidence" />
+              <mat-error>{{ getErrorMessage("q5Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 6</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question6" />
+              <mat-error>{{ getErrorMessage("question6") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q6 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q6Confidence" />
+              <mat-error>{{ getErrorMessage("q6Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 7</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question7" />
+              <mat-error>{{ getErrorMessage("question7") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q7 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q7Confidence" />
+              <mat-error>{{ getErrorMessage("q7Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 8</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question8" />
+              <mat-error>{{ getErrorMessage("question8") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q8 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q8Confidence" />
+              <mat-error>{{ getErrorMessage("q8Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 9</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question9" />
+              <mat-error>{{ getErrorMessage("question9") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q9 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q9Confidence" />
+              <mat-error>{{ getErrorMessage("q9Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Question 10</mat-label>
+              <input matInput maxlength="100" type="text" placeholder="" formControlName="question10" />
+              <mat-error>{{ getErrorMessage("question10") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Q10 Confidence</mat-label>
+              <input matInput step="1" min="0" max="100" type="number" placeholder="" formControlName="q10Confidence" />
+              <mat-error>{{ getErrorMessage("q10Confidence") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </div>
+    <mat-card-actions>
+      <button (click)="onBack()" type="button" mat-raised-button matTooltip="Previous page" matTooltipPosition="below" matTooltipShowDelay="500">
+        <mat-icon svgIcon="arrow_back"></mat-icon>
+        Back
+      </button>
+      <button
+        [disabled]="frmGroupCuts.pristine"
+        type="submit"
+        mat-raised-button
+        color="accent"
+        matTooltip="Save"
+        matTooltipPosition="below"
+        matTooltipShowDelay="500"
+      >
+        <mat-icon svgIcon="save"></mat-icon>
+        Save
+      </button>
+      <button
+        [disabled]="frmGroupCuts.pristine"
+        (click)="onCancel()"
+        type="button"
+        mat-raised-button
+        matTooltip="Undo"
+        matTooltipPosition="below"
+        matTooltipShowDelay="500"
+      >
+        <mat-icon svgIcon="undo"></mat-icon>
+        Undo
+      </button>
+    </mat-card-actions>
+  </form>
+</mat-card>

@@ -2,25 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using weightech_api.Models;
+using dg_foods_api.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace weightech_api
+namespace dg_foods_api
 {
     public class Startup
     {
-        const string API_TITLE = "purdue-milford-api";
-        const string API_VERSION = "v5";
         public Startup(IConfiguration configuration, IHostEnvironment env)
         {
             Configuration = configuration;
@@ -33,33 +30,39 @@ namespace weightech_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<afnlContext>(options =>
+            services.AddDbContext<DatabaseContext>(options =>
             {
                 //var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                options.UseSqlite(Configuration.GetConnectionString("defaultConnection"), sqlite => { sqlite.CommandTimeout(30); });
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), sqlite => { sqlite.CommandTimeout(30); });
                 if (Env.IsDevelopment())
                 {
                     options.EnableDetailedErrors(true);
                     options.EnableSensitiveDataLogging(true);
                 }
-            });
 
+            });
 
             services.AddControllers();
 
-            // Register the Swagger services
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+        {
+            // options.IdleTimeout = TimeSpan.FromSeconds(10);
+            // options.Cookie.HttpOnly = true;
+            // options.Cookie.IsEssential = true;
+        });
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(API_VERSION, new OpenApiInfo
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Version = API_VERSION,
-                    Title = API_TITLE,
-                    Description = "Demo API for Georges Rogers ",
+                    Version = "v1",
+                    Title = "purdue-milford-api",
+                    Description = "purdue-milford-api build 1",
                     // TermsOfService = new Uri("https://example.com/terms"),
                     // Contact = new OpenApiContact
                     // {
-                    //     Name = "Shayne Boyer",
+                    //     Name = "Robert Scott",
                     //     Email = string.Empty,
                     //     Url = new Uri("https://twitter.com/spboyer"),
                     // },
@@ -67,8 +70,9 @@ namespace weightech_api
                     // {
                     //     Name = "Use under LICX",
                     //     Url = new Uri("https://example.com/license"),
-                    // }
+                    // }                    
                 });
+
             });
 
         }
@@ -81,34 +85,25 @@ namespace weightech_api
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            //app.UseSwagger();
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            // app.UseSwaggerUI();
-            app.UseSwaggerUI(c =>
-            {
-                // c.RoutePrefix
-                c.SwaggerEndpoint(API_VERSION + "/swagger.json", API_TITLE + " " + API_VERSION);
-            });
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
+            app.UseSwagger();
 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }

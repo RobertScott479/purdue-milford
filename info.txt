@@ -1,49 +1,17 @@
-Build 3-5,rss, 8/21/2025
-added generate-version.js and placed in scripts folder.
-updated package.json scripts to add prebuild hook
-added "prebuild": "node scripts/generate-version.js"
- running this creates file versions.js which is then imported into the homeservice to expose the build name,version,date.
-
-
-
-based on tyson-North-Richland-Hills build 8
-
-
-Build 2, rss, 7/31/2025
-in addtion to caseweigher:
-added coneline
-added distribution
-added sizer
-added floorscale
-
-
-
-
-
-
-Build 1, rss, 6/18/2025
-
-Modified TNRH build 8
-added light/dark theme
-changed the build name and app title
-added status indicators like tyson-clarksville.
-added matsortdirective to allow sort directions to be save/recalled to maintain previous sort state.
-
+Build 1, rss, 10/24/2025
+first commit of purdue milford.
+todo: qc station like dg with weights and PO's??
+change products??
+database or json file based??
+employee assignments alternate assignments??
 
 
 Reports:
 -	Summary
--	Details 
--   Rate
+-   ???
 
 JSON:
-data.json (used when timeframe selection is "Live")
 servermap.json (using fresno format incase they want to define shift start/stop times to query database)
-
-API:
--	api/db/summary?start=1729137600&stop=1729166400
--	api/db/details?start=1729137600&stop=1729166400
--   api/db/rate?start=1747137600&stop=1747184400
 
 
 

@@ -12,5 +12,16 @@
     </h1>
 
     <div class="spacer"></div>
+    @if (authService.isAuthenticated) {
+    <button mat-stroked-button (click)="logout()">
+      <mat-icon svgIcon="person"></mat-icon>
+      {{ authService.loadedUser.firstName }}
+    </button>
+    } @if (!authService.isAuthenticated) {
+    <button mat-stroked-button (click)="login()">
+      <mat-icon svgIcon="person"></mat-icon>
+      <span> Login</span>
+    </button>
+    }
   </div>
 </mat-toolbar>

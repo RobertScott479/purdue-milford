@@ -1,0 +1,90 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>User Profile {{ action }}</mat-card-title>
+  </mat-card-header>
+  <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
+  <div class="table-container">
+    <mat-card-content>
+      <app-alert [alert]="authService.alert" [alertHidden]="true"></app-alert>
+      <form [formGroup]="formGrp" (keyup.enter)="onSubmit()" autocomplete="off">
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput type="text" formControlName="username" />
+            <mat-error>{{ getErrorMessageFormGrp("username") }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mat-row">
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>First name</mat-label>
+              <input matInput type="text" formControlName="firstName" />
+              <mat-error>{{ getErrorMessageFormGrp("firstName") }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-col">
+            <mat-form-field appearance="outline">
+              <mat-label>Last name</mat-label>
+              <input matInput type="text" formControlName="lastName" />
+              <mat-error>{{ getErrorMessageFormGrp("lastName") }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- <mat-form-field appearance="outline" >
+        <mat-label>Job title</mat-label>
+        <input matInput type="text" formControlName="jobTitle" autocomplete="organization-title" />
+        <mat-error>{{ getErrorMessageFormGrp("jobTitle") }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" >
+        <mat-label>Company</mat-label>
+        <input matInput type="text" formControlName="company" autocomplete="organization" />
+        <mat-error>{{ getErrorMessageFormGrp("company") }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" >
+        <mat-label>Phone</mat-label>
+        <input matInput type="tel" formControlName="phone" autocomplete="tel-national" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="555-555-1234" />
+        <mat-error>{{ getErrorMessageFormGrp("phone") }}</mat-error>
+      </mat-form-field> -->
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Roles</mat-label>
+            <mat-select #roleselection formControlName="roles" multiple>
+              <mat-option *ngFor="let role of authService.roles" [value]="role">
+                {{ role }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessageFormGrp("roles") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            <mat-error>{{ getErrorMessageFormGrp("password") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- <mat-form-field appearance="outline" >
+        <mat-label>Account Status</mat-label>
+        <mat-select formControlName="active" (selectionChange)="onStatusChange()">
+          <mat-option [value]="0">Disabled</mat-option>
+          <mat-option [value]="1">Active</mat-option>
+          <mat-option [value]="2">Locked</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      </form>
+    </mat-card-content>
+  </div>
+  <mat-card-actions>
+    <button [disabled]="showSpinner" mat-raised-button (click)="onCancel()" cdkFocusInitial><mat-icon svgIcon="arrow_back"></mat-icon>Back</button>
+    <button [disabled]="submited || showSpinner || formGrp.pristine" mat-raised-button (click)="onSubmit()">
+      <mat-icon svgIcon="save"></mat-icon>Save
+    </button>
+
+    <button [disabled]="showSpinner" mat-raised-button (click)="onReset()"><mat-icon svgIcon="undo"></mat-icon>Reset</button>
+  </mat-card-actions>
+</mat-card>

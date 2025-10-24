@@ -15,132 +15,7 @@
     <mat-accordion class="example-headers-align" multi="false">
       <mat-expansion-panel expanded="true">
         <mat-expansion-panel-header>
-          <mat-panel-title>Coneline</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
-        </mat-expansion-panel-header>
-
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/yields-viewer/summary']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="summarize"></mat-icon>
-            Summary
-          </div>
-        </mat-list-item>
-        <!-- <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/yield-viewer/details']" routerLinkActive="active">
-        <div class="nav-item">
-          <mat-icon svgIcon="list_alt"></mat-icon>
-          Details
-        </div>
-      </mat-list-item> -->
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Distribution</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
-        </mat-expansion-panel-header>
-
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/distribution-viewer/summary']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="summarize"></mat-icon>
-            Summary
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/distribution-viewer/details']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="list_alt"></mat-icon>
-            Details
-          </div>
-        </mat-list-item>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Sizer</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
-        </mat-expansion-panel-header>
-
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/sizer-viewer/summary']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="summarize"></mat-icon>
-            Summary
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/sizer-viewer/details']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="list_alt"></mat-icon>
-            Details
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/sizer-viewer/rate']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="show_chart"></mat-icon>
-            Rate
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/sizer-viewer/histogram']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="bar_chart"></mat-icon>
-            Histogram
-          </div>
-        </mat-list-item>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Caseweigher</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
-        </mat-expansion-panel-header>
-
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/caseweigher-viewer/summary']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="summarize"></mat-icon>
-            Summary
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/caseweigher-viewer/details']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="list_alt"></mat-icon>
-            Details
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/caseweigher-viewer/rate']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="show_chart"></mat-icon>
-            Rate
-          </div>
-        </mat-list-item>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Floor scale</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
-        </mat-expansion-panel-header>
-
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/floorscale-viewer/summary']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="summarize"></mat-icon>
-            Summary
-          </div>
-        </mat-list-item>
-        <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/floorscale-viewer/details']" routerLinkActive="active">
-          <div class="nav-item">
-            <mat-icon svgIcon="list_alt"></mat-icon>
-            Details
-          </div>
-        </mat-list-item>
-        <!-- <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/caseweigher-viewer/rate']" routerLinkActive="active">
-        <div class="nav-item">
-          <mat-icon svgIcon="show_chart"></mat-icon>
-          Rate
-        </div>
-      </mat-list-item> -->
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
           <mat-panel-title>Trimline</mat-panel-title>
-          <!-- <mat-panel-description> </mat-panel-description> -->
         </mat-expansion-panel-header>
 
         <mat-list-item [routerLink]="['/trimline-viewer/summary']">
@@ -149,6 +24,21 @@
             Summary
           </div></mat-list-item
         >
+
+        <mat-list-item [routerLink]="['/home/cutsbrowser']"
+          ><div class="nav-item">
+            <mat-icon svgIcon="list_alt"></mat-icon>
+            Cuts
+          </div></mat-list-item
+        >
+
+        <mat-list-item [routerLink]="['/home/employees']"
+          ><div class="nav-item">
+            <mat-icon svgIcon="person"></mat-icon>
+            Employees
+          </div></mat-list-item
+        >
+
         <mat-list-item [routerLink]="['/home/stations']"
           ><div class="nav-item">
             <mat-icon svgIcon="toggle_on"></mat-icon>
@@ -170,6 +60,31 @@
           Servers
         </div>
       </mat-list-item>
+
+      <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/userbrowser']" routerLinkActive="active">
+        <div class="nav-item">
+          <mat-icon svgIcon="manage_accounts"></mat-icon>
+          Manage Users
+        </div>
+      </mat-list-item>
+
+      <!-- <ng-container *ngIf="!authService.isAuthenticated">
+        <mat-list-item class="nav-section-item" mat-ripple (click)="login()" routerLinkActive="active">
+          <div class="nav-item">
+            <mat-icon svgIcon="login"></mat-icon>
+            Login
+          </div>
+        </mat-list-item>
+      </ng-container>
+
+      <ng-container *ngIf="authService.isAuthenticated">
+        <mat-list-item class="nav-section-item" mat-ripple (click)="logout()" routerLinkActive="active">
+          <div class="nav-item">
+            <mat-icon svgIcon="logout"></mat-icon>
+            Logout
+          </div>
+        </mat-list-item>
+      </ng-container> -->
 
       <mat-list-item class="nav-section-item" mat-ripple (click)="toggleDarkMode()">
         <div class="nav-item">

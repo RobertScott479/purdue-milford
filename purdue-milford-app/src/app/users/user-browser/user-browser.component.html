@@ -1,0 +1,93 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Manage Users {{ authService.trimlineService.selectedServerHost }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="mat-col">
+      <form [formGroup]="trimlineService.frmGroup">
+        <mat-form-field appearance="outline">
+          <mat-label>Server</mat-label>
+          <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
+            @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
+            <mat-option [value]="s.index">{{ s.server }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <app-alert [alert]="authService.alert"></app-alert>
+
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="authService.dataSourceLoadedUsers"
+        class="mat-elevation-z8"
+        matSort
+        matSortActive="firstName"
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+          <td mat-cell *matCellDef="let d">{{ d.firstName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+          <td mat-cell *matCellDef="let d">{{ d.lastName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+          <td mat-cell *matCellDef="let d">{{ d.username }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="jobTitle">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Job Title</th>
+          <td mat-cell *matCellDef="let d">{{ d.jobTitle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+          <td mat-cell *matCellDef="let d">{{ d.company }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="roles">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
+          <td mat-cell *matCellDef="let d">{{ d.roles }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let d">{{ status[d.active] }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef width="130px"></th>
+          <td mat-cell *matCellDef="let d">
+            <div style="display: inline">
+              <button mat-icon-button (click)="onEdit(d)" matTooltipPosition="below" matTooltipShowDelay="500">
+                <mat-icon svgIcon="edit"></mat-icon>
+              </button>
+
+              <button mat-icon-button type="button" (click)="onDelete(d)" matTooltipPosition="below" matTooltipShowDelay="500">
+                <mat-icon svgIcon="delete"></mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button [routerLink]="['/edituser']">
+      <mat-icon svgIcon="add"></mat-icon>
+      Add User
+    </button>
+    <!-- <button type="button" class="ms-2 btn btn-success" (click)="onExport()"><mat-icon svgIcon="lan"></mat-icon> Export</button> -->
+  </mat-card-actions>
+</mat-card>

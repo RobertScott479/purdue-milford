@@ -205,7 +205,7 @@ export class StationsComponent implements OnInit {
     this.trimlineService
       .loadStations()
       .pipe(timeout(this.timeoutDelay))
-      .pipe(delay(300))
+      .pipe(delay(0))
       .subscribe(
         (res) => {
           if (res.errorCode === '0') {

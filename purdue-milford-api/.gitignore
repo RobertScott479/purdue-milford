@@ -31,8 +31,6 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-Data/
-
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -59,7 +57,7 @@ dlldata.c
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
-# .NET
+# .NET Core
 project.lock.json
 project.fragment.lock.json
 artifacts/
@@ -454,5 +452,3 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-*.db
-

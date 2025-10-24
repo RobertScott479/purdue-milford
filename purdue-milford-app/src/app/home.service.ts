@@ -11,6 +11,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { BUILD_VERSION, BUILD_DATE, BUILD_NAME, BUILD_INFO } from './version';
+import { AlertDialogComponent, AlertDialogInterface } from './alert-dialog/alert-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +32,9 @@ export class HomeService {
   //caseweigher: Caseweigher;
   isDarkMode = signal(false);
 
-  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private http: HttpClient) {
+  patterns: string[] = [];
+
+  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private dialog: MatDialog) {
     this.serverMap = new ServerMap('../assets/serverMap.json');
     this.title = this.serverMap.appConfig.appTitle;
     //this.appVersion = BUILD_VERSION;
@@ -69,6 +73,7 @@ export class HomeService {
       { name: 'arrow_forward', path: 'assets/icons/misc/arrow_forward_24.svg' },
       { name: 'delete', path: 'assets/icons/misc/delete24.svg' },
       { name: 'login', path: 'assets/icons/misc/login_24.svg' },
+      { name: 'logout', path: 'assets/icons/misc/logout_24.svg' },
       { name: 'cancel', path: 'assets/icons/misc/cancel_24.svg' },
       { name: 'person', path: 'assets/icons/misc/person_24.svg' },
       { name: 'admin_panel_settings', path: 'assets/icons/misc/admin_panel_settings_24.svg' },
@@ -82,6 +87,7 @@ export class HomeService {
       { name: 'fact_check', path: 'assets/icons/misc/fact_check_24.svg' },
       { name: 'toggle_on', path: 'assets/icons/misc/toggle_on_24.svg' },
       { name: 'bar_chart', path: 'assets/icons/misc/bar_chart_24.svg' },
+      { name: 'manage_accounts', path: 'assets/icons/misc/manage_accounts_24.svg' },
 
       //dashboard icons
       { name: 'light_mode', path: 'assets/icons/dashboard/light_mode.svg' },
@@ -207,5 +213,33 @@ export class HomeService {
       const result = dateInvalid ? { dateInvalid: true } : null;
       return result;
     };
+  }
+
+  async versionCheck(min_version: number) {
+    //expects build number to be that last element!
+    const appVersion = this.appVersion.split(' ');
+    const build = parseInt(appVersion[appVersion.length - 1]);
+
+    if (min_version > build) {
+      await this.showAlert('Newer version available', 'Click OK to reload latest.');
+    }
+  }
+
+  async showAlert(title_: string, content_: string) {
+    const dialogData: AlertDialogInterface = {
+      title: title_,
+      content: content_,
+    };
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      width: '450px',
+      data: dialogData,
+    });
+
+    await dialogRef.afterClosed().toPromise();
+    window.location.reload();
+  }
+
+  copyObject(obj: any): any {
+    return JSON.parse(JSON.stringify(obj));
   }
 }

@@ -1,235 +1,257 @@
 using Microsoft.AspNetCore.Mvc;
 
-using weightech_api.Models;
+using dg_foods_api.Models;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using System;
-
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Linq;
 
-namespace weightech_api.Models
+namespace api_philly.Controllers
 {
 
     [Produces("application/json")]
-    [Route("api/scale")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ScaleController : ControllerBase
     {
+        private readonly DatabaseContext db;
+        // private readonly string filePath;
+        // dg_foods_api.Data.ProductsDatabaseAccess products;
 
-        private static readonly object _lockObject = new object();
-        private static QCModel lastCheck = new QCModel { weight = 0, timestamp = DateTimeOffset.Now.ToUnixTimeSeconds() * 1000, station = "", duration = 0, index = 0, checkStatus = "" };
-        //private readonly string key = "QcEvent";
-        private readonly string filePath;
-
-        private readonly ILogger<ScaleController> _logger;
-
-        public ScaleController(IConfiguration configuration, IHostEnvironment env, ILogger<ScaleController> logger)
+        public ScaleController(IConfiguration configuration, IHostEnvironment env, DatabaseContext _db)
         {
-            filePath = configuration["filepath"];
-            _logger = logger;
+            // filePath = configuration["filepath"];
+            db = _db;
+        }
+
+        [HttpPost("codechange")]
+        public ActionResult<ErrorResModel> codechange([FromBody] string code)
+        {
+            System.Threading.Thread.Sleep(500);
+            if (code != "")
+            {
+                return Ok(new ErrorResModel { errorCode = "0", errorMessage = $"New Meat In code {code} applied" });
+            }
+            else
+            {
+                return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Old Meat Out applied" });
+            }
+
         }
 
 
+        [HttpPost("newmeatin")]
+        public ActionResult<ErrorResModel> newmeatin([FromBody] CodeChangeModel codeChange)
+        {
+            System.Threading.Thread.Sleep(500);
+            return Ok(new ErrorResModel { errorCode = "0", errorMessage = $"New Meat In code {codeChange.product} applied" });
+        }
 
 
-        // [HttpPost("cleartotals")]
-        // public ActionResult<ErrorResModel> clear()
-        // {
-        //     return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Totals cleared successfully at " + DateTime.Now });
-        // }
+        [HttpPost("oldmeatout")]
+        public ActionResult<ErrorResModel> oldmeatout()
+        {
+            System.Threading.Thread.Sleep(500);
+            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Old Meat Out applied" });
 
+        }
+
+        [HttpPost("cleanout")]
+        public ActionResult<ErrorResModel> cleanout()
+        {
+            System.Threading.Thread.Sleep(500);
+            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Cleanout Started..." });
+
+        }
+
+
+        [HttpPost("shiftchange")]
+        public ActionResult<ErrorResModel> shiftchange([FromBody] int shiftNum)
+        {
+            System.Threading.Thread.Sleep(500);
+            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Shift changed to " + shiftNum });
+        }
+
+
+        [HttpPost("clear")]
+        public ActionResult<ErrorResModel> clear(int index)
+        {
+            // Console.Write(index);
+            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Totals cleared successfully at " + DateTime.Now });
+        }
 
         [HttpGet("loadstations")]
-        public async Task<ActionResult<StationsResModel>> loadStations()
+        public ActionResult<StationsResModel> loadStations()
         {
 
             var res = new StationsResModel();
+            res.errorCode = "0";
+            res.errorMessage = "";
             try
             {
 
-                var fileToRead = Path.Combine(this.filePath, "stations.json");
-                if (System.IO.File.Exists(fileToRead))
-                {
-                    var json = await System.IO.File.ReadAllTextAsync(fileToRead);
-                    res.stations = JsonSerializer.Deserialize<StationsResModel>(json).stations;
-                    res.errorCode = "0";
-                    res.errorMessage = "";
-                }
-                else
-                {
-                    res.errorCode = "1";
-                    res.errorMessage = $"Unable to load {fileToRead}.  This file is missing!";
-                }
+                var q = db.Stations.Select(u =>
+                    new StationModel { Station = u.Station, Enabled = Convert.ToBoolean(u.Enabled) }
+                ).ToList();
 
+                res.stations = q;
             }
             catch (Exception e)
             {
                 res.errorCode = "1";
-                res.errorMessage = e.Message;
+                res.errorMessage = e.Message + " " + e.InnerException?.Message;
             }
 
             return Ok(res);
         }
 
         [HttpPost("savestations")]
-        public async Task<ActionResult<ErrorResModel>> saveemployees([FromBody] StationsRootModel req)
+        public ActionResult<ErrorResModel> saveStations([FromBody] StationsRootModel req)
         {
-            ErrorResModel res = new ErrorResModel();
 
+            ErrorResModel res = new ErrorResModel { errorCode = "0", errorMessage = "" };
+            db.Database.BeginTransaction();
             try
             {
-                if (!Directory.Exists(filePath))
-                {
-                    DirectoryInfo di = Directory.CreateDirectory(filePath);
-                }
 
-                var fileToWrite = Path.Combine(this.filePath, "stations.json");
-                // Console.Write(fileToWrite);                           
-                var json = JsonSerializer.Serialize(req);
-                await System.IO.File.WriteAllTextAsync(fileToWrite, json);
-                res.errorCode = "0";
-                res.errorMessage = "";
+                db.Stations.RemoveRange(db.Stations);
+                db.SaveChanges();
+                req.stations.ForEach(e =>
+               {
+                   var station = new StationModel
+                   {
+                       //  Id = e.Id,                     
+                       Enabled = Convert.ToBoolean(e.Enabled),
+                       Station = e.Station
+                   };
+                   db.Stations.Add(station);
+               });
+
+                db.SaveChanges();
+                db.Database.CommitTransaction();
+
             }
             catch (Exception e)
             {
                 Console.WriteLine("The process failed: {0}", e.ToString());
                 res.errorCode = "1";
-                res.errorMessage = e.Message;
+                res.errorMessage = e.Message + " " + e.InnerException?.Message;
             }
-
-
             return Ok(res);
         }
 
 
-
-        [HttpGet("checkstream")]
-        [Produces("text/event-stream")]
-        [ProducesResponseType(typeof(QCModel), StatusCodes.Status200OK)]
-        public async Task checkstream()
+        [HttpPost("applybreakadjustments")]
+        public ActionResult<ErrorResModel> applybreakadjustments([FromBody] BreakAdjustmentRootModel req)
         {
+
+            ErrorResModel res = new ErrorResModel { errorCode = "0", errorMessage = "" };
+            db.Database.BeginTransaction();
             try
             {
-                string[] stations = { "A01", "B01", "A02", "B02", "A03", "B03", "A04", "B04", "A05", "B05", "A06", "B06", "A07", "B07", "A08", "B08", "A09", "B09", "A10", "B10", };
-                _logger.LogInformation("Checkstream Started.");
-
-                Response.Headers.Add("Content-Type", "text/event-stream");
-                Response.Headers.Add("Connection", "keep-alive");
-                Response.Headers.Add("Cache-Control", "no-cache");
-                //  Response.Headers.Add("X-Accel-Buffering", "no");
-                var random = new Random();
-                var id = 0;
-                var index = 0;
-                var duration = 0;
-                var newCheck = 0;
-                var newCheckDelay = random.Next(3, 10);
-                QCModel payload = new QCModel { weight = 0, timestamp = 0, station = "", duration = 0, index = index, checkStatus = "" };
-                var json = JsonSerializer.Serialize(payload);
-                // HttpContext.Session.SetString(key, json);
-
-                //await Response.WriteAsync($"event: check\ndata: {json}\nid:{++id}\n\n");
-                await Response.WriteAsync($"data: {json}\nid:{++id}\n\n");
-                await Response.Body.FlushAsync();
-
-
-                QCModel checkInfo;
-                while (!HttpContext.RequestAborted.IsCancellationRequested)
-                {
-
-                    lock (_lockObject)
-                    {
-                        checkInfo = lastCheck;
-                    }
-                    if (checkInfo.checkStatus == "pass" || checkInfo.checkStatus == "fail")
-                    {
-                        checkInfo.checkStatus = "";
-                        payload.index = 0;
-                        payload.duration = 0;
-                        payload.station = "";
-                        payload.weight = 0;
-                        payload.checkStatus = "";
-                        payload.timestamp = 0;
-                        newCheck = 0;
-                        newCheckDelay = random.Next(5, 15);
-                    }
-
-                    newCheck++;
-                    if (newCheck == newCheckDelay)
-                    {
-                        payload.index = checkInfo.index + 1;
-                        payload.station = stations[random.Next(0, stations.Length)];
-                        payload.weight = random.Next(5, 50);
-                        payload.duration = 0;
-                        payload.checkStatus = "";
-                        payload.timestamp = DateTimeOffset.Now.ToUnixTimeSeconds() * 1000;
-                    }
-
-                    if (payload.index > 0)
-                    {
-                        payload.duration = duration++;
-                    }
-
-
-
-                    json = JsonSerializer.Serialize(payload);
-                    var packet = $"data: {json}\nid:{++id}\n\n";
-
-                    await Response.WriteAsync(packet);
-                    await Response.Body.FlushAsync();
-                    await Task.Delay(1000);
-                }
-                _logger.LogInformation("Checkstream canceled.");
-                lock (_lockObject)
-                {
-                    lastCheck.checkStatus = "";
-                }
-
-            }
-            catch (TaskCanceledException e)
-            {
-                _logger.LogInformation(e.Message + " " + e.InnerException?.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message + " " + e.InnerException?.Message);
-            }
-        }
-
-
-
-
-        [HttpPost("savecheck")]
-        public ActionResult<ErrorResModel> saveCheck([FromBody] QCModel req)
-        {
-            ErrorResModel res = new ErrorResModel();
-
-            try
-            {
-                lock (_lockObject)
-                {
-                    lastCheck = req;
-                }
-
-                res.errorCode = "0";
-                res.errorMessage = "";
+                db.BreakAdjustments.RemoveRange(db.BreakAdjustments);
+                db.SaveChanges();
+                //     req.breakAdjustments.ForEach(e =>
+                //   {
+                //       var breakAdjustment = new BreakAdjustmentModel
+                //       {
+                //           //  Id = e.Id,                     
+                //           bank = e.bank,
+                //           adjustment = e.adjustment
+                //       };
+                //       db.BreakAdjustments.Add(breakAdjustment);
+                //   });
+                db.AddRange(req.breakAdjustments);
+                db.SaveChanges();
+                db.Database.CommitTransaction();
             }
             catch (Exception e)
             {
                 Console.WriteLine("The process failed: {0}", e.ToString());
                 res.errorCode = "1";
-                res.errorMessage = e.Message;
+                res.errorMessage = e.Message + " " + e.InnerException?.Message;
             }
-
-
             return Ok(res);
         }
+
+
+        // [HttpGet("loadstations")]
+        // public async Task<ActionResult<StationsResModel>> loadstations()
+        // {
+
+        //     var res = new StationsResModel();
+        //     var fileExist = false;
+        //     try
+        //     {
+        //         var fileToRead = Path.Combine(this.filePath, "stations.json");
+        //         if (System.IO.File.Exists(fileToRead))
+        //         {
+        //             var json = await System.IO.File.ReadAllTextAsync(fileToRead);
+        //             res.stations = JsonConvert.DeserializeObject<StationsRootModel>(json).stations;
+        //             fileExist = true;
+        //         }
+
+        //         if (res.stations == null)
+        //         {
+        //             res.errorCode = "1";
+        //             res.errorMessage = "Unable to load stations.json. The file is " + (fileExist ? "corrupt" : "missing");
+        //         }
+        //         else
+        //         {
+        //             res.errorCode = "0";
+        //             res.errorMessage = "";
+        //         }
+
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         res.errorCode = "1";
+        //         res.errorMessage =  e.Message + " " + e.InnerException?.Message;
+        //     }
+
+        //     return Ok(res);
+        // }
+
+        // [HttpPost("savestations")]
+        // public async Task<ActionResult<ErrorResModel>> savestations([FromBody] StationsRootModel req)
+        // {
+        //     ErrorResModel res = new ErrorResModel();
+
+        //     try
+        //     {
+        //         if (!Directory.Exists(filePath))
+        //         {
+        //             DirectoryInfo di = Directory.CreateDirectory(filePath);
+        //         }
+
+        //         var fileToWrite = Path.Combine(this.filePath, "stations.json");
+        //         // Console.Write(fileToWrite);                           
+        //         var json = JsonConvert.SerializeObject(req);
+        //         await System.IO.File.WriteAllTextAsync(fileToWrite, json);
+        //         res.errorCode = "0";
+        //         res.errorMessage = "";
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine("The process failed: {0}", e.ToString());
+        //         res.errorCode = "1";
+        //         res.errorMessage =  e.Message + " " + e.InnerException?.Message;
+        //     }
+
+
+        //     return Ok(res);
+        // }
+
+
+
+
+
+
 
 
     }

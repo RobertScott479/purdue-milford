@@ -1,0 +1,168 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Cutters {{ employeeService.trimlineService.selectedServerHost }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-mat-progress-spinner [visible]="showSpinner" [delay]="100"></app-mat-progress-spinner>
+    <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
+
+    <div class="row-space-between">
+      <div class="mat-col">
+        <form [formGroup]="trimlineService.frmGroup">
+          <mat-form-field appearance="outline">
+            <mat-label>Server</mat-label>
+            <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
+              @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
+              <mat-option [value]="s.index">{{ s.server }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <div class="mat-col">
+        <form [formGroup]="employeeService.frmGrpEmployeeFilters">
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a shift</mat-label>
+            <mat-select #shiftSelect id="shiftSelection" formControlName="shift" (selectionChange)="onSelectionChange()">
+              <mat-option [value]="0">All Shifts</mat-option>
+              @for(shift of this.homeService.serverMap.appConfig.shifts; track shift.name;let idx = $index){
+              <mat-option [value]="idx + 1">{{ shift.name }} </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <div class="mat-col">
+        <form [formGroup]="employeeService.frmGrpEmployeeFilters">
+          <mat-form-field appearance="outline">
+            <mat-label>Search Cutter</mat-label>
+            <input matInput type="text" maxlength="20" placeholder="" formControlName="search" />
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- <div class="mat-col">
+          <mat-checkbox formControlName="activeOnly" (change)="onSelectionChange()">Show enabled only</mat-checkbox>
+        </div> -->
+    </div>
+
+    <!-- <ng-container *ngIf="isAdminOrSuper && !showSpinner && !addNewDisabled">
+      <label for="csvfile" class="input-btn btn btn-success me-3">Import cutter list</label>
+      <input id="csvfile" type="file" style="display: none" #EmployeeFile accept=".csv" (change)="onImport($event)" />     
+    </ng-container> -->
+
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="employeeService.dataSourceEmployeeList"
+        class=""
+        matSort
+        matSortActive="name"
+        matSortDirection="asc"
+        appMatSortCache
+      >
+        <ng-container matColumnDef="row">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let d; let i = index">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
+          <td mat-cell *matCellDef="let d">
+            <mat-slide-toggle disabled="true" [checked]="d.enabled"></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="shift">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
+          <td mat-cell *matCellDef="let d">
+            {{ employeeService.trimlineService.homeService.serverMap.appConfig.shifts[d.shift - 1].name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cutter_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cutter Number</th>
+          <td mat-cell *matCellDef="let d">{{ d.cutter_number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let d">{{ d.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+          <td mat-cell *matCellDef="let d">{{ d.role }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="employeeCategory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Category</th>
+          <td mat-cell *matCellDef="let d">{{ d.employeeCategory }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="hireDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Hire Date</th>
+          <td mat-cell *matCellDef="let d">{{ d.hireDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let d">
+            <div>
+              <button
+                class="action-button"
+                mat-icon-button
+                [disabled]="showSpinner"
+                (click)="onEdit(d)"
+                matTooltip="Edit Employee"
+                matTooltipPosition="below"
+                matTooltipShowDelay="500"
+              >
+                <mat-icon svgIcon="edit"></mat-icon>
+              </button>
+
+              <button
+                class="action-button"
+                mat-icon-button
+                [disabled]="showSpinner"
+                (click)="onDelete(d)"
+                matTooltip="Delete Employee"
+                matTooltipPosition="below"
+                matTooltipShowDelay="500"
+              >
+                <mat-icon svgIcon="delete"></mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="9999">No data available</td>
+        </tr>
+      </table>
+      <mat-paginator [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 250, 500, 1000]" showFirstLastButtons> </mat-paginator>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <div class="footer-container">
+      <button
+        mat-raised-button
+        matTooltip="Add Employee"
+        matTooltipPosition="below"
+        matTooltipShowDelay="500"
+        (click)="onEdit(null)"
+        [disabled]="addNewDisabled"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+        Add Cutter
+      </button>
+    </div>
+  </mat-card-footer>
+</mat-card>
