@@ -4,7 +4,7 @@ import { DiagnosticsComponent } from './reports/trimline/diagnostics/diagnostics
 import { StationsComponent } from './reports/trimline/stations/stations.component';
 import { HomeComponent } from './layout/home/home.component';
 import { TrimlineSummaryComponent } from './reports/trimline/trimline-summary/trimline-summary.component';
-import { QcCheckComponent } from './reports/trimline/qc/qc-check/qc-check.component';
+//import { QcCheckComponent } from './reports/trimline/qc/qc-check_sep/qc-check.component';
 import { Injectable } from '@angular/core';
 import { QcLoginComponent } from './reports/trimline/qc/qc-login/qc-login.component';
 import { TrimlineViewerComponent } from './reports/trimline/trimline-viewer/trimline-viewer.component';
@@ -20,6 +20,7 @@ import { UserRoleEnum } from './users/login/auth-models';
 import { UserBrowserComponent } from './users/user-browser/user-browser.component';
 import { LoginComponent } from './users/login/login.component';
 import { UserEditorComponent } from './users/user-editor/user-editor.component';
+import { QcCheckComponent } from './reports/trimline/qc/qc-check/qc-check.component';
 
 @Injectable()
 export class SaveFormsGuard {
@@ -42,7 +43,7 @@ export const routes: Routes = [
         data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
       },
       { path: 'employeenew', component: EmployeeNewComponent, canDeactivate: [SaveFormsGuard] },
-      { path: 'stations', component: StationsComponent, canDeactivate: [SaveFormsGuard] },
+      { path: 'stations', component: StationsComponent },
 
       {
         path: 'cutsbrowser',

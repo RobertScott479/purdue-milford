@@ -346,6 +346,8 @@ namespace dg_foods_api.Models
                 entity.ToTable("stations");
 
                 entity.Property(e => e.Enabled).HasColumnName("enabled");
+                entity.Property(e => e.PrimaryCutterNumber).HasColumnName("primary_cutter_number").HasDefaultValue(0);
+                entity.Property(e => e.AlternateCutterNumber).HasColumnName("alternate_cutter_number").HasDefaultValue(0);
             });
 
 

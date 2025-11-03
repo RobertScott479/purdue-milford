@@ -25,7 +25,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../../users/login/auth.service';
-import { ConfirmationDialogInterface } from '../../../../users/user.model';
+import { ConfirmationDialogInterface } from '../../../../layout/confirmation-dialog/confirmation.model';
 
 @Component({
   selector: 'app-cut-editor',
@@ -106,6 +106,8 @@ export class CutEditorComponent implements OnInit {
       const dialogData: ConfirmationDialogInterface = {
         title: 'Please Confirm',
         content: 'You have unsaved changes. Continue anyway?',
+        yesButton: 'Yes',
+        cancelButton: 'No',
         returnVal: '',
       };
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

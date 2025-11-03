@@ -1,54 +1,63 @@
-<div class="content-container">
-    <mat-card appearance="outlined">
-        <mat-card-header>
-          <mat-card-title>QC Check</mat-card-title>  
-          
-        </mat-card-header>
-        <mat-card-content>
-    <app-alert [alert]="alert"></app-alert>
- 
-    <app-mat-progress-spinner [visible]="showSpinner" mode="indeterminate"></app-mat-progress-spinner>
-    
-    <div class="row-space-between">
-      <div class="check-detail-block">
-        <div class="detail-name">Station</div>
-        <div class="detail-value">{{checkInfo().station || '--'}}</div>
-      </div>
-      
-      <div class="check-detail-block">
-        <div class="detail-name">Weight</div>
-        <div class="detail-value">{{checkInfo().weight || '--'}}</div>
-      </div>
-      
-      <div class="check-detail-block">
-        <div class="detail-name">Count</div>
-        <div class="detail-value">{{checkInfo().index || '--'}}</div>
-      </div>
-      
-      <div class="check-detail-block">
-        <div class="detail-name">Duration</div>
-        <div class="detail-value">{{checkInfo().duration || '--'}}</div>
-      </div>
-      
-      <!-- <div class="check-detail-block">
-        <div class="detail-name">Time</div>
-        <div class="detail-value">{{ checkInfo().timestamp?(checkInfo().timestamp | date : "M/dd/yyyy h:mm a") :'--' }}</div>
-      </div> -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Checker: {{ qcService.activeChecker.name }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="content-container">
+      <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
+
+      <ng-container *ngIf="this.checkEventOutput.product !== ''">
+        <div class="row-space-between">
+          <div class="check-detail-block">
+            <div class="detail-name">Product</div>
+            <div class="detail-value">{{ checkEventOutput.product }}</div>
+          </div>
+
+          <div class="check-detail-block">
+            <div class="detail-name">{{ checkEventOutput.checkEvent.cut.replace("Primary", "Nugget") }}</div>
+            <div class="detail-value">{{ cutName }}</div>
+          </div>
+
+          <div class="check-detail-block">
+            <div class="detail-name">Weight</div>
+            <div class="detail-value">{{ pieceWeight() }}</div>
+          </div>
+          <div class="check-detail-block">
+            <div class="detail-name">Time</div>
+            <div class="detail-value">{{ this.checkEventOutput.inspectionTime.toFixed(0) }}</div>
+          </div>
+        </div>
+
+        <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
+
+        <ng-container *ngIf="defectsDefined">
+          <div class="grid_container">
+            <mat-grid-list cols="4" rowHeight="100px" gutterSize="10px" class="defects-grid">
+              <mat-grid-tile *ngFor="let d of filterDemeritInfo">
+                <div matRipple class="defect-tile" (click)="onOccurance(d.index)">
+                  <div class="occurrence-count">{{ d.occurances }}</div>
+                  <div class="defect-question">{{ d.question }}</div>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
-    
-    
-      <div class="row-space-around">
-      <div class="pass-button" [class.disabled]="showSpinner || !checkInProgress()" (click)="submitCheck('pass')">Pass</div>  
-    
-      <div class="fail-button" [class.disabled]="showSpinner|| !checkInProgress()" (click)="submitCheck('fail')">Fail</div>  
-    </div>
-    
-    
-    
-        </mat-card-content>
-        <mat-card-footer>
-            <button [disabled]="showSpinner" mat-raised-button  (click)="logout()">Logout</button>
-            
-        </mat-card-footer>
-    </mat-card>
-    </div>
+  </mat-card-content>
+
+  <mat-card-actions class="action-buttons">
+    <ng-container *ngIf="defectsDefined">
+      <button mat-stroked-button color="primary" [disabled]="disableCheck || showSpinner || !checkInProgress" (click)="onSubmit()">
+        <mat-icon svgIcon="save"></mat-icon>Submit
+      </button>
+      <button mat-stroked-button [disabled]="showSpinner || !checkInProgress" (click)="onReset()"><mat-icon svgIcon="undo"></mat-icon>Reset</button>
+    </ng-container>
+    <div class="spacer"></div>
+    <button [disabled]="showSpinner" mat-stroked-button color="primary" (click)="logout()">
+      <mat-icon svgIcon="logout"></mat-icon>
+      Logout
+    </button>
+  </mat-card-actions>
+</mat-card>

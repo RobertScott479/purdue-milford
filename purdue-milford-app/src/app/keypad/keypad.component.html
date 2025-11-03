@@ -1,0 +1,29 @@
+<div class="keypad-container">
+  <div class="input-display">
+    <span class="input-text">{{ displayBox }}</span>
+  </div>
+
+  <div class="key-grid">
+    @for (r of keys; track r) {
+    <div class="key-row">
+      @for (c of r; track c) {
+      <button mat-stroked-button class="key-button" matRipple (click)="onKeyPress(c)">
+        {{ c }}
+      </button>
+      }
+    </div>
+    }
+
+    <div class="key-row">
+      <button mat-stroked-button class="key-button" matRipple (click)="onKeyPress('X')" aria-label="Delete">
+        <mat-icon svgIcon="undo"></mat-icon>
+      </button>
+
+      <button mat-stroked-button class="key-button" matRipple (click)="onKeyPress('0')">0</button>
+
+      <button mat-stroked-button class="key-button" matRipple (click)="onKeyPress('E')" aria-label="Enter">
+        <mat-icon svgIcon="login"></mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

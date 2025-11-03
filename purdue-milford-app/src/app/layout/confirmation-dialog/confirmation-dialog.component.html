@@ -9,9 +9,9 @@
     {{ cancelButton }}
   </button>
   } @if (yesButton !== '') {
-  <button mat-raised-button (click)="onClick(yesButton)">{{ yesButton }}</button>
+  <button mat-stroked-button (click)="onClick(yesButton)">{{ yesButton }}</button>
   } @if (noButton !== '') {
-  <button mat-raised-button (click)="onClick(noButton)">{{ noButton }}</button>
+  <button mat-stroked-button (click)="onClick(noButton)">{{ noButton }}</button>
   }
 
   <!--<button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>-->

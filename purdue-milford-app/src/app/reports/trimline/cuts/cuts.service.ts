@@ -44,17 +44,18 @@ export class CutsService {
     );
   }
 
-  async loadCutsAsync1() {
+  async loadCutsAsync1(): Promise<string> {
     try {
       this.alert.clear();
       const res = await this.loadCutsAsync();
       this.dataSourceCutInfo.data = res.cuts;
+      return '';
       // console.log(this.dataSourceCutInfo.data);
     } catch (err) {
       this.dataSourceCutInfo.data = [];
       this.alert.setError('Unable to load product cuts. ' + this.alert.getErrorMessage(err));
+      return this.alert.getErrorMessage(err);
     } finally {
-      return this.alert.message;
     }
   }
 }

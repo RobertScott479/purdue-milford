@@ -18,6 +18,8 @@ namespace dg_foods_api.Models
         [Required] public string Station { get; set; }
 
         [Required] public bool Enabled { get; set; }
+        public int PrimaryCutterNumber { get; set; } = 0;
+        public int AlternateCutterNumber { get; set; } = 0;
         // [Required] public string EmployeeName { get; set; }
         // [Required] public int Shift { get; set; }
     }

@@ -1,17 +1,41 @@
+Build 2, rss, 10/31/2025
+setup pages mostly done: cuts,cutters, stations, users
+qc login and qc check mostly done.
+todo: design report details like: 
+
+station, 
+cutter#, 
+cutterName, 
+Code, 
+Code Description
+gradeA(lbs), 
+gradeAYield,
+SYieldA,
+POSYieldA
+gradeB(lbs), 
+gradeBYield,
+overallYield
+AQLScore,
+Hours,
+PPMH,
+SPPMH,
+POSPPMH,
+
+
+
+
 Build 1, rss, 10/24/2025
 first commit of purdue milford.
-todo: qc station like dg with weights and PO's??
+todo: qc station like dg without weights and PO's??
 change products??
-database or json file based??
-employee assignments alternate assignments??
+central database is the plan
+stations assignments primary and alternate
 
 
 Reports:
 -	Summary
 -   ???
 
-JSON:
-servermap.json (using fresno format incase they want to define shift start/stop times to query database)
 
 
 

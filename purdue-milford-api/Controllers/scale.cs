@@ -96,7 +96,13 @@ namespace api_philly.Controllers
             {
 
                 var q = db.Stations.Select(u =>
-                    new StationModel { Station = u.Station, Enabled = Convert.ToBoolean(u.Enabled) }
+                    new StationModel
+                    {
+                        Station = u.Station,
+                        Enabled = Convert.ToBoolean(u.Enabled),
+                        PrimaryCutterNumber = u.PrimaryCutterNumber,
+                        AlternateCutterNumber = u.AlternateCutterNumber
+                    }
                 ).ToList();
 
                 res.stations = q;
@@ -127,7 +133,9 @@ namespace api_philly.Controllers
                    {
                        //  Id = e.Id,                     
                        Enabled = Convert.ToBoolean(e.Enabled),
-                       Station = e.Station
+                       Station = e.Station,
+                       PrimaryCutterNumber = e.PrimaryCutterNumber,
+                       AlternateCutterNumber = e.AlternateCutterNumber
                    };
                    db.Stations.Add(station);
                });

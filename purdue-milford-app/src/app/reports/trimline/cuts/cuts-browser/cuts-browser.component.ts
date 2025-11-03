@@ -31,10 +31,11 @@ import { Unix2ShortDate } from '../../../../pipes.pipe';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../../users/login/auth.service';
-import { ConfirmationDialogInterface } from '../../../../users/user.model';
+
 import { UserRoleEnum } from '../../../../users/login/auth-models';
 import { Trimline } from '../../datasource/trimline';
 import { TrimlineService } from '../../datasource/trimline.service';
+import { ConfirmationDialogInterface } from '../../../../layout/confirmation-dialog/confirmation.model';
 
 @Component({
   selector: 'app-cuts-browser',
@@ -116,12 +117,12 @@ export class CutsBrowserComponent implements OnDestroy, OnInit, AfterViewInit {
       const dialogData: ConfirmationDialogInterface = {
         title: 'Please Confirm',
         content: 'Are you sure you want to delete this cut?',
+        yesButton: 'Yes',
+        cancelButton: 'Cancel',
         returnVal: productKey,
       };
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '450px',
-        backdropClass: 'custom-dialog-backdrop-class',
-        panelClass: 'custom-dialog-panel-class',
         data: dialogData,
       });
 

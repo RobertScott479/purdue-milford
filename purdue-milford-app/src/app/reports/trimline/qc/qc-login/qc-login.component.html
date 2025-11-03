@@ -1,16 +1,13 @@
-<div class="content-container">
-    <mat-card appearance="outlined">
-        <mat-card-header>
-          <mat-card-title>QC Login</mat-card-title>  
-          
-        </mat-card-header>
-        <mat-card-content>
-    <app-alert [alert]="alert"></app-alert>
-    <!-- <app-mat-progress-spinner [visible]="true" mode="indeterminate"></app-mat-progress-spinner> -->
-        </mat-card-content>
-        <mat-card-footer>
-            <button  mat-raised-button  (click)="qclogin()">Login</button>
-            
-        </mat-card-footer>
-    </mat-card>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>QA Checker Login</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-container">
+      <app-alert class="alert-large" [alert]="alert"></app-alert>
+      <div class="keypad-container">
+        <app-keypad (LoginEvent)="onQCLogin($event)" (KeyPressEvent)="onKeyPress()"></app-keypad>
+      </div>
     </div>
+  </mat-card-content>
+</mat-card>

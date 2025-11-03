@@ -84,7 +84,7 @@ export class UserEditorComponent implements OnInit, OnDestroy {
           (async () => {
             try {
               this.loadedUser = await this.authService.getUser(username);
-              console.log(this.loadedUser);
+              // console.log(this.loadedUser);
               this.onReset();
             } catch (err) {
               this.authService.alert.setError(err);

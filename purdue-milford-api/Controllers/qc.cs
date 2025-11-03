@@ -207,38 +207,6 @@ namespace api_philly.Controllers
             return Ok(res);
         }
 
-        // [HttpPost("loginchecker")]
-        // public ActionResult<ErrorResModel> qclogin([FromBody] CheckerModel login)
-        // {
-        //     ErrorResModel res = new ErrorResModel { errorCode = "0", errorMessage = "" };
-        //     Console.WriteLine("QC logged in " + login.checker_cutter_number.ToString() + " at " + DateTime.Now.ToString("M/dd/yy hh:mm:ss:ms"));
-        //     log.write("loginchecker " + login.checker_cutter_number.ToString());
-        //     return Ok(res);
-        // }
-
-        // [HttpPost("loginchecker/{cutter_number}")]
-        // public ActionResult<ErrorResModel> qclogin(int cutter_number)
-        // {
-        //     var res = new CheckerLoginResModel();
-        //     res.errorCode = "0";
-        //     res.errorMessage = "";
-        //     try
-        //     {
-        //         var q = db.Employees.SingleOrDefault(u => u.Cutter_number == cutter_number && u.Role == "Checker");
-        //         if (q == null)
-        //         {
-        //             throw new Exception($"{cutter_number} is not a valid checker number.");
-        //         }
-        //         res.checker = new EmployeeModel { cutter_number = q.Cutter_number, name = q.Name, role = q.Role, enabled = Convert.ToBoolean(q.Enabled == "1" ? true : false), shift = Convert.ToInt32(q.Shift) };
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         res.errorCode = "1";
-        //         res.errorMessage = e.Message + " " + e.InnerException?.Message;
-        //     }
-
-        //     return Ok(res);
-        // }
 
         [HttpPost("logoutchecker")]
         public ActionResult<ErrorResModel> qclogout()

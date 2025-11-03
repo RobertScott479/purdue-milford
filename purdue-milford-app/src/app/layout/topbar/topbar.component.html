@@ -17,7 +17,7 @@
       <mat-icon svgIcon="person"></mat-icon>
       {{ authService.loadedUser.firstName }}
     </button>
-    } @if (!authService.isAuthenticated) {
+    } @if (!authService.isAuthenticated && !qcLoggedIn) {
     <button mat-stroked-button (click)="login()">
       <mat-icon svgIcon="person"></mat-icon>
       <span> Login</span>

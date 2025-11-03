@@ -86,4 +86,8 @@ export interface StationsResInterface extends ErrorResInterface {
 export interface StationInterface {
   station: string;
   enabled: boolean;
+  primaryCutterNumber: number;
+  alternateCutterNumber: number;
+  primaryCutterName?: string;
+  alternateCutterName?: string;
 }

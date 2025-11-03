@@ -413,9 +413,21 @@ namespace dg_foods_api.Migrations
                     b.Property<string>("Station")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("AlternateCutterNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0)
+                        .HasColumnName("alternate_cutter_number");
+
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER")
                         .HasColumnName("enabled");
+
+                    b.Property<int>("PrimaryCutterNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0)
+                        .HasColumnName("primary_cutter_number");
 
                     b.HasKey("Station");
 

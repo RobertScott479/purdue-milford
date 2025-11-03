@@ -4,7 +4,6 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 
 import { AuthService } from '../login/auth.service';
 
-import { ConfirmationDialogInterface } from '../user.model';
 import { UserInterface } from '../login/auth-models';
 
 import { Subscription } from 'rxjs';
@@ -27,6 +26,7 @@ import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../layout/alert/alert.component';
 import { ConfirmationDialogComponent } from '../../layout/confirmation-dialog/confirmation-dialog.component';
 import { TrimlineService } from '../../reports/trimline/datasource/trimline.service';
+import { ConfirmationDialogInterface } from '../../layout/confirmation-dialog/confirmation.model';
 
 @Component({
   selector: 'app-user-browser',
@@ -126,8 +126,8 @@ export class UserBrowserComponent implements OnInit {
       title: 'Please Confirm',
       content: 'Are you sure you want to delete this user?',
       returnVal: user,
-      yesButtonName: 'Yes',
-      noButtonName: 'Cancel',
+      yesButton: 'Yes',
+      noButton: 'Cancel',
     };
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '450px',

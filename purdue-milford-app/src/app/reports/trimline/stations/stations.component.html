@@ -16,39 +16,79 @@
       </div>
     </form>
 
-    <app-alert [alert]="alert"></app-alert>
+    <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
     <app-mat-progress-spinner [visible]="showSpinner()" [delay]="100" mode="indeterminate"></app-mat-progress-spinner>
+
     <div class="table-container">
-      <div class="stations-container">
-        <div class="stations-column">
-          <mat-list>
-            <mat-list-item *ngFor="let i of aStations">
-              <mat-slide-toggle (toggleChange)="onChange(i.station)" [color]="slideToggleColor" [checked]="i.enabled" [disabled]="showSpinner()">
-                {{ i.station }}
-              </mat-slide-toggle>
-            </mat-list-item>
-          </mat-list>
+      <div class="tables-wrapper">
+        <!-- A Stations Table -->
+        <div class="station-table-section">
+          <h3>Stations</h3>
+          <table mat-table #myTable [dataSource]="datasource" class="station-table" matSort matSortActive="station" matSortDirection="asc">
+            <!-- Enabled Column -->
+            <ng-container matColumnDef="enabled">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
+              <td mat-cell *matCellDef="let station">
+                <mat-icon svgIcon="check_circle" *ngIf="station.enabled" color="primary"></mat-icon>
+                <mat-icon svgIcon="cancel" *ngIf="!station.enabled" class="disabled-icon"></mat-icon>
+              </td>
+            </ng-container>
+
+            <!-- Station Column -->
+            <ng-container matColumnDef="station">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Station</th>
+              <td mat-cell *matCellDef="let station">{{ station.station }}</td>
+            </ng-container>
+
+            <!-- Primary Cutter Number Column -->
+            <ng-container matColumnDef="primaryCutterNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Primary #</th>
+              <td mat-cell *matCellDef="let station">{{ station.primaryCutterNumber || "-" }}</td>
+            </ng-container>
+
+            <!-- Primary Cutter Name Column -->
+            <ng-container matColumnDef="primaryCutterName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Primary Name</th>
+              <td mat-cell *matCellDef="let station">{{ station.primaryCutterName || "-" }}</td>
+            </ng-container>
+
+            <!-- Alternate Cutter Number Column -->
+            <ng-container matColumnDef="alternateCutterNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alternate #</th>
+              <td mat-cell *matCellDef="let station">{{ station.alternateCutterNumber || "-" }}</td>
+            </ng-container>
+
+            <!-- Alternate Cutter Name Column -->
+            <ng-container matColumnDef="alternateCutterName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alternate Name</th>
+              <td mat-cell *matCellDef="let station">{{ station.alternateCutterName || "-" }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let station">
+                <button mat-icon-button color="primary" (click)="onEditStation(station)" [disabled]="showSpinner()">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
         </div>
-        <div class="stations-column">
-          <mat-list>
-            <mat-list-item *ngFor="let i of bStations">
-              <mat-slide-toggle (toggleChange)="onChange(i.station)" [color]="slideToggleColor" [checked]="i.enabled" [disabled]="showSpinner()">
-                {{ i.station }}
-              </mat-slide-toggle>
-            </mat-list-item>
-          </mat-list>
-        </div>
+
+        <!-- B Stations Table -->
       </div>
     </div>
   </mat-card-content>
   <mat-card-footer>
-    <button mat-stroked-button [disabled]="!stationsLoaded() || showSpinner()" (click)="UpdateAll(true)" type="button">Enable All</button>
+    <!-- <button mat-stroked-button [disabled]="!stationsLoaded() || showSpinner()" (click)="UpdateAll(true)" type="button">Enable All</button>
 
     <button mat-stroked-button [disabled]="!stationsLoaded() || showSpinner()" (click)="UpdateAll(false)" type="button">Disable All</button>
 
     <button mat-stroked-button [disabled]="submitted() || !stationsLoaded() || showSpinner()" (click)="onClear()" type="button">Undo Changes</button>
-    <button mat-stroked-button [disabled]="submitted() || !stationsLoaded() || showSpinner()" (click)="onSave()" type="button">Save Changes</button>
-
-    <!-- <button mat-stroked-button (click)="dialogTest()">Dialog</button> -->
+    <button mat-stroked-button [disabled]="submitted() || !stationsLoaded() || showSpinner()" (click)="onSave()" type="button">Save Changes</button> -->
   </mat-card-footer>
 </mat-card>

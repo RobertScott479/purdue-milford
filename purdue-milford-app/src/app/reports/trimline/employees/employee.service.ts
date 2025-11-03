@@ -216,4 +216,12 @@ export class EmployeeService {
     };
     return myFilterPredicate;
   }
+
+  getEmployeeName(cutterNumber: number): string {
+    if (!cutterNumber || cutterNumber === 0) {
+      return '';
+    }
+    const employee = this.dataSourceEmployeeList.data.find((emp) => emp.cutter_number === cutterNumber);
+    return employee ? employee.name : '';
+  }
 }

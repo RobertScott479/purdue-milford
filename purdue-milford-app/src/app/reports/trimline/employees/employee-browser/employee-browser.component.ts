@@ -82,7 +82,6 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.onServerChange();
-    this.employeeService.loadEmployeesAsync();
     this.employeeService.dataSourceEmployeeList.filterPredicate = this.employeeService.employeefilterPredicate();
     this.setFilter();
 

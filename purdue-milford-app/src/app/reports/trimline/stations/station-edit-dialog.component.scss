@@ -1,0 +1,17 @@
+.dialog-content {
+  padding: 20px 0;
+}
+
+.enable-toggle {
+  margin-bottom: 24px;
+}
+
+.employee-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .employee-field {
+    width: 100%;
+  }
+}

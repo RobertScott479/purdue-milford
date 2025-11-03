@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ISSEvent } from './qc.model';
+import { EmployeeInterface } from '../employees/employee.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QcService {
   lastCheckIndex = 0;
-  constructor() {}
+  timeoutDelay = 5000;
+  activeChecker: EmployeeInterface = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
+  constructor(public httpClient: HttpClient) {}
 
   openEventSource(url: string): Observable<any> {
     return new Observable<MessageEvent>((observer) => {

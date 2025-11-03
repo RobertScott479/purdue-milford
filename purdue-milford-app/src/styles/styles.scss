@@ -64,3 +64,8 @@ mat-form-field {
   margin-right: 5px;
   text-align: center;
 }
+
+mat-dialog-container {
+  border-radius: 28px;
+  border: solid 1px var(--mat-sys-outline) !important;
+}
