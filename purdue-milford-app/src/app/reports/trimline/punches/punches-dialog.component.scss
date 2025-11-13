@@ -1,0 +1,33 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0;
+  min-width: 400px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.time-fields {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+
+  .time-field {
+    flex: 1;
+  }
+}
+
+mat-dialog-content {
+  overflow: visible;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+}

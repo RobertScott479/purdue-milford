@@ -8,6 +8,8 @@ White='\033[0;37m'        # White
 #trap 'echo SCRIPT FAILED' EXIT
 
 APPNAME="purdue-milford-api"
+PORT="5019"
+CUSTOMER="purdue-milford"
 
 echo "Step 1 of 9, Building $APPNAME container..."
 if docker build -t rcm3100d/$APPNAME .
@@ -38,24 +40,31 @@ else
 fi
 
 
-echo "Stop/remove/pull/run purdue-milford-api container on remote"
+echo "Stop/remove/pull/run $APPNAME container on remote"
 echo "Step 4 of 9, stop docker container..."
 if ssh -t robert@192.168.0.29 sudo docker stop $APPNAME
 then
      echo "${Green}Step 4 completed"
+
+     echo "Step 5 of 9, remove docker container..."
+    if ssh -t robert@192.168.0.29 sudo docker rm $APPNAME
+    then
+        echo "${Green}Step 5 completed"
+    else
+        echo "${Red}Step 5 failed."
+        exit 5
+    fi
 else
-    echo "${Red}Step 4 failed."
+    echo "${Red}Step 4 docker container Stop failed. perhaps it doesn't exist?"
+    echo "${White}"
+    read -p "Continue anyway?(y/n)"  REPLY
+    if [[ $REPLY =~ ^[Nn]$ ]]
+    then
      exit 4
+     fi
 fi
 
-echo "Step 5 of 9, remove docker container..."
-if ssh -t robert@192.168.0.29 sudo docker rm $APPNAME
-then
-     echo "${Green}Step 5 completed"
-else
-    echo "${Red}Step 5 failed."
-     exit 5
-fi
+
 
 echo "Step 6 of 9, pull image from docker hub..."
 if ssh -t robert@192.168.0.29 sudo docker pull rcm3100d/$APPNAME 
@@ -67,8 +76,8 @@ else
 fi
 
 
-# echo  "${White}(Step 7 of 9) grant +rw permissions to /var/customers/purdue-milford on remote..."
-# if ssh -t robert@192.168.0.29 sudo chmod 777 -R /var/customers/purdue-milford
+# echo  "${White}(Step 7 of 9) grant +rw permissions to /var/customers/$CUSTOMER on remote..."
+# if ssh -t robert@192.168.0.29 sudo chmod 777 -R /var/customers/$CUSTOMER
 # then
 #     echo "${Green}Step 7 completed."
 # else
@@ -77,24 +86,36 @@ fi
 # fi
 
 
-
-#COPY sqlite db TO REMOTE
-echo "${White}(Step 8 of 9) scp local $APPNAME files to remote..."
-if scp Data/purdue-milford.db robert@192.168.0.29:/var/customers/purdue-milford
-then
-    echo "${Green}Step 8 completed."
-else    
-    echo "${Red}Script execution aborted! failed at Step 8."
-    exit 3
-fi
+ read -p "Upload database?(y/n)"  REPLY
+if [[ $REPLY =~ ^[Yy]$ ]]
+then   
+    
+    #COPY sqlite db TO REMOTE
+    echo "${White}(Step 8 of 9) scp local $APPNAME files to remotes /var/customers/$CUSTOMER"
+    ssh -t robert@192.168.0.29 "sudo mkdir -p /var/customers/$CUSTOMER && sudo chown -R robert:robert /var/customers/$CUSTOMER"
+    if scp -i "C:\Users\rober\.ssh\id_rsa" Data/* robert@192.168.0.29:/var/customers/$CUSTOMER
+    then
+        echo "${Green}Step 8 completed."
+    else    
+        echo "${Red}Database copy failed at Step 8."
+        echo "${White}"
+        read -p "Continue anyway?(y/n)"  REPLY
+        if [[ $REPLY =~ ^[Nn]$ ]]
+        then
+        exit 7
+        fi
+    fi
+else
+    echo "${White}Skipping step 8 database upload."
+ fi
 
 echo "Step 9 of 9, run docker container..."
-if ssh -t robert@192.168.0.29 "sudo docker run -d --restart always --name=$APPNAME -v /var/customers/purdue-milford:/app/Data -p 5011:80 rcm3100d/$APPNAME"
+if ssh -t robert@192.168.0.29 "sudo docker run -d --restart always --name=$APPNAME -v /var/customers/$CUSTOMER:/app/Data -p $PORT:80 rcm3100d/$APPNAME"
 then
      echo "${Green}Step 9 completed"
 else
     echo "${Red}Step 9 failed."
-     exit 7
+     exit 8
 fi
 
 sleep 3

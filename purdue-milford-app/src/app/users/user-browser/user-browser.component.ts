@@ -22,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
+
 import { AlertComponent } from '../../layout/alert/alert.component';
 import { ConfirmationDialogComponent } from '../../layout/confirmation-dialog/confirmation-dialog.component';
 import { TrimlineService } from '../../reports/trimline/datasource/trimline.service';
@@ -113,11 +113,11 @@ export class UserBrowserComponent implements OnInit {
   }
 
   onEdit(user: UserInterface) {
-    this.router.navigate(['/edituser', user]);
+    this.router.navigate(['/setup/edituser', user]);
   }
 
   onCancel() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/setup/userbrowser']);
   }
 
   async onDelete(user: UserInterface) {

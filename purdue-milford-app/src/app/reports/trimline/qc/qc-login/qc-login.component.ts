@@ -12,14 +12,13 @@ import { SideNavService } from '../../../../layout/sidenav/sidenav.service';
 import { TrimlineService } from '../../datasource/trimline.service';
 import { EmployeeService } from '../../employees/employee.service';
 import { ErrorResInterface } from '../../../../models';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-qc-login',
   templateUrl: './qc-login.component.html',
   styleUrls: ['./qc-login.component.scss'],
   standalone: true,
-  imports: [AlertComponent, KeypadComponent, MatCardModule, MatIconModule],
+  imports: [AlertComponent, KeypadComponent, MatCardModule],
 })
 export class QcLoginComponent implements OnInit, OnDestroy {
   alert = new AlertMessage();
@@ -37,8 +36,8 @@ export class QcLoginComponent implements OnInit, OnDestroy {
     // this.sideNavService.sideNavMenuDisabled = true;
     // this.sideNavService.sideNavOpened = false;
     this.onKeyPress();
-    this.trimlineService.trimline.stopRefreshTimer();
-    this.alert.setLight('You are logged out. Press Login to begin');
+    //this.trimlineService.trimline.stopRefreshTimer();
+    this.alert.setLight('You are logged out. Enter your # then press Login to begin');
     this.sideNavService.close();
     this.qcService.activeChecker = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
   }

@@ -18,34 +18,55 @@
           <mat-panel-title>Trimline</mat-panel-title>
         </mat-expansion-panel-header>
 
-        <mat-list-item [routerLink]="['/trimline-viewer/summary']">
+        <mat-list-item [routerLink]="['/trimline-viewer/trimsummary']">
           <div class="nav-item">
             <mat-icon svgIcon="summarize"></mat-icon>
             Summary
-          </div></mat-list-item
-        >
+          </div>
+        </mat-list-item>
 
-        <mat-list-item [routerLink]="['/home/cutsbrowser']"
+        <!-- <mat-list-item [routerLink]="['/trimline-viewer/summarycopy']">
+          <div class="nav-item">
+            <mat-icon svgIcon="summarize"></mat-icon>
+            SummaryCopy
+          </div>
+        </mat-list-item> -->
+
+        <mat-list-item [routerLink]="['/trimline-viewer/qasummary']">
+          <div class="nav-item">
+            <mat-icon svgIcon="fact_check"></mat-icon>
+            QA
+          </div>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="['/setup/cutsbrowser']"
           ><div class="nav-item">
             <mat-icon svgIcon="list_alt"></mat-icon>
             Cuts
           </div></mat-list-item
         >
 
-        <mat-list-item [routerLink]="['/home/employees']"
+        <mat-list-item [routerLink]="['/setup/employees']"
           ><div class="nav-item">
             <mat-icon svgIcon="person"></mat-icon>
             Cutters
           </div></mat-list-item
         >
 
-        <mat-list-item [routerLink]="['/home/stations']"
+        <mat-list-item [routerLink]="['/setup/stations']"
           ><div class="nav-item">
             <mat-icon svgIcon="toggle_on"></mat-icon>
             Stations
           </div></mat-list-item
         >
-        <!-- <mat-list-item [routerLink]="['/home/diagnostics']">Diagnostics</mat-list-item> -->
+
+        <mat-list-item [routerLink]="['/setup/punches']"
+          ><div class="nav-item">
+            <mat-icon svgIcon="schedule"></mat-icon>
+            Punches
+          </div></mat-list-item
+        >
+        <!-- <mat-list-item [routerLink]="['/setup/diagnostics']">Diagnostics</mat-list-item> -->
         <mat-list-item [routerLink]="['/qc-login']"
           ><div class="nav-item">
             <mat-icon svgIcon="fact_check"></mat-icon>
@@ -61,7 +82,7 @@
         </div>
       </mat-list-item>
 
-      <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/userbrowser']" routerLinkActive="active">
+      <mat-list-item class="nav-section-item" mat-ripple [routerLink]="['/setup/userbrowser']" routerLinkActive="active">
         <div class="nav-item">
           <mat-icon svgIcon="manage_accounts"></mat-icon>
           Manage Users

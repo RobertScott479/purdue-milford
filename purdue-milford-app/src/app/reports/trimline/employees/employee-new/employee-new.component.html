@@ -27,7 +27,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Role</mat-label>
             <mat-select formControlName="role">
-              <mat-option *ngFor="let role of employeeService.employeeRoles" [value]="role">{{ role }}</mat-option>
+              <mat-option *ngFor="let role of stationRoles" [value]="role">{{ role }}</mat-option>
             </mat-select>
             <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("role") }}</mat-error>
           </mat-form-field>
@@ -37,8 +37,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Shift</mat-label>
             <mat-select formControlName="shift">
-              @for(shift of this.homeService.serverMap.appConfig.shifts; track shift.name;let idx = $index){
-              <mat-option [value]="idx + 1">{{ shift.name }} </mat-option>
+              @for(shift of this.homeService.serverMap.appConfig.shifts; track shift.number;let idx = $index){
+              <mat-option [value]="shift.number">{{ shift.name }} </mat-option>
               }
             </mat-select>
             <mat-error *ngIf="formGrp.invalid">{{ getErrorMessage("shift") }}</mat-error>

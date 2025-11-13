@@ -59,7 +59,7 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort = new MatSort();
   // alert = new AlertMessage();
 
-  columns = ['row', 'shift', 'employeeCategory', 'hireDate', 'role', 'cutter_number', 'name', 'action'];
+  columns = ['row', 'shift', 'role', 'cutter_number', 'name', 'action'];
   enabledString = ['Off', 'On'];
   addNewDisabled = false;
   showSpinner = false;
@@ -116,19 +116,6 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // async onServerChange() {
-  //   this.addNewDisabled = true;
-  //   this.alert.clear();
-  //   this.showSpinner = true;
-  //   const err = await this.homeService.loadEmployeesAsync();
-  //   this.showSpinner = false;
-  //   if (err === '') {
-  //     this.addNewDisabled = false;
-  //   } else {
-  //     this.alert.setError(err);
-  //   }
-  // }
-
   ngOnDestroy() {
     this.subscription && this.subscription.unsubscribe();
     //this.homeService.disableServerSelection = false;
@@ -150,7 +137,7 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     } else {
       this.employeeService.selectedEmployee = this.employeeService.defaultEmployee;
     }
-    this.router.navigate(['/home/employeenew']);
+    this.router.navigate(['/setup/employeenew']);
   }
 
   async onDelete(emp: EmployeeInterface) {

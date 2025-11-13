@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './layout/confirmation-dialog/confirmation-dialog.component';
 import { TimeFrame } from './reports/report.models';
 import { formatDate } from '@angular/common';
+import { IUnixStartStop } from './home.service';
 
 export interface IShiftTime {
   hour: number;
@@ -17,6 +18,7 @@ export interface IShiftTime {
 
 export interface IShift {
   name: string;
+  number: number;
   start: IShiftTime;
   stop: IShiftTime;
 }
@@ -190,6 +192,7 @@ export class ServerMap {
       throw new Error('ServerMap not loaded');
     }
     this.appConfig = res;
+    this.appConfig.shifts.map((s, index) => (s.number = index + 1));
 
     if (mode === 'production') {
       this.dataSource.data = this.appConfig.serverMap;
@@ -231,43 +234,43 @@ export class ServerMap {
     return svr;
   }
 
-  async fetchDb2(frm: any) {
-    const responsePayload = new Array<IResponseWithServerInfo>();
-    const servers: any[] = [];
+  // async fetchDb2(frm: any) {
+  //   const responsePayload = new Array<IResponseWithServerInfo>();
+  //   const servers: any[] = [];
 
-    for (const s of this.getServersByGroup(frm.serverGroups)) {
-      s.state = 'unknown';
-      if (s.enabled) {
-        const url = s.url + this.getFileFromDateAndShift(frm, s.group); //specifying a json file is only useful for testing api json response without having a working endpoint.  only works when timeframe is live.
-        servers.push(() => this.fetch(s.index, url));
-      }
-    }
-    const res = (await Promise.allSettled(servers.map((f) => f()))) as Array<PromiseFulfilledResult<IResponseWithServerInfo | null>>;
+  //   for (const s of this.getServersByGroup(frm.serverGroups)) {
+  //     s.state = 'unknown';
+  //     if (s.enabled) {
+  //       const url = s.url + this.getFileFromDateAndShift(frm, s.group); //specifying a json file is only useful for testing api json response without having a working endpoint.  only works when timeframe is live.
+  //       servers.push(() => this.fetch(s.index, url));
+  //     }
+  //   }
+  //   const res = (await Promise.allSettled(servers.map((f) => f()))) as Array<PromiseFulfilledResult<IResponseWithServerInfo | null>>;
 
-    let serversResponding = 0;
-    res.forEach((r: PromiseFulfilledResult<IResponseWithServerInfo | null>) => {
-      if (r.status === 'fulfilled' && r.value) {
-        serversResponding++;
-        const serverName = r.value.server.server;
-        const serverIndex = r.value.server.index;
-        //const serverGroup = r.value.server.group;
+  //   let serversResponding = 0;
+  //   res.forEach((r: PromiseFulfilledResult<IResponseWithServerInfo | null>) => {
+  //     if (r.status === 'fulfilled' && r.value) {
+  //       serversResponding++;
+  //       const serverName = r.value.server.server;
+  //       const serverIndex = r.value.server.index;
+  //       //const serverGroup = r.value.server.group;
 
-        r?.value?.response[frm.report.replace('Histogram', 'details').toLowerCase()].forEach((e: any) => {
-          e.updated = new Date().getTime() / 1000;
-          e.serverName = serverName;
-          e.serverIndex = serverIndex;
-          //e.serverGroup = serverGroup;
-        });
-        r.value && responsePayload.push(r.value);
-      }
-    });
+  //       r?.value?.response[frm.report.replace('Histogram', 'details').toLowerCase()].forEach((e: any) => {
+  //         e.updated = new Date().getTime() / 1000;
+  //         e.serverName = serverName;
+  //         e.serverIndex = serverIndex;
+  //         //e.serverGroup = serverGroup;
+  //       });
+  //       r.value && responsePayload.push(r.value);
+  //     }
+  //   });
 
-    if (serversResponding !== servers.length) {
-      await this.showServerOfflineWarning();
-    }
+  //   if (serversResponding !== servers.length) {
+  //     await this.showServerOfflineWarning();
+  //   }
 
-    return responsePayload;
-  }
+  //   return responsePayload;
+  // }
 
   async showServerOfflineWarning() {
     const dialogData: ConfirmationDialogInterface = {
@@ -276,21 +279,23 @@ export class ServerMap {
       yesButton: 'OK',
       noButton: '',
       returnVal: undefined,
-    };
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '450px',
+    };
+    await this.showDialogMessage(dialogData);
+  }
+
+  async showDialogMessage(dialogData: ConfirmationDialogInterface) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: dialogData.width ?? '450px',
       data: dialogData,
     });
 
     const response = await dialogRef.afterClosed().toPromise();
-    if (response === 'Yes') {
-      return true;
-    } else {
-      return false;
-    }
+    return response === 'Yes';
   }
 
   getFileFromDateAndShift(frm: any, selectedGroup: string): string {
+    const reports = ['trimsummary', 'qasummary'];
     const selectedReport = frm.report.toLowerCase();
     let endpoint = ``;
     if (frm.timeframe === TimeFrame.Live) {
@@ -300,36 +305,58 @@ export class ServerMap {
       const dateString = formatDate(frm.date, 'yyyy-MM-dd', 'en-US');
       const dateShift = `${dateString}-${frm.shift}`;
       endpoint = `/archive/${dateShift}-data.json`;
-    } else if (frm.timeframe === TimeFrame.DateShift) {
-      const shifts = this.appConfig.shifts;
-
-      const dateStart = new Date(frm.date);
-      dateStart.setDate(dateStart.getDate() + shifts[frm.shift - 1].start.offset);
-      dateStart.setHours(shifts[frm.shift - 1].start.hour, shifts[frm.shift - 1].start.minute, 0, 0);
-
-      const dateStop = new Date(frm.date);
-      dateStop.setDate(dateStop.getDate() + shifts[frm.shift - 1].stop.offset);
-      dateStop.setHours(shifts[frm.shift - 1].stop.hour, shifts[frm.shift - 1].stop.minute, 0, 0);
-
-      this.startUnix = Math.floor(dateStart.getTime() / 1000);
-      this.stopUnix = Math.floor(dateStop.getTime() / 1000);
-
-      if (['summary', 'details', 'histogram', 'rate'].includes(selectedReport)) {
-        endpoint = `/api/${selectedGroup}/${selectedReport.replace('histogram', 'details')}?start=${this.startUnix}&stop=${this.stopUnix}`;
+    } else {
+      if (reports.includes(selectedReport)) {
+        const unixTimes = this.getUnixStartStop(frm);
+        endpoint = `/api/${selectedGroup}/${selectedReport.replace('histogram', 'details')}?start=${unixTimes.startUnix}&stop=${unixTimes.stopUnix}`;
       }
+    }
+    return endpoint;
+  }
+
+  getUnixStartStop(frm: any): IUnixStartStop {
+    const unixTimes: IUnixStartStop = { startUnix: 0, stopUnix: 0 };
+    if (frm.timeframe === TimeFrame.DateShift) {
+      return this.getUnixStartStopFromIShift(new Date(frm.date), this.appConfig.shifts[frm.shift - 1]);
+      // const shifts = this.appConfig.shifts;
+
+      // const dateStart = new Date(frm.date);
+      // dateStart.setDate(dateStart.getDate() + shifts[frm.shift - 1].start.offset);
+      // dateStart.setHours(shifts[frm.shift - 1].start.hour, shifts[frm.shift - 1].start.minute, 0, 0);
+
+      // const dateStop = new Date(frm.date);
+      // dateStop.setDate(dateStop.getDate() + shifts[frm.shift - 1].stop.offset);
+      // dateStop.setHours(shifts[frm.shift - 1].stop.hour, shifts[frm.shift - 1].stop.minute, 0, 0);
+
+      // unixTimes.startUnix = Math.floor(dateStart.getTime() / 1000);
+      // unixTimes.stopUnix = Math.floor(dateStop.getTime() / 1000);
     } else if (frm.timeframe === TimeFrame.Custom) {
       const startDTStr = formatDate(frm.date, 'MM/dd/yyyy ', 'en-US') + frm.fromTime.toLowerCase();
       const stopDTStr = formatDate(frm.toDate, 'MM/dd/yyyy ', 'en-US') + frm.toTime.toLowerCase();
 
       const startDT = new Date(startDTStr);
       const stopDT = new Date(stopDTStr);
-      this.startUnix = Math.floor(startDT.getTime() / 1000);
-      this.stopUnix = Math.floor(stopDT.getTime() / 1000);
-      if (['summary', 'details', 'histogram', 'rate'].includes(selectedReport)) {
-        endpoint = `/api/${selectedGroup}/${selectedReport.replace('histogram', 'details')}?start=${this.startUnix}&stop=${this.stopUnix}`;
-      }
+      unixTimes.startUnix = Math.floor(startDT.getTime() / 1000);
+      unixTimes.stopUnix = Math.floor(stopDT.getTime() / 1000);
     }
-    return endpoint;
+
+    return unixTimes;
+  }
+
+  getUnixStartStopFromIShift(date: Date, shift: IShift): IUnixStartStop {
+    const unixTimes: IUnixStartStop = { startUnix: 0, stopUnix: 0 };
+    const dateStart = new Date(date);
+    dateStart.setDate(dateStart.getDate() + shift.start.offset);
+    dateStart.setHours(shift.start.hour, shift.start.minute, 0, 0);
+
+    const dateStop = new Date(date);
+    dateStop.setDate(dateStop.getDate() + shift.stop.offset);
+    dateStop.setHours(shift.stop.hour, shift.stop.minute, 0, 0);
+
+    unixTimes.startUnix = Math.floor(dateStart.getTime() / 1000);
+    unixTimes.stopUnix = Math.floor(dateStop.getTime() / 1000);
+
+    return unixTimes;
   }
 
   // Returns a list of enabled servers filtered by the provided server groups

@@ -21,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HomeService } from '../../../../home.service';
+import { StationsService } from '../../stations/stations.service';
 
 @Component({
   selector: 'app-employee-new',
@@ -50,6 +51,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
 
   showSpinner = false;
   formGrp: any;
+  stationRoles: string[] = [];
   public noWhitespaceValidator(control: UntypedFormControl) {
     const isWhitespace = (control.value || '').trim().length !== (control.value || '').length;
     const isValid = !isWhitespace;
@@ -62,7 +64,8 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
     public employeeService: EmployeeService,
     private route: Router,
     public fb: FormBuilder,
-    public homeService: HomeService
+    public homeService: HomeService,
+    public stationService: StationsService
   ) {
     this.formGrp = this.fb.group({
       cutter_number: [0, Validators.required],
@@ -73,6 +76,10 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
       employeeCategory: ['DGF', Validators.required],
       hireDate: [''],
     });
+
+    this.stationRoles = this.stationService.stationNames.slice();
+    this.stationRoles.push('Checker');
+    this.stationRoles.push('Unassigned');
   }
 
   ngOnInit(): void {
@@ -108,6 +115,8 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
       const dialogData: ConfirmationDialogInterface = {
         title: 'Please Confirm',
         content: 'You have unsaved changes. Continue anyway?',
+        yesButton: 'Yes',
+        noButton: 'No',
         returnVal: '',
       };
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -126,7 +135,26 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  isValidRole(): boolean {
+    const cutter_number = this.formGrp.get('cutter_number').value;
+    const shift = this.formGrp.get('shift').value;
+    let role = this.formGrp.get('role').value;
+    const filteredEmployees = this.employeeService.dataSourceEmployeeList.data.filter((emp) => emp.cutter_number !== cutter_number);
+    const index = filteredEmployees.findIndex((emp) => emp.role === role && emp.shift === shift);
+    if (index !== -1 && role !== 'Checker' && role !== 'Unassigned') {
+      this.employeeService.alert.setError(
+        `The station role '${role}' is already assigned to another employee on shift ${shift}. Please choose a different role.`
+      );
+      return false;
+    }
+    return this.stationRoles.includes(role);
+  }
+
   async onSubmit() {
+    if (!this.isValidRole()) {
+      return;
+    }
+
     let name = this.formGrp.get('name').value;
     this.formGrp.get('name').setValue(name.trim());
     if (this.formGrp.valid) {
@@ -142,7 +170,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
           const errMsg = await this.employeeService.saveEmployeesAsync();
           this.showSpinner = false;
           if (errMsg === '') {
-            this.route.navigate(['/home/employees']);
+            this.route.navigate(['/setup/employees']);
             this.isDirty = false;
           }
         } else {
@@ -171,7 +199,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
           const errMsg = await this.employeeService.saveEmployeesAsync();
           this.showSpinner = false;
           if (errMsg === '') {
-            this.route.navigate(['/home/employees']);
+            this.route.navigate(['/setup/employees']);
             this.isDirty = false;
           }
         }
@@ -189,7 +217,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
   }
 
   onBack() {
-    this.route.navigate(['/home/employees']);
+    this.route.navigate(['/setup/employees']);
   }
 
   getErrorMessage(fieldName: string) {

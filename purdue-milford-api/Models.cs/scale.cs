@@ -8,20 +8,26 @@ namespace dg_foods_api.Models
 
     public class StationsRootModel
     {
-        [Required] public List<StationModel> stations { get; set; }
+        [Required] public List<StationTableModel> stations { get; set; }
     }
 
-    public class StationModel
+
+    public class StationModel : StationTableModel
+    {
+        public string Name { get; set; } = "";
+    }
+
+    public class StationTableModel
     {
 
-        // [Required] public int Id { get; set; }
+        [Required] public int Id { get; set; }
         [Required] public string Station { get; set; }
 
         [Required] public bool Enabled { get; set; }
-        public int PrimaryCutterNumber { get; set; } = 0;
-        public int AlternateCutterNumber { get; set; } = 0;
+        //public int Cutter_number { get; set; } = 0;
+        //public int AlternateCutterNumber { get; set; } = 0;
         // [Required] public string EmployeeName { get; set; }
-        // [Required] public int Shift { get; set; }
+        //[Required] public int Shift { get; set; } = 1;
     }
 
 

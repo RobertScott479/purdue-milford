@@ -3,10 +3,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output, Input, inject }
 import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-
-import { iconService } from '../icon.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 interface IKeys {
   c: number[];
@@ -16,7 +13,7 @@ interface IKeys {
   selector: 'app-keypad',
   templateUrl: './keypad.component.html',
   styleUrls: ['./keypad.component.scss'],
-  imports: [MatButtonModule, MatRippleModule, MatIconModule],
+  imports: [MatButtonModule, MatRippleModule, MatIconModule, MatGridListModule],
 })
 export class KeypadComponent implements OnInit, AfterViewInit {
   @Input() set keyPress(key: string) {

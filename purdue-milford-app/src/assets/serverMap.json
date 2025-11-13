@@ -1,24 +1,34 @@
 {
   "serverMap": [
     {
-      "server": "Trimline #1 Demo",
+      "server": "Database Server",
+      "url": "",
+      "group": "dbserver"
+    },
+    {
+      "server": "Trimline AB",
       "url": "",
       "group": "trimline"
     },
     {
-      "server": "Trimline #2 Demo",
+      "server": "Trimline CD",
       "url": "",
       "group": "trimline"
     }
   ],
   "serverMapDemo": [
     {
-      "server": "Trimline #1 Demo",
+      "server": "Database Server",
+      "url": "",
+      "group": "dbserver"
+    },
+    {
+      "server": "Trimline AB",
       "url": "",
       "group": "trimline"
     },
     {
-      "server": "Trimline #2 Demo",
+      "server": "Trimline CD",
       "url": "",
       "group": "trimline"
     }

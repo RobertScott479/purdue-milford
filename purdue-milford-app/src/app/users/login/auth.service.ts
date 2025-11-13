@@ -115,7 +115,7 @@ export class AuthService {
           this.router.navigateByUrl(returnUrl);
         }
       });
-      // this.router.navigate(['/home/login', returnUrl], {
+      // this.router.navigate(['/setup/login', returnUrl], {
       //   queryParams: {
       //     return: returnUrl,
       //     message: 'You do not have permission to access this resource',

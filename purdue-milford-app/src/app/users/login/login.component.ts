@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
   //@ViewChild('username') usernameField: ElementRef;
 
   formGrp = new UntypedFormGroup({
-    username: new UntypedFormControl('', Validators.required),
-    password: new UntypedFormControl('', Validators.required),
+    username: new UntypedFormControl('admin', Validators.required),
+    password: new UntypedFormControl('weightech', Validators.required),
   });
 
   //return = '/home';

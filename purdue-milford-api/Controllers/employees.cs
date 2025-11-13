@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-namespace api_philly.Controllers
+namespace weightech.Controllers
 {
 
     [Produces("application/json")]

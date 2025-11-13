@@ -26,7 +26,7 @@ export class CutsService {
   constructor(public httpClient: HttpClient, public dialog: MatDialog, public trimlineService: TrimlineService, public fb: FormBuilder) {}
 
   saveCutsAsync(data: ICutInfo[]) {
-    const host = this.trimlineService.selectedServerHost;
+    const host = this.trimlineService.dbServerHost;
     return firstValueFrom(
       this.httpClient
         .post<ErrorResInterface>(`${host}/api/products/saveCuts`, data, this.trimlineService.homeService.httpOptions)
@@ -35,7 +35,7 @@ export class CutsService {
     );
   }
 
-  loadCutsAsync(url: string = this.trimlineService.selectedServerHost): Promise<CutsResInterface> {
+  loadCutsAsync(url: string = this.trimlineService.dbServerHost): Promise<CutsResInterface> {
     return firstValueFrom(
       this.httpClient
         .get<CutsResInterface>(`${url}/api/products/loadcuts`)

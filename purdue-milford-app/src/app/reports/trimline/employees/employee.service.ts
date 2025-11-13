@@ -52,7 +52,7 @@ export class EmployeeService {
     hireDate: '',
   } as const;
   selectedEmployee: EmployeeInterface = { name: '', role: '', cutter_number: 0, shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
-  employeeRoles = ['Cutter', 'Checker'];
+  //employeeRoles = ['A01', 'A02', 'A03', 'Checker'];
 
   constructor(public httpClient: HttpClient, public dialog: MatDialog, public trimlineService: TrimlineService, public fb: FormBuilder) {
     this.frmGrpEmployeeFilters = this.fb.group({
@@ -62,12 +62,8 @@ export class EmployeeService {
     });
   }
 
-  // loadEmployees(url: string = this.trimlineService.selectedServerHost) {
-  //   return this.httpClient.get<EmployeesResInterface>(`${url}/api/employees/loademployees`).pipe(timeout(this.timeoutDelay)).pipe(delay(0)).toPromise();
-  // }
-
   loadEmployees() {
-    const host = this.trimlineService.selectedServerHost;
+    const host = this.trimlineService.dbServerHost;
     return this.httpClient
       .get<EmployeesResInterface>(`${host}/api/employees/loademployees`)
       .pipe(timeout(this.trimlineService.homeService.timeoutDelay))
@@ -105,7 +101,7 @@ export class EmployeeService {
   }
 
   saveEmployees(employees: EmployeeRootInterface) {
-    const host = this.trimlineService.selectedServerHost;
+    const host = this.trimlineService.dbServerHost;
     return this.httpClient
       .post<ErrorResInterface>(`${host}/api/employees/saveemployees`, employees, this.trimlineService.homeService.httpOptions)
       .pipe(timeout(this.timeoutDelay))

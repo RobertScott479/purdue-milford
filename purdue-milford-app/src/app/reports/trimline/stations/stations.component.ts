@@ -31,6 +31,9 @@ import { EmployeeService, EmployeeInterface } from '../employees/employee.servic
 import { StationEditDialogComponent } from './station-edit-dialog.component';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { AlertDialogComponent } from '../../../alert-dialog/alert-dialog.component';
+import { ServerMapInterface } from '../../../serverMap';
+import { ServerStatusIndicatorsComponent } from '../../../layout/server-status-indicators/server-status-indicators.component';
+import { StationsService } from './stations.service';
 
 @Component({
   selector: 'app-stations',
@@ -52,190 +55,92 @@ import { AlertDialogComponent } from '../../../alert-dialog/alert-dialog.compone
     MatIconModule,
     FormsModule,
     MatSortModule,
+    ServerStatusIndicatorsComponent,
   ],
 })
 export class StationsComponent implements OnInit, AfterViewInit {
-  alert = new AlertMessage();
-
   slideToggleColor: ThemePalette = 'primary';
 
   action = 'Edit';
-  submitted = signal(false);
-  dirty = false;
-  datasource = new MatTableDataSource<StationInterface>();
+
   //bStations: StationInterface[] = [];
   //stationsLoaded = signal(false);
-  timeoutDelay = 6000;
-  showSpinner = signal(false);
+
   employees: EmployeeInterface[] = [];
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  displayedColumns: string[] = [
-    'enabled',
-    'station',
-    'primaryCutterNumber',
-    'primaryCutterName',
-    'alternateCutterNumber',
-    'alternateCutterName',
-    'actions',
-  ];
+  displayedColumns: string[] = ['enabled', 'station', 'cutter_number', 'name', 'actions'];
   // @ts-ignore
   @ViewChild('myTable', { static: true }) myTable: MatTable<StationInterface>;
 
-  duplicateCutterNumber = new Map<number, string[]>();
-  primaryCutterList = [];
+  //duplicateCutterNumber = new Map<number, string[]>();
+  //primaryCutterList = [];
 
   constructor(
     public dialog: MatDialog,
 
-    public homeService: HomeService,
     public trimlineService: TrimlineService,
-    public employeeService: EmployeeService
+    public employeeService: EmployeeService,
+    public stationService: StationsService
   ) {}
 
   async ngOnInit() {
-    if (this.trimlineService.frmGroup.get('serverIndex').value == -1) {
-      this.trimlineService.frmGroup.get('serverIndex').setValue(0);
-    }
-    this.trimlineService.trimline.stopRefreshTimer();
-    this.alert.clear();
-    await this.loadEmployees();
-    await this.loadStations();
-    this.dirty = false;
+    this.stationService.alert.clear();
+    await this.stationService.loadStations();
   }
 
   ngAfterViewInit(): void {
-    this.datasource.sort = this.sort;
+    this.stationService.datasource.sort = this.sort;
   }
 
-  onServerChange(event: any) {
-    this.loadStations();
+  onServerChange() {
+    this.stationService.loadStations();
   }
 
   onClear() {
     this.ngOnInit();
   }
 
-  async onSave() {
-    this.alert.clear();
+  // showAlertDialog(message: string) {
+  //   const dialogRef = this.dialog.open(AlertDialogComponent, {
+  //     width: '400px',
+  //     data: { title: 'Warning', content: message },
+  //   });
 
-    this.showSpinner.set(true);
-    this.alert.setLight('Saving stations...');
-    try {
-      const res = await firstValueFrom(this.trimlineService.saveStations(this.datasource.data).pipe(timeout(this.timeoutDelay)).pipe(delay(1000)));
+  //   dialogRef.afterClosed().subscribe((result: any) => {});
+  // }
 
-      if (res.errorCode === '0') {
-        this.submitted.set(true);
-        this.trimlineService.frmGroup.get('serverIndex')?.enable();
-
-        await this.loadStations();
-        this.alert.setSuccess('Stations saved');
-        await this.homeService.delay(500);
-        this.alert.clear();
-        this.dirty = false;
-      } else {
-        this.alert.setError(res.errorMessage);
-      }
-    } catch (err) {
-      this.alert.setError(err);
-    }
-
-    this.showSpinner.set(false);
-  }
-
-  async loadStations() {
-    //this.alert.setLight('Loading stations...');
-    this.submitted.set(false);
-    this.showSpinner.set(true);
-    //this.stationsLoaded.set(false);
-    this.duplicateCutterNumber.clear();
-    try {
-      const res = await firstValueFrom(this.trimlineService.loadStations().pipe(timeout(this.timeoutDelay)).pipe(delay(1000)));
-      if (res.errorCode === '0') {
-        this.submitted.set(true);
-        this.trimlineService.frmGroup.get('serverIndex')?.enable();
-
-        this.datasource.data = res.stations.map((station) => {
-          const s = {
-            ...station,
-            primaryCutterName: this.employeeService.getEmployeeName(station.primaryCutterNumber),
-            alternateCutterName: this.employeeService.getEmployeeName(station.alternateCutterNumber),
-          };
-
-          const activeCutter = station.alternateCutterNumber ? station.alternateCutterNumber : station.primaryCutterNumber;
-          if (this.duplicateCutterNumber.has(activeCutter)) {
-            const list = this.duplicateCutterNumber.get(activeCutter) ?? [];
-            list.push(station.station);
-            this.duplicateCutterNumber.set(activeCutter, list);
-          } else {
-            this.duplicateCutterNumber.set(activeCutter, [station.station]);
-          }
-
-          return s;
-        });
-
-        // const state = this.datasource.data.length > 0;
-        //this.stationsLoaded.set(state);
-
-        this.alert.clear();
-        const warningMessage: string[] = [];
-        this.duplicateCutterNumber.forEach((value, key) => {
-          if (value.length > 1 && key !== 0) {
-            warningMessage.push(`Cutter: ${key}, Assigned To: ${value.join(', ')}`);
-          }
-        });
-
-        if (warningMessage.length > 0) {
-          //this.alert.setWarning('Duplicate Cutter Assignments Detected:\n' + warningMessage.join('\n'));
-          // window.alert('Duplicate Cutter Assignments Detected:\n' + warningMessage.join('\n'));
-          this.showAlertDialog('Duplicate Cutter Assignments Detected:\n' + warningMessage.join('\n'));
-        }
-      } else {
-        this.datasource.data = [];
-        this.alert.setError(res.errorMessage);
-      }
-    } catch (err) {
-      this.alert.setError(err);
-    }
-
-    this.showSpinner.set(false);
-  }
-
-  showAlertDialog(message: string) {
-    const dialogRef = this.dialog.open(AlertDialogComponent, {
-      width: '400px',
-      data: { title: 'Warning', content: message },
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {});
-  }
-
-  async loadEmployees() {
-    try {
-      const result = await this.employeeService.loadEmployeesAsync();
-      if (result === '') {
-        this.employees = this.employeeService.dataSourceEmployeeList.data.filter((emp) => emp.enabled);
-      }
-    } catch (error) {
-      console.error('Error loading employees:', error);
-    }
-  }
+  // async loadEmployees() {
+  //   const serverIndex = this.trimlineService.frmGroup.get('serverIndex')?.value ?? -1;
+  //   try {
+  //     this.trimlineService.blinkIndicator(serverIndex, 'unknown');
+  //     const result = await this.employeeService.loadEmployeesAsync();
+  //     this.trimlineService.blinkIndicator(serverIndex, 'online');
+  //     if (result === '') {
+  //       this.employees = this.employeeService.dataSourceEmployeeList.data.filter((emp) => emp.enabled);
+  //     }
+  //   } catch (error) {
+  //     this.trimlineService.blinkIndicator(serverIndex, 'offline');
+  //     console.error('Error loading employees:', error);
+  //   }
+  // }
 
   onEditStation(station: StationInterface) {
+    const shift = station.shift;
     const dialogRef = this.dialog.open(StationEditDialogComponent, {
       width: '400px',
 
-      data: { station: station },
+      data: station,
     });
 
     dialogRef.afterClosed().subscribe((result: StationInterface) => {
       if (result) {
-        const index = this.datasource.data.findIndex((s) => s.station === station.station);
+        const index = this.stationService.datasource.data.findIndex((s) => s.station === station.station && s.shift === station.shift);
         if (index !== -1) {
-          this.datasource.data[index] = result;
-          this.dirty = true;
-          this.submitted.set(false);
-          this.onSave();
+          this.stationService.datasource.data[index] = result;
+          this.stationService.dirty = true;
+          this.stationService.submitted.set(false);
+          this.stationService.onSave();
         }
       }
     });
@@ -246,4 +151,19 @@ export class StationsComponent implements OnInit, AfterViewInit {
   //   this.submitted.set(false);
   //   this.datasource.data = this.datasource.data.map((e) => ({ ...e, enabled }));
   // }
+
+  applyFilter(shift: number) {
+    this.stationService.datasource.filter = JSON.stringify({
+      shift: shift,
+    });
+  }
+
+  defaultStations() {
+    const stations = this.stationService.initStationList();
+    this.stationService.datasource.data = stations;
+    this.stationService.dirty = true;
+    this.stationService.submitted.set(false);
+    this.stationService.onSave();
+    return stations;
+  }
 }

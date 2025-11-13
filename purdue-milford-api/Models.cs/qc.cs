@@ -48,6 +48,8 @@ namespace dg_foods_api.Models
         [Required] public int canceled { get; set; }
         [Required] public PieceWightModel[] pieces { get; set; }
         [Required] public string finishedPO { get; set; }
+        [Required] public double aqlScore { get; set; }
+        [Required] public double aqlStandard { get; set; }
     }
 
 

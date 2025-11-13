@@ -4,18 +4,18 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="mat-col">
+    <!-- <div class="mat-col">
       <form [formGroup]="trimlineService.frmGroup">
         <mat-form-field appearance="outline">
           <mat-label>Server</mat-label>
           <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
-            @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
+            @for(s of trimlineService.servers; track s.index; let idx = $index ){
             <mat-option [value]="s.index">{{ s.server }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       </form>
-    </div>
+    </div> -->
 
     <app-alert [alert]="authService.alert"></app-alert>
 

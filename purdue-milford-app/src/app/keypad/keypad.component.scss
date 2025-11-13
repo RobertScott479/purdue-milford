@@ -1,7 +1,7 @@
 .keypad-container {
-  width: 100%;
-  max-width: 400px;
+  width: 550px;
   margin: 8px auto;
+  border: solid 1px var(--mat-sys-on-secondary-container);
 }
 
 .input-display {
@@ -24,25 +24,27 @@
   font-family: "Roboto Mono", monospace;
 }
 
-.key-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+svg {
+  color: var(--mat-sys-on-primary);
 }
 
-.key-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
+mat-grid-list {
+  width: 100%;
+}
+
+mat-grid-tile {
+  overflow: visible !important;
 }
 
 .key-button {
-  flex: 1;
-  height: 72px;
+  width: 100%;
+  height: 100%;
   font-size: 62px;
   font-weight: 500;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   // color: var(--mat-sys-on-surface) !important;
   // background-color: var(--mat-sys-surface-container) !important;
 
@@ -53,6 +55,12 @@
   // &:active {
   //   background-color: var(--mat-sys-surface-container-high) !important;
   // }
+
+  mat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+  }
 }
 
 // .delete-key {
@@ -76,11 +84,3 @@
 //     background-color: var(--mat-sys-primary-fixed) !important;
 //   }
 // }
-
-mat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-}

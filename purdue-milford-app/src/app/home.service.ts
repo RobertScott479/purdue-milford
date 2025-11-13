@@ -1,18 +1,22 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertMessage } from './layout/alert/alert-message';
-import { IExportCriteria } from './reports/standard-report/standard-report.component';
-import { IShift, ServerMap, ServerMapInterface } from './serverMap';
-import { Trimline } from './reports/trimline/datasource/trimline';
 
-import { Observable, Subject } from 'rxjs';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { IShift, ServerMap, ServerMapInterface } from './serverMap';
+
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { BUILD_VERSION, BUILD_DATE, BUILD_NAME, BUILD_INFO } from './version';
 import { AlertDialogComponent, AlertDialogInterface } from './alert-dialog/alert-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { TimeFrame } from './reports/report.models';
+import { ConfirmationDialogComponent } from './layout/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogInterface } from './layout/confirmation-dialog/confirmation.model';
+
+export interface IUnixStartStop {
+  startUnix: number;
+  stopUnix: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +32,6 @@ export class HomeService {
   alert = new AlertMessage();
 
   serverMap: ServerMap;
-  //trimline: Trimline;
-  //caseweigher: Caseweigher;
   isDarkMode = signal(false);
 
   patterns: string[] = [];
@@ -145,5 +147,32 @@ export class HomeService {
 
   copyObject(obj: any): any {
     return JSON.parse(JSON.stringify(obj));
+  }
+
+  getUnixTimestampDateOnly(date: Date): number {
+    // Get start of day in local timezone
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const startOfDay = new Date(year, month, day, 0, 0, 0, 0);
+    return Math.floor(startOfDay.getTime() / 1000);
+  }
+
+  getUnixTimestamp(date: Date): number {
+    return Math.floor(date.getTime() / 1000);
+  }
+
+  getDateFromUnixTimestamp(unixTimestamp: number): Date {
+    return new Date(unixTimestamp * 1000);
+  }
+
+  async showDialogMessage(dialogData: ConfirmationDialogInterface): Promise<string> {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: dialogData.width ?? '450px',
+      data: dialogData,
+    });
+
+    const response = await dialogRef.afterClosed().toPromise();
+    return response;
   }
 }

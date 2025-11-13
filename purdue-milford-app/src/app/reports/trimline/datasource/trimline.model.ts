@@ -1,16 +1,16 @@
 import { ErrorResInterface } from '../../../models';
 
-export interface CommInterface {
-  crc: number;
-  delay: number;
-  in: number;
-  latency: number;
-  out: number;
-  reply: number;
-  rx: number;
-  timeout: number;
-  tx: number;
-}
+// export interface CommInterface {
+//   crc: number;
+//   delay: number;
+//   in: number;
+//   latency: number;
+//   out: number;
+//   reply: number;
+//   rx: number;
+//   timeout: number;
+//   tx: number;
+// }
 
 export interface CutterInterface {
   in_lbs: number;
@@ -26,56 +26,56 @@ export interface CutterInterface {
   ppmh: number;
 }
 
-export interface ScaleInterface {
-  app: string;
-  boot: string;
-  health_coin_cell_ok: boolean;
-  health_nvram_defaulted: boolean;
-  health_nvram_reloaded: boolean;
-  health_rtc_running: boolean;
-  health_rtc_sane: boolean;
-  silicon_serial_number: string;
-  operating_mode: string;
-}
+// export interface ScaleInterface {
+//   app: string;
+//   boot: string;
+//   health_coin_cell_ok: boolean;
+//   health_nvram_defaulted: boolean;
+//   health_nvram_reloaded: boolean;
+//   health_rtc_running: boolean;
+//   health_rtc_sane: boolean;
+//   silicon_serial_number: string;
+//   operating_mode: string;
+// }
 
-export interface ServerInterface {
-  app: string;
-  bios_info: string;
-  cpu_temp: number;
-  dev: string;
-  infeed_cleared: number;
-  infeed_updated: number;
-  outfeed_cleared: number;
-  outfeed_updated: number;
-  poll: number;
-  qc_cleared: number;
-  qc_updated: number;
-  serial_number: string;
-  uptime: number;
-}
+// export interface ServerInterface {
+//   app: string;
+//   bios_info: string;
+//   cpu_temp: number;
+//   dev: string;
+//   infeed_cleared: number;
+//   infeed_updated: number;
+//   outfeed_cleared: number;
+//   outfeed_updated: number;
+//   poll: number;
+//   qc_cleared: number;
+//   qc_updated: number;
+//   serial_number: string;
+//   uptime: number;
+// }
 
 export interface RootInterface {
-  comm: CommInterface;
+  //comm: CommInterface;
   cutters: CutterInterface[];
-  scale: ScaleInterface;
-  server: ServerInterface;
+  //scale: ScaleInterface;
+  //server: ServerInterface;
 }
 
-export interface RegisterInterface {
-  bits: string;
-  contents: string;
-  description: string;
-  index: number;
-  offset: string;
-  read_write: string;
-  registers: string;
-  type: string;
-  value: string;
-}
+// export interface RegisterInterface {
+//   bits: string;
+//   contents: string;
+//   description: string;
+//   index: number;
+//   offset: string;
+//   read_write: string;
+//   registers: string;
+//   type: string;
+//   value: string;
+// }
 
-export interface RegistersInterface {
-  registers: RegisterInterface[];
-}
+// export interface RegistersInterface {
+//   registers: RegisterInterface[];
+// }
 
 export interface StationRootInterface {
   stations: StationInterface[];
@@ -86,8 +86,9 @@ export interface StationsResInterface extends ErrorResInterface {
 export interface StationInterface {
   station: string;
   enabled: boolean;
-  primaryCutterNumber: number;
-  alternateCutterNumber: number;
-  primaryCutterName?: string;
-  alternateCutterName?: string;
+  cutter_number: number;
+  //alternateCutterNumber: number;
+  name?: string;
+  //alternateCutterName?: string;
+  shift: number;
 }

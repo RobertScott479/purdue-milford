@@ -1,0 +1,61 @@
+<form [formGroup]="punchForm" class="dialog-content">
+  <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>Edit Punch - {{ punch.id }}</h2>
+
+  <mat-dialog-content>
+    <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Station</mat-label>
+      <mat-select #stationSelect class="" formControlName="station">
+        @for(s of stations; track s.station; let idx = $index ){
+        <mat-option [value]="s.station">{{ s.station }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Employee</mat-label>
+      <input matInput formControlName="employee" [matAutocomplete]="employeeAuto" placeholder="Type name or number..." />
+      <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="displayEmployee">
+        <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee">
+          {{ employee.name }} ({{ employee.cutter_number }})
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="punchForm.get('employee')?.hasError('required')"> Employee is required </mat-error>
+    </mat-form-field>
+
+    <div class="time-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Date In</mat-label>
+        <input #dateIn matInput [matDatepicker]="pickerDateIn" formControlName="punchInDate" />
+        <mat-datepicker-toggle matSuffix [for]="pickerDateIn"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDateIn></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date Out</mat-label>
+        <input #dateOut matInput [matDatepicker]="pickerDateOut" formControlName="punchOutDate" />
+        <mat-datepicker-toggle matSuffix [for]="pickerDateOut"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDateOut></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="time-fields">
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Time In</mat-label>
+        <input matInput type="time" formControlName="punchInTime" placeholder="HH:MM" cdkFocusInitial />
+        <mat-error *ngIf="punchForm.get('punchInTime')?.hasError('required')"> Punch in time is required </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Time Out</mat-label>
+        <input matInput type="time" formControlName="punchOutTime" placeholder="HH:MM" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!saveEnabled" (click)="onSave()">Save</button>
+  </mat-dialog-actions>
+</form>

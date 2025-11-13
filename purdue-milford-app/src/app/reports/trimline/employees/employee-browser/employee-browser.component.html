@@ -7,18 +7,18 @@
     <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
 
     <div class="row-space-between">
-      <div class="mat-col">
+      <!-- <div class="mat-col">
         <form [formGroup]="trimlineService.frmGroup">
           <mat-form-field appearance="outline">
             <mat-label>Server</mat-label>
             <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
-              @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
+              @for(s of trimlineService.servers; track s.index; let idx = $index ){
               <mat-option [value]="s.index">{{ s.server }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
         </form>
-      </div>
+      </div> -->
 
       <div class="mat-col">
         <form [formGroup]="employeeService.frmGrpEmployeeFilters">
@@ -142,8 +142,8 @@
 
         <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: columns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="9999">No data available</td>
+        <tr *matNoDataRow>
+          <td colspan="9999">No data available</td>
         </tr>
       </table>
       <mat-paginator [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 250, 500, 1000]" showFirstLastButtons> </mat-paginator>

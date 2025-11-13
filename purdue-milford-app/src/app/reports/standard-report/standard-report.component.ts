@@ -1,29 +1,22 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-//import { ICheckerReport, CutterInterface, CutIndexEnum, cutNamesAndIndex } from 'src/app/models';
-//import { GrandTotals } from '../grand-totals';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { CommonModule, DatePipe, formatDate, formatNumber } from '@angular/common';
+import { CommonModule, DatePipe, formatDate, formatNumber, DecimalPipe } from '@angular/common';
 import { Subject } from 'rxjs';
 
-//import { IFieldName, IFilterStandard } from '../report.models';
-//import { ReportService } from '../report.service';
-
-import { MatCard, MatCardModule } from '@angular/material/card';
 import { MatSortCacheDirective } from '../../mat-sort-cache.directive';
 
 export interface IExportCriteria {
   reportName: string;
   header: string;
   fileName: string;
-  //displayedColumns: string[];
 }
 
 export interface IFieldName {
   column: string;
   rowField?: string;
-  footerfield?: string;
+  footerfield?: boolean;
   name: string;
   format?: string;
 }
@@ -31,7 +24,7 @@ export interface IFieldName {
 @Component({
   selector: 'app-standard-report',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, DatePipe, MatSortCacheDirective, MatPaginatorModule], //MatPaginator
+  imports: [CommonModule, MatTableModule, MatSortModule, MatSortCacheDirective, MatPaginatorModule],
   templateUrl: './standard-report.component.html',
   styleUrls: ['./standard-report.component.scss', '../../../styles/table.scss'],
 })
@@ -52,19 +45,44 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
   //if no footerField, then use column name
 
   fieldNames: IFieldName[] = [
-    { column: 'serverName', name: 'Server' },
-    { column: 'station_name', name: 'Station' },
+    //summary
+    { column: 'server', name: 'Server' },
+    { column: 'line', name: 'Line' },
+    { column: 'station', name: 'Station' },
+    { column: 'code', name: 'Code' },
+    { column: 'description', name: 'Description' },
+    { column: 'cutter', name: 'Cutter' },
+    { column: 'cutterName', name: 'Cutter Name' },
+    { column: 'checker', name: 'Checker' },
+    { column: 'checkerName', name: 'Checker Name' },
+    { column: 'aqlScore', name: 'AQL', format: '1.0-2', footerfield: true },
+    { column: 'aqlStandard', name: 'AQL Standard', format: '1.0-2', footerfield: true },
+    //posAqlScore
+    { column: 'posAqlScore', name: 'POS AQL', format: '1.0-2', footerfield: true },
+    { column: 'in_lbs', name: 'In Pounds', format: '1.0-0', footerfield: true },
+    { column: 'gradeA_lbs', name: 'Pounds_A', format: '1.0-0', footerfield: true },
+    { column: 'gradeA_yield', name: 'Yield_A', format: '1.0-2', footerfield: true },
+    { column: 'sYieldA', name: 'STD Yield_A', format: '1.0-2', footerfield: true },
+    { column: 'posYieldA', name: 'POS Yield_A', format: '1.0-2', footerfield: true },
+    { column: 'gradeB_lbs', name: 'Pounds_B', format: '1.0-0', footerfield: true },
+    { column: 'gradeB_yield', name: 'Yield_B', format: '1.0-2', footerfield: true },
+    { column: 'total_lbs', name: 'Total Pounds', format: '1.0-0', footerfield: true },
+    { column: 'overall_yield', name: 'Overall Yield', format: '1.0-2', footerfield: true },
+    { column: 'hours', name: 'Hours', format: '1.0-2', footerfield: true },
+    { column: 'ppmh', name: 'PPMH', format: '1.0-2', footerfield: true },
+    { column: 'sppmh', name: 'STD PPMH', format: '1.0-2', footerfield: true },
+    { column: 'posPpmh', name: 'POS PPMH', format: '1.0-2', footerfield: true },
 
-    { column: 'in_lbs', name: 'In(lbs)', format: '1.0-2' },
+    //summary copy
+    { column: 'serverName', name: 'Server' },
+
+    //{ column: 'in_lbs', name: 'In(lbs)', format: '1.0-2' },
     { column: 'out_lbs', name: 'Out(lbs)', format: '1.0-2' },
     { column: 'yield_percent', name: 'Yield', format: '1.0-2' },
-    { column: 'qc_fail_count', name: 'QC Fail', format: '1.0-2' },
-    { column: 'qc_pass_count', name: 'QC Pass', format: '1.0-2' },
-    { column: 'qc_score', name: 'QC Score', format: '1.0-2' },
 
     { column: 'work_seconds', name: 'Work Seconds', format: '1.0-0' },
-    { column: 'ppmh', name: 'PPMH', format: '1.0-2' },
-    { column: 'hours', name: 'Hours', format: '1.0-2' },
+    //{ column: 'ppmh', name: 'PPMH', format: '1.0-2' },
+    //{ column: 'hours', name: 'Hours', format: '1.0-2' },
     { column: 'total', name: 'Total', format: '1.0-0' },
     { column: 'count', name: 'Count', format: '1.0-0' },
     { column: 'mean', name: 'Mean', format: '1.0-2' },
@@ -72,47 +90,29 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'under', name: 'Under', format: '1.0-0' },
     { column: 'cpm', name: 'CPM', format: '1.0-2' },
 
-    { column: 'updated', name: 'Updated', format: 'Date:M/d/yy h:mm:ss a' },
-    { column: 'high_limit', name: 'High Limit', format: '1.0-2' },
-    { column: 'low_limit', name: 'Low Limit', format: '1.0-2' },
-    { column: 'status', name: 'Status' },
-    { column: 'timestamp', name: 'Timestamp', format: 'Date:M/d/yy h:mm:ss a' },
+    { column: 'qc_fail_count', name: 'QC Fail', format: '1.0-2' },
+    { column: 'qc_pass_count', name: 'QC Pass', format: '1.0-2' },
+    { column: 'qc_score', name: 'QC Score', format: '1.0-2' },
 
-    { column: 'gross_lb', name: 'Gross', format: '1.0-0' },
-    { column: 'tare_lb', name: 'Tare', format: '1.0-0' },
-    { column: 'serial', name: 'Serial', format: '1.0-0' },
+    //QA
 
-    { column: 'machine_state', name: 'State', format: '1.0-0' },
-    { column: 'reason_code', name: 'Reason Code', format: '1.0-0' },
-    { column: 'resolution', name: 'Resolution', format: '1.0-0' },
-    { column: 'units', name: 'Units' },
-    { column: 'stable', name: 'Stable', format: '1.0-0' },
-    { column: 'scale', name: 'Scale', format: '1.0-0' },
-    { column: 'cleared', name: 'Cleared', format: 'Date:M/d/yy h:mm:ss a' },
-
-    { column: 'gate', name: 'Gate' },
-    { column: 'high_g', name: 'High(g)', format: '1.0-0' },
-    { column: 'low_g', name: 'Low(g)', format: '1.0-0' },
-    { column: 'net_lb', name: 'Net(lb)', format: '1.0-2' },
-    { column: 'net_g', name: 'Net(g)', format: '1.0-0' },
-
-    // Yield/Poultry specific fields
-    { column: 'birds', name: 'Birds', format: '1.0-0' },
-    { column: 'bpm', name: 'BPM', format: '1.1-1' },
-    { column: 'fronts', name: 'Fronts', format: '1.0-0' },
-    { column: 'fillets', name: 'Fillets', format: '1.0-0' },
-    { column: 'filletYield', name: 'Fillet Yield %', format: '1.0-1' },
-    { column: 'tenders', name: 'Tenders', format: '1.0-0' },
-    { column: 'tenderYield', name: 'Tender Yield %', format: '1.0-1' },
-    { column: 'skins', name: 'Skin', format: '1.0-0' },
-    { column: 'skinYield', name: 'Skin Yield %', format: '1.0-1' },
-    { column: 'wings', name: 'Wings', format: '1.0-0' },
-    { column: 'wingsYield', name: 'Wings Yield %', format: '1.0-1' },
-    { column: 'shells', name: 'Shells', format: '1.0-0' },
-    { column: 'shellsYield', name: 'Shells Yield %', format: '1.0-1' },
-    { column: 'condemned', name: 'Condemned', format: '1.0-0' },
-    { column: 'condemnedYield', name: 'Condemned Yield %', format: '1.0-1' },
-    { column: 'serverGroup', name: 'Server Group' },
+    { column: 'totalChecks', name: 'Total Checks', format: '1.0-0', footerfield: true },
+    { column: 'passedChecks', name: 'Passed Checks', format: '1.0-0', footerfield: true },
+    { column: 'passPercent', name: 'Pass Percent', format: '1.0-2', footerfield: true },
+    { column: 'avgInspectionTime', name: 'Avg Inspection Time', format: '1.0-2', footerfield: true },
+    { column: 'weight', name: 'Weight', format: '1.0-2', footerfield: true },
+    { column: 'totalDefects', name: 'Total Defects', format: '1.0-0', footerfield: true },
+    { column: 'totalSamples', name: 'Total Samples', format: '1.0-0', footerfield: true },
+    { column: 'defects1', name: '1', format: '1.0-0', footerfield: true },
+    { column: 'defects2', name: '2', format: '1.0-0', footerfield: true },
+    { column: 'defects3', name: '3', format: '1.0-0', footerfield: true },
+    { column: 'defects4', name: '4', format: '1.0-0', footerfield: true },
+    { column: 'defects5', name: '5', format: '1.0-0', footerfield: true },
+    { column: 'defects6', name: '6', format: '1.0-0', footerfield: true },
+    { column: 'defects7', name: '7', format: '1.0-0', footerfield: true },
+    { column: 'defects8', name: '8', format: '1.0-0', footerfield: true },
+    { column: 'defects9', name: '9', format: '1.0-0', footerfield: true },
+    { column: 'defects10', name: '10', format: '1.0-0', footerfield: true },
   ];
 
   constructor() {}
@@ -255,5 +255,36 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     } else {
       return 'ERROR!';
     }
+  }
+
+  getColumnValue(row: any, field: IFieldName): string | number {
+    const value = this.getNestedValue(row, field.rowField ?? field.column);
+    if (value && field.format) {
+      if (field.format.includes('Date:')) {
+        const format = field.format.slice(field.format.indexOf(':') + 1);
+        return formatDate((value as number) * 1000, format, 'en-US');
+      } else {
+        return formatNumber(parseFloat(value.toString()), 'en-US', field.format);
+      }
+    } else {
+      return value;
+    }
+  }
+
+  getFooterValue(field: IFieldName): string | number {
+    if (this.grandTotals && field.footerfield) {
+      const value = this.getNestedValue(this.grandTotals, field.column);
+      if (value && field.format) {
+        if (field.format.includes('Date:')) {
+          const format = field.format.slice(field.format.indexOf(':') + 1);
+          return formatDate((value as number) * 1000, format, 'en-US');
+        } else {
+          return formatNumber(parseFloat(value.toString()), 'en-US', field.format);
+        }
+      } else {
+        return value;
+      }
+    }
+    return '';
   }
 }

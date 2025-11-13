@@ -13,7 +13,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace api_philly.Controllers
+namespace weightech.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

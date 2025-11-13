@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace api_philly.Controllers
+namespace weightech.Controllers
 {
 
     [Produces("application/json")]
@@ -100,8 +100,9 @@ namespace api_philly.Controllers
                     {
                         Station = u.Station,
                         Enabled = Convert.ToBoolean(u.Enabled),
-                        PrimaryCutterNumber = u.PrimaryCutterNumber,
-                        AlternateCutterNumber = u.AlternateCutterNumber
+                        // Cutter_number = u.Cutter_number,
+                        // Name = db.Employees.Where(c => c.Cutter_number == u.Cutter_number).Select(c => c.Name).FirstOrDefault() ?? "",
+                        // Shift = u.Shift
                     }
                 ).ToList();
 
@@ -129,13 +130,13 @@ namespace api_philly.Controllers
                 db.SaveChanges();
                 req.stations.ForEach(e =>
                {
-                   var station = new StationModel
+                   var station = new StationTableModel
                    {
                        //  Id = e.Id,                     
                        Enabled = Convert.ToBoolean(e.Enabled),
                        Station = e.Station,
-                       PrimaryCutterNumber = e.PrimaryCutterNumber,
-                       AlternateCutterNumber = e.AlternateCutterNumber
+                       //    Cutter_number = e.Cutter_number,
+                       //    Shift = e.Shift
                    };
                    db.Stations.Add(station);
                });

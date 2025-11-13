@@ -11,7 +11,7 @@ using System.Linq;
 using System.IO;
 using System.Globalization;
 
-namespace api_philly.Controllers
+namespace weightech.Controllers
 {
 
     [Produces("application/json")]

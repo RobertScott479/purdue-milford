@@ -33,7 +33,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../../users/login/auth.service';
 
 import { UserRoleEnum } from '../../../../users/login/auth-models';
-import { Trimline } from '../../datasource/trimline';
+
 import { TrimlineService } from '../../datasource/trimline.service';
 import { ConfirmationDialogInterface } from '../../../../layout/confirmation-dialog/confirmation.model';
 
@@ -153,12 +153,12 @@ export class CutsBrowserComponent implements OnDestroy, OnInit, AfterViewInit {
 
   onAdd() {
     this.cutService.selectedCutCode = '';
-    this.router.navigate(['/home/cutseditor']);
+    this.router.navigate(['/setup/cutseditor']);
   }
 
   onEdit(key: string) {
     this.cutService.selectedCutCode = key;
-    this.router.navigate(['/home/cutseditor']);
+    this.router.navigate(['/setup/cutseditor']);
   }
 
   get isAdminOrSuper() {

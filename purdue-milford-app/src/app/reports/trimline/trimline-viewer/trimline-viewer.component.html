@@ -1,18 +1,25 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>{{ reportname }}</mat-card-title>
+    <mat-card-title>{{ trimlineService.trimlineViewerTitle() }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="trimlineService.frmGroup">
       <div class="row-space-between">
         <div class="mat-col">
           <mat-form-field appearance="outline">
-            <mat-label>Server</mat-label>
-            <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="trimlineService.onFrmGroupChange()">
-              <!-- <mat-option [value]="-1">All</mat-option> -->
-              @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
-              <mat-option [value]="s.index">{{ s.server }}</mat-option>
-              }
+            <mat-label>Line</mat-label>
+            <mat-select #lineSelect class="" formControlName="line" (selectionChange)="trimlineService.onFrmGroupChange()">
+              <mat-option value="">All</mat-option>
+              <mat-option value="AB">AB</mat-option>
+              <mat-option value="CD">CD</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>GroupBy</mat-label>
+            <mat-select #groupBySelect class="" formControlName="groupBy" (selectionChange)="trimlineService.onFrmGroupChange()" multiple>
+              <mat-option *ngFor="let groupBy of groupByColumns" [value]="groupBy.column">{{ groupBy.name }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -21,7 +28,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Timeframe</mat-label>
             <mat-select #dateTypeSelection class="" formControlName="timeframe" (selectionChange)="trimlineService.onFrmGroupChange()">
-              <mat-option [value]="TimeFrameEnum.Live">{{ TimeFrameEnum.Live }}</mat-option>
+              <!-- <mat-option [value]="TimeFrameEnum.Live">{{ TimeFrameEnum.Live }}</mat-option> -->
               <mat-option [value]="TimeFrameEnum.DateShift">{{ TimeFrameEnum.DateShift }}</mat-option>
               <mat-option [value]="TimeFrameEnum.Custom">{{ TimeFrameEnum.Custom }}</mat-option>
             </mat-select>
@@ -53,7 +60,7 @@
             <mat-label>Shift</mat-label>
             <mat-select #shiftSelect id="shiftSelection" formControlName="shift">
               @for(shift of shifts; track shift.name;let idx = $index){
-              <mat-option [value]="idx + 1">{{ shift.name }} {{ homeService.getShiftTime(dateInput.value, shift) }} </mat-option>
+              <mat-option [value]="shift.number">{{ shift.name }} {{ homeService.getShiftTime(dateInput.value, shift) }} </mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -114,27 +121,13 @@
   <mat-card-footer>
     <div class="footer-container">
       <div class="button-group">
-        <!-- <button mat-raised-button (click)="onRefresh()">Refresh</button> -->
+        <button mat-raised-button (click)="onRefresh()">Refresh</button>
         @if(trimlineService.showExportButton()){
         <button mat-raised-button (click)="trimlineService.onExport()">Export</button>
         }
       </div>
 
-      <div class="status-indicators-container">
-        <div *ngFor="let server of trimlineService.trimline.servers" class="status-indicator">
-          <div
-            class="indicator-dot"
-            [ngClass]="{
-              'status-online': server.enabled && server.state === 'online',
-              'status-offline': server.enabled && server.state === 'offline',
-              'status-unknown': server.enabled && server.state === 'unknown',
-              pulse: server.enabled && server.state === 'online',
-              'status-disabled': !server.enabled
-            }"
-          ></div>
-          <span class="status-name">{{ server.server }}</span>
-        </div>
-      </div>
+      <app-server-status-indicators [serverList]="homeService.serverMap.dataSource.data"></app-server-status-indicators>
     </div>
   </mat-card-footer>
 </mat-card>

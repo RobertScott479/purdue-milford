@@ -73,6 +73,8 @@ export class QcCheckComponent implements OnInit, OnDestroy {
     total: 0,
     pieces: [{ weight: 0, timestamp: 0 }],
     finishedPO: '123',
+    aqlScore: 0,
+    aqlStandard: 0,
   };
 
   demeritInfo: IDefectInfo[] = [];
@@ -137,6 +139,8 @@ export class QcCheckComponent implements OnInit, OnDestroy {
       canceled: 0,
       pieces: [],
       finishedPO: '123',
+      aqlScore: 0,
+      aqlStandard: 0,
     };
   }
 
@@ -427,10 +431,19 @@ export class QcCheckComponent implements OnInit, OnDestroy {
     return res;
   }
 
+  calculateAQLScore(): number {
+    let aqlScore = 0;
+    let ConfidenceLevel99CheckFailed = false;
+    let aqlAccumulator = 100;
+
+    return aqlScore;
+  }
+
   async submit() {
     try {
       let passed = true;
-
+      let hasCriticalDefect = false;
+      this.checkEventOutput.aqlScore = 1.0;
       for (let i = 0; i < this.demeritInfo.length; i++) {
         this.checkEventOutput.defects[i] = this.demeritInfo[i].occurances;
         const occurances = this.demeritInfo[i].occurances;
@@ -438,8 +451,20 @@ export class QcCheckComponent implements OnInit, OnDestroy {
         const confidence = this.demeritInfo[i].confidence;
         const MinAcceptable = sampleSize - sampleSize * (confidence / 100);
         passed = occurances > MinAcceptable ? false : passed;
-      }
+        if (confidence > 0) {
+          if (occurances > MinAcceptable) {
+            hasCriticalDefect = true;
+          }
 
+          if (hasCriticalDefect) {
+            this.checkEventOutput.aqlScore = 0;
+          } else {
+            this.checkEventOutput.aqlScore -= occurances / sampleSize;
+          }
+        }
+      }
+      this.checkEventOutput.aqlScore = Math.max(0, this.checkEventOutput.aqlScore * 100);
+      this.checkEventOutput.aqlStandard = this.cutInfo ? this.cutInfo.aqlScoreStandard : 0;
       this.checkStop = performance.now();
       this.checkEventOutput.inspectionTime = (this.checkStop - this.checkStart) / 1000;
       this.checkEventOutput.passed = passed ? 1 : 0;

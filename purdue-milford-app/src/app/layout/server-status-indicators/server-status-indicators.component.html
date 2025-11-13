@@ -1,0 +1,15 @@
+<div class="status-indicators-container">
+  <div *ngFor="let server of this.serverList" class="status-indicator">
+    <div
+      class="indicator-dot"
+      [ngClass]="{
+        'status-online': server.enabled && server.state === 'online',
+        'status-offline': server.enabled && server.state === 'offline',
+        'status-unknown': server.enabled && server.state === 'unknown',
+        pulse: server.enabled && server.state === 'online',
+        'status-disabled': !server.enabled
+      }"
+    ></div>
+    <span class="status-name">{{ server.server }}</span>
+  </div>
+</div>

@@ -37,19 +37,19 @@ export class StationEditDialogComponent implements OnInit {
   station: StationInterface;
   enabled: boolean;
   primaryEmployeeControl = new FormControl<EmployeeInterface | string | null>(null, Validators.required);
-  alternateEmployeeControl = new FormControl<EmployeeInterface | string | null>(null);
+  //alternateEmployeeControl = new FormControl<EmployeeInterface | string | null>(null);
 
   employees: EmployeeInterface[] = [];
   filteredPrimaryEmployees!: Observable<EmployeeInterface[]>;
-  filteredAlternateEmployees!: Observable<EmployeeInterface[]>;
+  //filteredAlternateEmployees!: Observable<EmployeeInterface[]>;
 
   employeesLoaded = false;
   dialogRef = inject<MatDialogRef<StationEditDialogComponent>>(MatDialogRef);
-  data = inject<StationEditDialogData>(MAT_DIALOG_DATA);
+  data = inject<StationInterface>(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
 
   constructor() {
-    this.station = { ...this.data.station };
+    this.station = this.data;
     this.enabled = this.station.enabled;
   }
 
@@ -65,19 +65,12 @@ export class StationEditDialogComponent implements OnInit {
       this.employeesLoaded = true;
 
       // Set initial values
-      const primaryEmployee = this.employees.find((emp) => emp.cutter_number === this.station.primaryCutterNumber);
-      const alternateEmployee = this.employees.find((emp) => emp.cutter_number === this.station.alternateCutterNumber);
+      const primaryEmployee = this.employees.find((emp) => emp.cutter_number === this.station.cutter_number);
 
       this.primaryEmployeeControl.setValue(primaryEmployee || null);
-      this.alternateEmployeeControl.setValue(alternateEmployee || null);
 
       // Setup filtering
       this.filteredPrimaryEmployees = this.primaryEmployeeControl.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filterEmployees(value))
-      );
-
-      this.filteredAlternateEmployees = this.alternateEmployeeControl.valueChanges.pipe(
         startWith(''),
         map((value) => this.filterEmployees(value))
       );
@@ -107,13 +100,13 @@ export class StationEditDialogComponent implements OnInit {
 
   onSave(): void {
     const primaryEmployee = this.primaryEmployeeControl.value as EmployeeInterface | null;
-    const alternateEmployee = this.alternateEmployeeControl.value as EmployeeInterface | null;
+    //const alternateEmployee = this.alternateEmployeeControl.value as EmployeeInterface | null;
 
     const result: StationInterface = {
       ...this.station,
       enabled: this.enabled,
-      primaryCutterNumber: primaryEmployee ? primaryEmployee.cutter_number : 0,
-      alternateCutterNumber: alternateEmployee ? alternateEmployee.cutter_number : 0,
+      cutter_number: primaryEmployee ? primaryEmployee.cutter_number : 0,
+      //  alternateCutterNumber: alternateEmployee ? alternateEmployee.cutter_number : 0,
     };
 
     this.dialogRef.close(result);
@@ -126,10 +119,10 @@ export class StationEditDialogComponent implements OnInit {
   toggleChanged(event: any) {
     if (event.checked) {
       this.primaryEmployeeControl.enable();
-      this.alternateEmployeeControl.enable();
+      //this.alternateEmployeeControl.enable();
     } else {
       this.primaryEmployeeControl.disable();
-      this.alternateEmployeeControl.disable();
+      //this.alternateEmployeeControl.disable();
     }
   }
 }

@@ -29,7 +29,7 @@
       "name": "Launch Edge",
       "type": "msedge",
       "request": "launch",
-      "url": "http://localhost:4200/caseweigher-viewer/summary/demo",
+      "url": "http://localhost:4200/trimline-viewer/trimsummary/demo",
       "webRoot": "${workspaceFolder}/purdue-milford-app",
       "skipFiles": ["${workspaceFolder}/purdue-milford-app/node_modules/**/*.js"],
       "preLaunchTask": "npm: start"
@@ -38,7 +38,7 @@
       "name": "Launch Chrome",
       "request": "launch",
       "type": "chrome",
-      "url": "http://localhost:4200/caseweigher-viewer/summary/demo",
+      "url": "http://localhost:4200/trimline-viewer/trimsummary/demo",
       "webRoot": "${workspaceFolder}/purdue-milford-app",
       "skipFiles": ["${workspaceFolder}/purdue-milford-app/node_modules/**/*.js"],
       "preLaunchTask": "npm: start"

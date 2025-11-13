@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-namespace api_philly.Controllers
+namespace weightech.Controllers
 {
 
 

@@ -7,7 +7,7 @@
 // using Microsoft.Extensions.Configuration;
 // using Microsoft.Extensions.Hosting;
 
-// namespace api_philly.Controllers
+// namespace weightech.Controllers
 // {
 //     [Produces("application/json")]
 //     [Route("api/[controller]")]

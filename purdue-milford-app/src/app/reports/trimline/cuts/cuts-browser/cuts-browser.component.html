@@ -4,18 +4,18 @@
   </mat-card-header>
   <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
   <mat-card-content>
-    <form [formGroup]="trimlineService.frmGroup">
+    <!-- <form [formGroup]="trimlineService.frmGroup">
       <div class="mat-col">
         <mat-form-field appearance="outline">
           <mat-label>Server</mat-label>
           <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
-            @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
+            @for(s of trimlineService.servers; track s.index; let idx = $index ){
             <mat-option [value]="s.index">{{ s.server }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       </div>
-    </form>
+    </form> -->
     <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
 
     <div class="table-container">

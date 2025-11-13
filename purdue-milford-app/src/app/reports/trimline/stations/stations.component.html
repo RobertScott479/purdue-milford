@@ -4,86 +4,89 @@
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="trimlineService.frmGroup">
-      <div class="mat-col">
-        <mat-form-field appearance="outline">
-          <mat-label>Server</mat-label>
-          <mat-select #lineSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange($event)">
-            @for(s of trimlineService.trimline.servers; track s.index; let idx = $index ){
-            <mat-option [value]="s.index">{{ s.server }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+      <div class="mat-row">
+        <div class="mat-col">
+          <form [formGroup]="trimlineService.frmGroup">
+            <mat-form-field appearance="outline">
+              <mat-label>Server</mat-label>
+              <mat-select #serverSelect class="" formControlName="serverIndex" (selectionChange)="onServerChange()">
+                @for(s of stationService.serverList; track s.index; let idx = $index ){
+                <mat-option [value]="s.index">{{ s.server }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+        <!-- <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Shift</mat-label>
+            <mat-select #shiftSelect id="shiftSelection" formControlName="shift" (selectionChange)="applyFilter(shiftSelect.value)">
+              
+              @for(shift of this.stationService.homeService.serverMap.appConfig.shifts; track shift.name;let idx = $index){
+              <mat-option [value]="shift.number">{{ shift.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div> -->
       </div>
     </form>
+    <!-- <button mat-stroked-button (click)="defaultStations()">Default Stations</button> -->
 
-    <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
-    <app-mat-progress-spinner [visible]="showSpinner()" [delay]="100" mode="indeterminate"></app-mat-progress-spinner>
+    <app-alert [alert]="stationService.alert" [alertHidden]="true"></app-alert>
+    <app-mat-progress-spinner [visible]="stationService.showSpinner()" [delay]="100" mode="indeterminate"></app-mat-progress-spinner>
 
     <div class="table-container">
-      <div class="tables-wrapper">
-        <!-- A Stations Table -->
-        <div class="station-table-section">
-          <h3>Stations</h3>
-          <table mat-table #myTable [dataSource]="datasource" class="station-table" matSort matSortActive="station" matSortDirection="asc">
-            <!-- Enabled Column -->
-            <ng-container matColumnDef="enabled">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
-              <td mat-cell *matCellDef="let station">
-                <mat-icon svgIcon="check_circle" *ngIf="station.enabled" color="primary"></mat-icon>
-                <mat-icon svgIcon="cancel" *ngIf="!station.enabled" class="disabled-icon"></mat-icon>
-              </td>
-            </ng-container>
+      <table mat-table #myTable [dataSource]="stationService.datasource" class="station-table" matSort matSortActive="station" matSortDirection="asc">
+        <!-- Enabled Column -->
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
+          <td mat-cell *matCellDef="let station">
+            <mat-icon svgIcon="check_circle" *ngIf="station.enabled" color="primary"></mat-icon>
+            <mat-icon svgIcon="cancel" *ngIf="!station.enabled" class="disabled-icon"></mat-icon>
+          </td>
+        </ng-container>
 
-            <!-- Station Column -->
-            <ng-container matColumnDef="station">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Station</th>
-              <td mat-cell *matCellDef="let station">{{ station.station }}</td>
-            </ng-container>
+        <!-- Station Column -->
+        <ng-container matColumnDef="station">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Station</th>
+          <td mat-cell *matCellDef="let station">{{ station.station }}</td>
+        </ng-container>
 
-            <!-- Primary Cutter Number Column -->
-            <ng-container matColumnDef="primaryCutterNumber">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Primary #</th>
-              <td mat-cell *matCellDef="let station">{{ station.primaryCutterNumber || "-" }}</td>
-            </ng-container>
+        <!-- Shift Column -->
+        <ng-container matColumnDef="shift">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
+          <td mat-cell *matCellDef="let station">{{ station.shift }}</td>
+        </ng-container>
 
-            <!-- Primary Cutter Name Column -->
-            <ng-container matColumnDef="primaryCutterName">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Primary Name</th>
-              <td mat-cell *matCellDef="let station">{{ station.primaryCutterName || "-" }}</td>
-            </ng-container>
+        <!-- Cutter Number Column -->
+        <ng-container matColumnDef="cutter_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cutter #</th>
+          <td mat-cell *matCellDef="let station">{{ station.cutter_number || "-" }}</td>
+        </ng-container>
 
-            <!-- Alternate Cutter Number Column -->
-            <ng-container matColumnDef="alternateCutterNumber">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alternate #</th>
-              <td mat-cell *matCellDef="let station">{{ station.alternateCutterNumber || "-" }}</td>
-            </ng-container>
+        <!-- Cutter Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let station">{{ station.name || "-" }}</td>
+        </ng-container>
 
-            <!-- Alternate Cutter Name Column -->
-            <ng-container matColumnDef="alternateCutterName">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alternate Name</th>
-              <td mat-cell *matCellDef="let station">{{ station.alternateCutterName || "-" }}</td>
-            </ng-container>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let station">
+            <button mat-icon-button color="primary" (click)="onEditStation(station)" [disabled]="stationService.showSpinner()">
+              <mat-icon svgIcon="edit"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Actions</th>
-              <td mat-cell *matCellDef="let station">
-                <button mat-icon-button color="primary" (click)="onEditStation(station)" [disabled]="showSpinner()">
-                  <mat-icon svgIcon="edit"></mat-icon>
-                </button>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-
-        <!-- B Stations Table -->
-      </div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
     </div>
   </mat-card-content>
   <mat-card-footer>
+    <app-server-status-indicators [serverList]="stationService.homeService.serverMap.dataSource.data"></app-server-status-indicators>
     <!-- <button mat-stroked-button [disabled]="!stationsLoaded() || showSpinner()" (click)="UpdateAll(true)" type="button">Enable All</button>
 
     <button mat-stroked-button [disabled]="!stationsLoaded() || showSpinner()" (click)="UpdateAll(false)" type="button">Disable All</button>

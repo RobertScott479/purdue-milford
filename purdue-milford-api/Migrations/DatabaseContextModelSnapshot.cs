@@ -16,6 +16,126 @@ namespace dg_foods_api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.17");
 
+            modelBuilder.Entity("QcResults", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("aqlScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("aqlStandard")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("bank")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("bank");
+
+                    b.Property<int>("cancel")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cancel");
+
+                    b.Property<int>("checker_cutter_number")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("checker_cutter_number");
+
+                    b.Property<string>("cut")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("cut");
+
+                    b.Property<int>("cutter_number")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cutter_number");
+
+                    b.Property<int>("cycle")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cycle");
+
+                    b.Property<int>("defect_0")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_0");
+
+                    b.Property<int>("defect_1")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_1");
+
+                    b.Property<int>("defect_2")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_2");
+
+                    b.Property<int>("defect_3")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_3");
+
+                    b.Property<int>("defect_4")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_4");
+
+                    b.Property<int>("defect_5")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_5");
+
+                    b.Property<int>("defect_6")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_6");
+
+                    b.Property<int>("defect_7")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_7");
+
+                    b.Property<int>("defect_8")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_8");
+
+                    b.Property<int>("defect_9")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("defect_9");
+
+                    b.Property<int>("fail")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("fail");
+
+                    b.Property<string>("finished_po")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("finished_po");
+
+                    b.Property<double>("inspect_time")
+                        .HasColumnType("REAL")
+                        .HasColumnName("inspect_time");
+
+                    b.Property<int>("pass")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("pass");
+
+                    b.Property<string>("pieces")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("pieces");
+
+                    b.Property<string>("product")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("product");
+
+                    b.Property<string>("station")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("station");
+
+                    b.Property<int>("timestamp")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("timestamp");
+
+                    b.Property<double>("weight")
+                        .HasColumnType("REAL")
+                        .HasColumnName("weight");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("qc_results");
+                });
+
             modelBuilder.Entity("dg_foods_api.Models.Bank", b =>
                 {
                     b.Property<string>("Code")
@@ -270,6 +390,46 @@ namespace dg_foods_api.Migrations
                     b.ToTable("employees");
                 });
 
+            modelBuilder.Entity("dg_foods_api.Models.Punches", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cutter_number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductionDate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PunchIn")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PunchOut")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Shift")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Station")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("updateAt")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("updateBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("punches");
+                });
+
             modelBuilder.Entity("dg_foods_api.Models.QaLogModel", b =>
                 {
                     b.Property<int>("Id")
@@ -315,121 +475,36 @@ namespace dg_foods_api.Migrations
                     b.ToTable("qalog");
                 });
 
-            modelBuilder.Entity("dg_foods_api.Models.QcResult", b =>
+            modelBuilder.Entity("dg_foods_api.Models.StationTableModel", b =>
                 {
-                    b.Property<long?>("Bank")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("bank");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("Canceled")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("canceled");
-
-                    b.Property<string>("CheckerName")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("checker_name");
-
-                    b.Property<string>("Cut")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("cut");
-
-                    b.Property<long?>("Cycle")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("cycle");
-
-                    b.Property<double?>("Defect0")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_0");
-
-                    b.Property<double?>("Defect1")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_1");
-
-                    b.Property<double?>("Defect10")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_10");
-
-                    b.Property<double?>("Defect2")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_2");
-
-                    b.Property<double?>("Defect3")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_3");
-
-                    b.Property<double?>("Defect4")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_4");
-
-                    b.Property<double?>("Defect5")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_5");
-
-                    b.Property<double?>("Defect6")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_6");
-
-                    b.Property<double?>("Defect7")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_7");
-
-                    b.Property<double?>("Defect8")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_8");
-
-                    b.Property<double?>("Defect9")
-                        .HasColumnType("REAL")
-                        .HasColumnName("defect_9");
-
-                    b.Property<long?>("Failed")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("failed");
-
-                    b.Property<long?>("Passed")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("passed");
-
-                    b.Property<string>("Product")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("product");
-
-                    b.Property<string>("Station")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("station");
-
-                    b.Property<long?>("Timestamp")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("timestamp");
-
-                    b.Property<double?>("Weight")
-                        .HasColumnType("REAL")
-                        .HasColumnName("weight");
-
-                    b.ToTable("qc_results");
-                });
-
-            modelBuilder.Entity("dg_foods_api.Models.StationModel", b =>
-                {
-                    b.Property<string>("Station")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AlternateCutterNumber")
+                    b.Property<int>("Cutter_number")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(0)
-                        .HasColumnName("alternate_cutter_number");
+                        .HasColumnName("cutter_number");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER")
                         .HasColumnName("enabled");
 
-                    b.Property<int>("PrimaryCutterNumber")
+                    b.Property<int>("Shift")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(0)
-                        .HasColumnName("primary_cutter_number");
+                        .HasDefaultValue(1)
+                        .HasColumnName("shift");
 
-                    b.HasKey("Station");
+                    b.Property<string>("Station")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Station", "Shift")
+                        .IsUnique();
 
                     b.ToTable("stations");
                 });

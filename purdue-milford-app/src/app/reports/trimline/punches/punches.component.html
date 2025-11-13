@@ -1,0 +1,114 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Employee Punches</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="frmGrp">
+      <div class="mat-row">
+        <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Production Date</mat-label>
+            <input #dateInput matInput [matDatepicker]="picker" formControlName="dateControl" (dateChange)="applyFilter()" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Shift</mat-label>
+            <mat-select #shiftSelect id="shiftSelection" formControlName="shiftControl" (selectionChange)="applyFilter()">
+              @for(shift of this.homeService.serverMap.appConfig.shifts; track shift.name;let idx = $index){
+              <mat-option [value]="shift.number">{{ shift.name }} {{ homeService.getShiftTime(dateInput.value, shift) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <!-- <div class="spinner-container" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div> -->
+
+    <app-mat-progress-spinner [visible]="loading" [delay]="100"></app-mat-progress-spinner>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="stationService.datasourcePunches" matSort matSortActive="station" matSortDirection="asc" appMatSortCache>
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td mat-cell *matCellDef="let punch">{{ punch.id }}</td>
+        </ng-container>
+
+        <!-- Station Column -->
+        <ng-container matColumnDef="station">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Station</th>
+          <td mat-cell *matCellDef="let punch">{{ punch.station }}</td>
+        </ng-container>
+
+        <!-- Cutter Number Column -->
+        <ng-container matColumnDef="cutter_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cutter #</th>
+          <td mat-cell *matCellDef="let punch">{{ punch.cutter_number || "-" }}</td>
+        </ng-container>
+
+        <!-- Cutter Number Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let punch">{{ punch.name || "-" }}</td>
+        </ng-container>
+
+        <!-- Punch In Column -->
+        <ng-container matColumnDef="punchIn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Punch In</th>
+          <td mat-cell *matCellDef="let punch">{{ formatTime(punch.punchIn) }}</td>
+        </ng-container>
+
+        <!-- Punch Out Column -->
+        <ng-container matColumnDef="punchOut">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Punch Out</th>
+          <td mat-cell *matCellDef="let punch">{{ formatTime(punch.punchOut) }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let punch">
+            <button mat-icon-button (click)="onEditPunch(punch)">
+              <mat-icon svgIcon="edit"></mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="onDeletePunch(punch)">
+              <mat-icon svgIcon="delete"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- No data row -->
+        <tr *matNoDataRow>
+          <td colspan="9999">No punches found for this date</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+  <mat-card-footer>
+    <button mat-raised-button (click)="onCreateTimesheet()">
+      <mat-icon svgIcon="add"></mat-icon>
+      Create Timesheet
+    </button>
+
+    <button mat-raised-button (click)="onAddPunch()">
+      <mat-icon svgIcon="add"></mat-icon>
+      Add Punch
+    </button>
+
+    <button mat-raised-button (click)="onDeleteTimesheet()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      Delete Timesheet
+    </button>
+  </mat-card-footer>
+</mat-card>

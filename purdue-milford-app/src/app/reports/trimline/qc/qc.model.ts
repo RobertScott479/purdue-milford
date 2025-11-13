@@ -45,6 +45,8 @@ export interface ICheckEventTeguar {
   canceled: number;
   pieces?: IPieces[];
   finishedPO: string;
+  aqlScore: number;
+  aqlStandard: number;
 }
 
 export interface ICheckEventOutput extends ICheckEventTeguar {

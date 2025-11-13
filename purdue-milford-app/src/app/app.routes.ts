@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { DiagnosticsComponent } from './reports/trimline/diagnostics/diagnostics.component';
 import { StationsComponent } from './reports/trimline/stations/stations.component';
 import { HomeComponent } from './layout/home/home.component';
 import { TrimlineSummaryComponent } from './reports/trimline/trimline-summary/trimline-summary.component';
@@ -22,6 +21,9 @@ import { LoginComponent } from './users/login/login.component';
 import { UserEditorComponent } from './users/user-editor/user-editor.component';
 import { QcCheckComponent } from './reports/trimline/qc/qc-check/qc-check.component';
 
+import { QaSummaryComponent } from './reports/trimline/qc/qa-summary/qa-summary.component';
+import { PunchesComponent } from './reports/trimline/punches/punches.component';
+
 @Injectable()
 export class SaveFormsGuard {
   canDeactivate(component: any) {
@@ -30,10 +32,10 @@ export class SaveFormsGuard {
 }
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'trimline-viewer/summary', pathMatch: 'full' },
+  { path: '', redirectTo: 'trimline-viewer/trimsummary', pathMatch: 'full' },
 
   {
-    path: 'home',
+    path: 'setup',
     component: HomeComponent,
     children: [
       {
@@ -60,32 +62,41 @@ export const routes: Routes = [
       },
       { path: 'login/:route', component: LoginComponent },
       { path: 'login', component: LoginComponent },
+
+      {
+        path: 'userbrowser',
+        component: UserBrowserComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
+      },
+      {
+        path: 'edituser',
+        component: UserEditorComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin] },
+      },
+      {
+        path: 'punches',
+        component: PunchesComponent,
+        canActivate: [AuthGuardService],
+        data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
+      },
     ],
   },
-  {
-    path: 'userbrowser',
-    component: UserBrowserComponent,
-    canActivate: [AuthGuardService],
-    data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
-  },
-  {
-    path: 'edituser',
-    component: UserEditorComponent,
-    canActivate: [AuthGuardService],
-    data: { expectedRoles: [UserRoleEnum.Admin] },
-  },
+
   { path: 'servers', component: ServersComponent },
 
   {
     path: 'trimline-viewer',
     component: TrimlineViewerComponent,
     children: [
-      { path: 'summary/:id', component: TrimlineSummaryComponent },
-      { path: 'summary', component: TrimlineSummaryComponent },
+      { path: 'trimsummary/:id', component: TrimlineSummaryComponent },
+      { path: 'trimsummary', component: TrimlineSummaryComponent },
+      { path: 'qasummary', component: QaSummaryComponent },
     ],
   },
 
   { path: 'qc-login', component: QcLoginComponent },
   { path: 'qc-check', component: QcCheckComponent, canDeactivate: [SaveFormsGuard] }, //, canDeactivate: [SaveFormsGuard]
-  { path: '**', redirectTo: 'trimline-viewer/summary', pathMatch: 'full' },
+  { path: '**', redirectTo: 'trimline-viewer/trimsummary', pathMatch: 'full' },
 ];

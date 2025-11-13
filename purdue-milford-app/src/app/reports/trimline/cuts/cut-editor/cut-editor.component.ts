@@ -68,35 +68,34 @@ export class CutEditorComponent implements OnInit {
     cutRate: new UntypedFormControl(0, Validators.required),
     ppmh: new UntypedFormControl(0, Validators.required),
     pattern: new UntypedFormControl('', Validators.required),
-    standardPrimaryYield: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99)]),
-    aqlScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99)]),
-    weightScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99)]),
-    sampleSize: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    standardPrimaryYield: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
+    aqlScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
+    weightScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
+    sampleSize: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     weightMinimum: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(999)]),
     weightMaximum: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(999)]),
-    wtConfidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    wtConfidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
 
     question1: new UntypedFormControl('N/A', Validators.required),
-    q1Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q1Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question2: new UntypedFormControl('', Validators.required),
-    q2Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q2Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question3: new UntypedFormControl('', Validators.required),
-    q3Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q3Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question4: new UntypedFormControl('', Validators.required),
-    q4Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q4Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question5: new UntypedFormControl('', Validators.required),
-    q5Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q5Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question6: new UntypedFormControl('', Validators.required),
-    q6Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q6Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question7: new UntypedFormControl('', Validators.required),
-    q7Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q7Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question8: new UntypedFormControl('', Validators.required),
-    q8Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q8Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question9: new UntypedFormControl('', Validators.required),
-    q9Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
+    q9Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     question10: new UntypedFormControl('', Validators.required),
-    q10Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern(/^[0-9]{1,2}$/)]),
-
+    q10Confidence: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern(/^[0-9]{1,3}$/)]),
     username: new UntypedFormControl('', Validators.required),
     timestamp: new UntypedFormControl(0, Validators.required),
   });
@@ -241,7 +240,7 @@ export class CutEditorComponent implements OnInit {
       await this.cutsService.saveCutsAsync(cuts);
       this.cutsService.dataSourceCutInfo.data = cuts;
       this.frmGroupCuts.reset();
-      this.router.navigate(['/cutsbrowser']);
+      this.router.navigate(['/setup/cutsbrowser']);
     } catch (err) {
       this.alert.setError('Unable to confirm save. ' + this.alert.getErrorMessage(err));
     } finally {
@@ -252,7 +251,7 @@ export class CutEditorComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate(['/home/cutsbrowser']);
+    this.router.navigate(['/setup/cutsbrowser']);
   }
 
   onCancel() {

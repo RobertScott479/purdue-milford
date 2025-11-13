@@ -6,11 +6,15 @@ import { StationInterface, StationRootInterface, StationsResInterface } from './
 import { ErrorResInterface, IFrmGroupHistory } from '../../../models';
 import { HttpClient } from '@angular/common/http';
 import { IExportCriteria } from '../../standard-report/standard-report.component';
-import { delay, Subject, timeout } from 'rxjs';
-import { Trimline } from './trimline';
+import { delay, groupBy, Subject, timeout } from 'rxjs';
+
 import { formatDate } from '@angular/common';
-import { IShift, ServerMapInterface } from '../../../serverMap';
-import { EmployeeRootInterface, EmployeesResInterface } from '../employees/employee.service';
+import { ServerMapInterface } from '../../../serverMap';
+
+export interface ServerState {
+  index: number;
+  state: 'online' | 'offline' | 'unknown';
+}
 
 @Injectable({
   providedIn: 'root',
@@ -18,25 +22,31 @@ import { EmployeeRootInterface, EmployeesResInterface } from '../employees/emplo
 export class TrimlineService {
   moduleID = 'trimline';
   serverGroups = ['trimline'];
+  //servers: ServerMapInterface[] = [];
+
   frmGroup: any;
   showSpinner = signal(false);
   exportReportEvent$ = new Subject<IExportCriteria>();
+  refreshReportEvent$ = new Subject<any>();
+  blinkIndicatorEvent$ = new Subject<ServerState>();
+  trimlineViewerTitle = signal('Trim Summary');
   showExportButton = signal(false);
-  showTimeFrame = signal(false);
-  trimline: Trimline;
+  showTimeFrame = signal(true);
+  //trimline: Trimline;
   TimeFrameEnum = TimeFrame;
 
   constructor(private fb: FormBuilder, public homeService: HomeService, private httpClient: HttpClient) {
-    this.trimline = new Trimline(this.homeService.serverMap, 5000);
-
+    //this.trimline = new Trimline(this.homeService.serverMap, 5000);
     this.frmGroup = this.fb.group({
       serverGroups: [this.serverGroups],
+      line: ['All'],
       report: ['Summary'],
       serverIndex: [-1],
       timeframe: [TimeFrame.Live],
       date: [new Date('8/1/2025'), Validators.required],
       toDate: [new Date(), Validators.required],
       shift: [1],
+      groupBy: ['cutter_number'],
       fromTime: [
         '12:00 AM',
         [Validators.required, Validators.pattern(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/), this.homeService.timeValidator()],
@@ -52,7 +62,7 @@ export class TrimlineService {
       const frm = JSON.parse(frmStr);
       frm.serverGroups = this.serverGroups; // Ensure serverGroups is set correctly incase localstorage has an obsolete value
       this.frmGroup.patchValue(frm);
-      this.trimline.updateFilters(frm.serverIndex);
+      //this.trimline.updateFilters(frm.serverIndex);
     }
   }
 
@@ -60,11 +70,11 @@ export class TrimlineService {
     if (this.frmGroup.valid) {
       const frm = this.frmGroup.value;
       localStorage.setItem(`${this.moduleID}.frmGroup`, JSON.stringify(frm));
-      this.trimline.updateFilters(frm.serverIndex);
-      this.trimline.init(frm.timeframe);
-      if (this.frmGroup.value.serverIndex === -1) {
-        this.frmGroup.patchValue({ serverIndex: this.trimline.servers[0]?.index || 0 }); // Ensure serverIndex is set to a valid server index
-      }
+      // this.trimline.updateFilters(frm.serverIndex);
+      // this.trimline.init(frm.timeframe);
+      // if (this.frmGroup.value.serverIndex === -1) {
+      //   this.frmGroup.patchValue({ serverIndex: this.trimline.servers[0]?.index || 0 }); // Ensure serverIndex is set to a valid server index
+      // }
     }
   }
 
@@ -73,20 +83,16 @@ export class TrimlineService {
     this.frmGroup.get('toDate')?.setValue(date);
   }
 
-  saveStations(data: StationInterface[]) {
-    const host = this.selectedServerHost;
-    const stations: StationRootInterface = { stations: data };
-    return this.httpClient.post<ErrorResInterface>(`${host}/api/scale/savestations`, stations, this.homeService.httpOptions);
-  }
-
-  loadStations() {
-    const host = this.selectedServerHost;
-    return this.httpClient.get<StationsResInterface>(`${host}/api/scale/loadstations`, this.homeService.httpOptions);
+  get dbServerHost() {
+    const host = this.homeService.serverMap.getServersByGroup(['dbserver'])[0]?.url;
+    return host ?? '';
   }
 
   public get selectedServerHost() {
     const serverIndex = this.frmGroup.get('serverIndex')?.value ?? 0;
-    return this.trimline.servers.find((e) => e.index === serverIndex)?.url ?? '';
+    const server = this.homeService.serverMap.getServersByGroup(['trimline']).find((e) => e.index === serverIndex);
+    if (!server) console.log(`Server with index ${serverIndex} not found in TrimlineService.selectedServerHost`);
+    return server?.url ?? '';
   }
 
   onExport() {
@@ -97,15 +103,7 @@ export class TrimlineService {
 
     let datetimeframe = '';
     if (frm.timeframe === this.TimeFrameEnum.Live) {
-      datetimeframe =
-        `Infeed cleared at: ${formatDate(this.trimline.dataSourceServer.data[frm.serverIndex].infeed_cleared * 1000, 'M/d/y h:mm:ss a', 'en-US')}\n` +
-        `Outfeed cleared at: ${formatDate(
-          this.trimline.dataSourceServer.data[frm.serverIndex].outfeed_cleared * 1000,
-          'M/d/y h:mm:ss a',
-          'en-US'
-        )}\n` +
-        `QC cleared at: ${formatDate(this.trimline.dataSourceServer.data[frm.serverIndex].qc_cleared * 1000, 'M/d/y h:mm:ss a', 'en-US')}\n` +
-        `Exported at: ${formatDate(new Date(), 'M/dd/yyyy h:mm a', 'en-US')}\n`;
+      datetimeframe = `Exported at: ${formatDate(new Date(), 'M/dd/yyyy h:mm a', 'en-US')}\n`;
     }
 
     if (frm.timeframe === TimeFrame.Archive || frm.timeframe === TimeFrame.DateShift) {
@@ -140,4 +138,28 @@ export class TrimlineService {
     };
     this.exportReportEvent$.next(exportCriteria);
   }
+
+  blinkIndicator(serverIndex: number, state: 'online' | 'offline' | 'unknown') {
+    const serverState: ServerState = { index: serverIndex, state: state };
+    //this.blinkIndicatorEvent$.next(serverState);
+
+    if (serverState.index >= 0 && serverState.index < this.homeService.serverMap.dataSource.data.length) {
+      this.homeService.serverMap.dataSource.data[serverState.index].state = serverState.state;
+    } else {
+      console.warn('Invalid server index for blinkIndicatorEvent$', serverState);
+    }
+  }
+
+  //   async fetchDB() {
+  //   this.showSpinner.set(true);
+  //   const frm = this.frmGroup.value;
+  //   if (frm.report === 'Summary') {
+  //     this.dataSourceSummary.data = (await this.homeService.serverMap.fetchDb2(frm)).map((r) => r.response.summary).flat();
+  //     this.grandTotalsSummary.updateSummary(this.dataSourceSummary.filteredData);
+  //   } else if (frm.report === 'Details') {
+  //     this.dataSourceDetails.data = (await this.homeService.serverMap.fetchDb2(frm)).map((r) => r.response.details).flat();
+  //     this.grandTotalsDetails.updateDetails(this.dataSourceDetails.filteredData);
+  //    }
+  //   this.showSpinner.set(false);
+  // }
 }
