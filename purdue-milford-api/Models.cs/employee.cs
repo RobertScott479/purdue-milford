@@ -15,11 +15,11 @@ namespace dg_foods_api.Models
     {
         [Required] public bool enabled { get; set; }
         [Required] public string name { get; set; }
-        public string employeeCategory { get; set; }
         [Required] public string role { get; set; }
         [Required] public int shift { get; set; }
-        [Required] public int cutter_number { get; set; }
-        public string hireDate { get; set; }
+        [Required] public int? cutter_number { get; set; }
+        public string updatedBy { get; set; } = "";
+        [Required] public int updatedAt { get; set; } = 0;
     }
 
 

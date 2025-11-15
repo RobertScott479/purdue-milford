@@ -1,3 +1,10 @@
+10.216.36.201   milford-qc-ab
+10.216.36.202   milford-qc-cd
+10.216.36.203   milford-sign-ab
+10.216.36.204   milford-sign-cd
+10.216.36.205   milford-db
+
+
 Build 2, rss, 10/31/2025
 setup pages mostly done: cuts,cutters, stations, users
 qc login and qc check mostly done.

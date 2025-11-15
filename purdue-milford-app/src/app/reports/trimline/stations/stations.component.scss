@@ -1,5 +1,5 @@
 .table-container {
-  height: calc(100vh - (263px));
+  height: calc(100vh - (375px));
   overflow: auto;
   box-shadow: 0px 0px 15px 1px lightgray;
 }
@@ -24,9 +24,23 @@ mat-card-content {
   margin-top: 10px;
 }
 
-mat-card-footer {
+// mat-card-footer {
+//   margin: 15px;
+//   display: flex;
+//   // justify-content: space-between;
+//   // align-items: center;
+// }
+button {
   margin: 15px;
+}
+
+.footer-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
 }

@@ -67,7 +67,7 @@ export class CutEditorComponent implements OnInit {
     customer: new UntypedFormControl('', [Validators.required, Validators.maxLength(200)]),
     cutRate: new UntypedFormControl(0, Validators.required),
     ppmh: new UntypedFormControl(0, Validators.required),
-    pattern: new UntypedFormControl('', Validators.required),
+    pattern: new UntypedFormControl('', [Validators.required, Validators.pattern(/^[A-B]{1,10}$/)]),
     standardPrimaryYield: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
     aqlScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
     weightScoreStandard: new UntypedFormControl(0, [Validators.required, Validators.min(0), Validators.max(100)]),
@@ -189,9 +189,12 @@ export class CutEditorComponent implements OnInit {
   }
 
   getErrorMessage(name: string) {
-    // if (this.frmGroupProducts.get(name).hasError('pattern')) {
-    //   return 'Expecting 0-99!';
-    // }
+    if (this.frmGroupCuts.get(name)?.hasError('pattern')) {
+      if (name === 'pattern') {
+        return 'Invalid pattern format!';
+      }
+      return 'Expecting 0-99!';
+    }
     if (this.frmGroupCuts.get(name)?.hasError('required')) {
       return 'Required!';
     }
@@ -210,10 +213,11 @@ export class CutEditorComponent implements OnInit {
     if (this.frmGroupCuts.valid) {
       const frm = this.frmGroupCuts.getRawValue() as ICutInfo;
       const temp: ICutInfo[] = this.cutsService.dataSourceCutInfo.data.slice(); // this.homeService.copyObject(this.homeService.dataSourceCutInfo.data);
-      let row = temp.findIndex((e) => {
-        return e.code === frm.code;
-      });
+
       if (this.cutsService.selectedCutCode === '') {
+        let row = temp.findIndex((e) => {
+          return e.code === frm.code;
+        });
         if (row > -1) {
           this.alert.setError('Code already exists!');
           return;
@@ -223,6 +227,9 @@ export class CutEditorComponent implements OnInit {
         }
         //update
       } else {
+        let row = temp.findIndex((e) => {
+          return e.code === this.cutsService.selectedCutCode;
+        });
         if (row > -1) {
           temp[row] = frm;
           await this.save(temp);

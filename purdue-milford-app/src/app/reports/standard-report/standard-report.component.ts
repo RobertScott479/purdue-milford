@@ -47,7 +47,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
   fieldNames: IFieldName[] = [
     //summary
     { column: 'server', name: 'Server' },
-    { column: 'line', name: 'Line' },
+    //{ column: 'line', name: 'Line' },
     { column: 'station', name: 'Station' },
     { column: 'code', name: 'Code' },
     { column: 'description', name: 'Description' },
@@ -55,17 +55,16 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'cutterName', name: 'Cutter Name' },
     { column: 'checker', name: 'Checker' },
     { column: 'checkerName', name: 'Checker Name' },
-    { column: 'aqlScore', name: 'AQL', format: '1.0-2', footerfield: true },
+    { column: 'aqlScore', name: 'AQL Score', format: '1.0-2', footerfield: true },
     { column: 'aqlStandard', name: 'AQL Standard', format: '1.0-2', footerfield: true },
     //posAqlScore
     { column: 'posAqlScore', name: 'POS AQL', format: '1.0-2', footerfield: true },
     { column: 'in_lbs', name: 'In Pounds', format: '1.0-0', footerfield: true },
-    { column: 'gradeA_lbs', name: 'Pounds_A', format: '1.0-0', footerfield: true },
-    { column: 'gradeA_yield', name: 'Yield_A', format: '1.0-2', footerfield: true },
-    { column: 'sYieldA', name: 'STD Yield_A', format: '1.0-2', footerfield: true },
-    { column: 'posYieldA', name: 'POS Yield_A', format: '1.0-2', footerfield: true },
-    { column: 'gradeB_lbs', name: 'Pounds_B', format: '1.0-0', footerfield: true },
-    { column: 'gradeB_yield', name: 'Yield_B', format: '1.0-2', footerfield: true },
+    { column: 'out_lbs', name: 'Out Pounds', format: '1.0-0', footerfield: true },
+    { column: 'yield', name: 'Yield', format: '1.0-2', footerfield: true },
+    { column: 'standardYield', name: 'STD Yield', format: '1.0-2', footerfield: true },
+    { column: 'posYield', name: 'POS Yield', format: '1.0-2', footerfield: true },
+
     { column: 'total_lbs', name: 'Total Pounds', format: '1.0-0', footerfield: true },
     { column: 'overall_yield', name: 'Overall Yield', format: '1.0-2', footerfield: true },
     { column: 'hours', name: 'Hours', format: '1.0-2', footerfield: true },
@@ -77,7 +76,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'serverName', name: 'Server' },
 
     //{ column: 'in_lbs', name: 'In(lbs)', format: '1.0-2' },
-    { column: 'out_lbs', name: 'Out(lbs)', format: '1.0-2' },
+    //{ column: 'out_lbs', name: 'Out(lbs)', format: '1.0-2' },
     { column: 'yield_percent', name: 'Yield', format: '1.0-2' },
 
     { column: 'work_seconds', name: 'Work Seconds', format: '1.0-0' },
@@ -159,6 +158,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     });
 
     let rows = new Array();
+    rows.push(exportCriteria.reportName);
     rows.push(exportCriteria.header);
     rows.push('');
     rows.push(colHeaders);
@@ -206,7 +206,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
       this.displayedColumns.forEach((dc) => {
         const f = this.fieldNames.find((f) => f.column === dc);
         if (f) {
-          const value = this.getNestedValue(this.grandTotals.summary, f.footerfield ?? f.column);
+          const value = this.getNestedValue(this.grandTotals, f.column);
           if (value && f.format) {
             if (f.format.includes('Date:')) {
               const format = f.format.slice(f.format.indexOf(':') + 1);

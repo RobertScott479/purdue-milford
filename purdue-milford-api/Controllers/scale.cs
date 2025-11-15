@@ -94,15 +94,11 @@ namespace weightech.Controllers
             res.errorMessage = "";
             try
             {
-
                 var q = db.Stations.Select(u =>
-                    new StationModel
+                    new StationTableModel
                     {
                         Station = u.Station,
                         Enabled = Convert.ToBoolean(u.Enabled),
-                        // Cutter_number = u.Cutter_number,
-                        // Name = db.Employees.Where(c => c.Cutter_number == u.Cutter_number).Select(c => c.Name).FirstOrDefault() ?? "",
-                        // Shift = u.Shift
                     }
                 ).ToList();
 
@@ -132,11 +128,8 @@ namespace weightech.Controllers
                {
                    var station = new StationTableModel
                    {
-                       //  Id = e.Id,                     
                        Enabled = Convert.ToBoolean(e.Enabled),
                        Station = e.Station,
-                       //    Cutter_number = e.Cutter_number,
-                       //    Shift = e.Shift
                    };
                    db.Stations.Add(station);
                });
@@ -165,16 +158,7 @@ namespace weightech.Controllers
             {
                 db.BreakAdjustments.RemoveRange(db.BreakAdjustments);
                 db.SaveChanges();
-                //     req.breakAdjustments.ForEach(e =>
-                //   {
-                //       var breakAdjustment = new BreakAdjustmentModel
-                //       {
-                //           //  Id = e.Id,                     
-                //           bank = e.bank,
-                //           adjustment = e.adjustment
-                //       };
-                //       db.BreakAdjustments.Add(breakAdjustment);
-                //   });
+
                 db.AddRange(req.breakAdjustments);
                 db.SaveChanges();
                 db.Database.CommitTransaction();
@@ -189,72 +173,6 @@ namespace weightech.Controllers
         }
 
 
-        // [HttpGet("loadstations")]
-        // public async Task<ActionResult<StationsResModel>> loadstations()
-        // {
-
-        //     var res = new StationsResModel();
-        //     var fileExist = false;
-        //     try
-        //     {
-        //         var fileToRead = Path.Combine(this.filePath, "stations.json");
-        //         if (System.IO.File.Exists(fileToRead))
-        //         {
-        //             var json = await System.IO.File.ReadAllTextAsync(fileToRead);
-        //             res.stations = JsonConvert.DeserializeObject<StationsRootModel>(json).stations;
-        //             fileExist = true;
-        //         }
-
-        //         if (res.stations == null)
-        //         {
-        //             res.errorCode = "1";
-        //             res.errorMessage = "Unable to load stations.json. The file is " + (fileExist ? "corrupt" : "missing");
-        //         }
-        //         else
-        //         {
-        //             res.errorCode = "0";
-        //             res.errorMessage = "";
-        //         }
-
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         res.errorCode = "1";
-        //         res.errorMessage =  e.Message + " " + e.InnerException?.Message;
-        //     }
-
-        //     return Ok(res);
-        // }
-
-        // [HttpPost("savestations")]
-        // public async Task<ActionResult<ErrorResModel>> savestations([FromBody] StationsRootModel req)
-        // {
-        //     ErrorResModel res = new ErrorResModel();
-
-        //     try
-        //     {
-        //         if (!Directory.Exists(filePath))
-        //         {
-        //             DirectoryInfo di = Directory.CreateDirectory(filePath);
-        //         }
-
-        //         var fileToWrite = Path.Combine(this.filePath, "stations.json");
-        //         // Console.Write(fileToWrite);                           
-        //         var json = JsonConvert.SerializeObject(req);
-        //         await System.IO.File.WriteAllTextAsync(fileToWrite, json);
-        //         res.errorCode = "0";
-        //         res.errorMessage = "";
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine("The process failed: {0}", e.ToString());
-        //         res.errorCode = "1";
-        //         res.errorMessage =  e.Message + " " + e.InnerException?.Message;
-        //     }
-
-
-        //     return Ok(res);
-        // }
 
 
 

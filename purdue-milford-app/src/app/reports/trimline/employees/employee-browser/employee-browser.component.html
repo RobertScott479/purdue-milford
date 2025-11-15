@@ -3,11 +3,11 @@
     <mat-card-title>Cutters {{ employeeService.trimlineService.selectedServerHost }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <app-mat-progress-spinner [visible]="showSpinner" [delay]="100"></app-mat-progress-spinner>
     <app-alert [alert]="alert" [alertHidden]="true"></app-alert>
 
-    <div class="row-space-between">
-      <!-- <div class="mat-col">
+    <form [formGroup]="employeeService.frmGrpEmployeeFilters">
+      <div class="row-space-between">
+        <!-- <div class="mat-col">
         <form [formGroup]="trimlineService.frmGroup">
           <mat-form-field appearance="outline">
             <mat-label>Server</mat-label>
@@ -20,8 +20,7 @@
         </form>
       </div> -->
 
-      <div class="mat-col">
-        <form [formGroup]="employeeService.frmGrpEmployeeFilters">
+        <div class="mat-col">
           <mat-form-field appearance="outline">
             <mat-label>Choose a shift</mat-label>
             <mat-select #shiftSelect id="shiftSelection" formControlName="shift" (selectionChange)="onSelectionChange()">
@@ -31,28 +30,31 @@
               }
             </mat-select>
           </mat-form-field>
-        </form>
-      </div>
+        </div>
 
-      <div class="mat-col">
-        <form [formGroup]="employeeService.frmGrpEmployeeFilters">
+        <div class="mat-col">
           <mat-form-field appearance="outline">
             <mat-label>Search Cutter</mat-label>
             <input matInput type="text" maxlength="20" placeholder="" formControlName="search" />
           </mat-form-field>
-        </form>
+        </div>
+
+        <div class="mat-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Active</mat-label>
+            <mat-select #activeSelect id="activeSelection" formControlName="activeOnly" (selectionChange)="onSelectionChange()">
+              <mat-option [value]="true">Active Employees</mat-option>
+              <mat-option [value]="false">Inactive Employees</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-
-      <!-- <div class="mat-col">
-          <mat-checkbox formControlName="activeOnly" (change)="onSelectionChange()">Show enabled only</mat-checkbox>
-        </div> -->
-    </div>
-
+    </form>
     <!-- <ng-container *ngIf="isAdminOrSuper && !showSpinner && !addNewDisabled">
       <label for="csvfile" class="input-btn btn btn-success me-3">Import cutter list</label>
       <input id="csvfile" type="file" style="display: none" #EmployeeFile accept=".csv" (change)="onImport($event)" />     
     </ng-container> -->
-
+    <app-mat-progress-spinner [visible]="showSpinner" [delay]="100"></app-mat-progress-spinner>
     <div class="table-container">
       <table
         mat-table
@@ -128,7 +130,7 @@
               <button
                 class="action-button"
                 mat-icon-button
-                [disabled]="showSpinner"
+                [disabled]="showSpinner || d.enabled === false"
                 (click)="onDelete(d)"
                 matTooltip="Delete Employee"
                 matTooltipPosition="below"

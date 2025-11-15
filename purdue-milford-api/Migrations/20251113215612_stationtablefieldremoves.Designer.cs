@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dg_foods_api.Models;
 
 namespace dg_foods_api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251113215612_stationtablefieldremoves")]
+    partial class stationtablefieldremoves
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,25 +361,31 @@ namespace dg_foods_api.Migrations
                 {
                     b.Property<int>("Cutter_number")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cutter_number");
+
+                    b.Property<string>("EmployeeCategory")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("employee_category");
 
                     b.Property<string>("Enabled")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("enabled");
+
+                    b.Property<string>("HireDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("hire_date");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
 
                     b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Shift")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("updatedAt")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("shift");
 
                     b.HasKey("Cutter_number");
 
@@ -409,13 +417,10 @@ namespace dg_foods_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("deleted")
+                    b.Property<int>("updateAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("updatedAt")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("updatedBy")
+                    b.Property<string>("updateBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -471,14 +476,19 @@ namespace dg_foods_api.Migrations
 
             modelBuilder.Entity("dg_foods_api.Models.StationTableModel", b =>
                 {
-                    b.Property<string>("Station")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER")
                         .HasColumnName("enabled");
 
-                    b.HasKey("Station");
+                    b.Property<string>("Station")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("stations");
                 });

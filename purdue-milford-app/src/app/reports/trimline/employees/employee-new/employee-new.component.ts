@@ -22,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HomeService } from '../../../../home.service';
 import { StationsService } from '../../stations/stations.service';
+import { AuthService } from '../../../../users/login/auth.service';
 
 @Component({
   selector: 'app-employee-new',
@@ -65,16 +66,15 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
     private route: Router,
     public fb: FormBuilder,
     public homeService: HomeService,
-    public stationService: StationsService
+    public stationService: StationsService,
+    public authService: AuthService
   ) {
     this.formGrp = this.fb.group({
       cutter_number: [0, Validators.required],
       name: ['', [Validators.required, Validators.pattern(/^((?!,).)*$/m)]],
       role: ['', [Validators.required]],
       enabled: [true],
-      shift: [this.employeeService.trimlineService.frmGroup.shift, Validators.required],
-      employeeCategory: ['DGF', Validators.required],
-      hireDate: [''],
+      shift: [this.employeeService.frmGrpEmployeeFilters.get('shift').value, Validators.required],
     });
 
     this.stationRoles = this.stationService.stationNames.slice();
@@ -101,8 +101,6 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
       this.formGrp.get('role').setValue(frm.role);
       this.formGrp.get('enabled').setValue(frm.enabled);
       this.formGrp.get('shift').setValue(frm.shift);
-      this.formGrp.get('employeeCategory').setValue(frm.employeeCategory);
-      this.formGrp.get('hireDate').setValue(frm.hireDate);
     }
   }
 
@@ -140,7 +138,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
     const shift = this.formGrp.get('shift').value;
     let role = this.formGrp.get('role').value;
     const filteredEmployees = this.employeeService.dataSourceEmployeeList.data.filter((emp) => emp.cutter_number !== cutter_number);
-    const index = filteredEmployees.findIndex((emp) => emp.role === role && emp.shift === shift);
+    const index = filteredEmployees.findIndex((emp) => emp.role === role && emp.shift === shift && emp.enabled === true);
     if (index !== -1 && role !== 'Checker' && role !== 'Unassigned') {
       this.employeeService.alert.setError(
         `The station role '${role}' is already assigned to another employee on shift ${shift}. Please choose a different role.`
@@ -155,6 +153,8 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const updateBy = this.authService.loadedUser?.username || 'system';
+    const updateAt = this.homeService.getUnixTimestampDateOnly(new Date());
     let name = this.formGrp.get('name').value;
     this.formGrp.get('name').setValue(name.trim());
     if (this.formGrp.valid) {
@@ -164,7 +164,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
         //add
         let row = this.employeeService.dataSourceEmployeeList.data.find((e) => e.cutter_number == frm.cutter_number);
         if (!row) {
-          frm.cutter_number = parseInt(frm.cutter_number.toString());
+          //  frm.cutter_number = parseInt(frm.cutter_number.toString());
           this.employeeService.dataSourceEmployeeList.data.push(frm);
           this.showSpinner = true;
           const errMsg = await this.employeeService.saveEmployeesAsync();
@@ -177,31 +177,23 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
           this.employeeService.alert.setError('This cutter number already exists.  Cutter number must be unique');
         }
       } else {
-        //update
-        //if dataSourceEmployeeList name changed then update name in dataSourceStations as well.  NOTE: this doesn't change the historical data!
         const idx = this.employeeService.dataSourceEmployeeList.data.findIndex(
           (e) => e.cutter_number === this.employeeService.selectedEmployee.cutter_number
         );
         let employeeRow = this.employeeService.dataSourceEmployeeList.data[idx];
-
-        let dupRow = this.employeeService.dataSourceEmployeeList.data.find((e, i) => e.cutter_number == frm.cutter_number && i !== idx);
-        if (dupRow) {
-          this.employeeService.alert.setError('This cutter number already exists.  Cutter number must be unique');
-        } else {
-          employeeRow.cutter_number = frm.cutter_number;
-          employeeRow.name = frm.name;
-          employeeRow.role = frm.role;
-          employeeRow.enabled = frm.enabled;
-          employeeRow.shift = frm.shift;
-          employeeRow.employeeCategory = frm.employeeCategory;
-          employeeRow.hireDate = frm.hireDate;
-          this.showSpinner = true;
-          const errMsg = await this.employeeService.saveEmployeesAsync();
-          this.showSpinner = false;
-          if (errMsg === '') {
-            this.route.navigate(['/setup/employees']);
-            this.isDirty = false;
-          }
+        //employeeRow.cutter_number = frm.cutter_number;
+        employeeRow.name = frm.name;
+        employeeRow.role = frm.role;
+        employeeRow.enabled = frm.enabled;
+        employeeRow.shift = frm.shift;
+        employeeRow.updatedBy = updateBy;
+        employeeRow.updatedAt = updateAt;
+        this.showSpinner = true;
+        const errMsg = await this.employeeService.saveEmployeesAsync();
+        this.showSpinner = false;
+        if (errMsg === '') {
+          this.route.navigate(['/setup/employees']);
+          this.isDirty = false;
         }
       }
     } else {
@@ -213,7 +205,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
   onCancel() {
     this.isDirty = false;
     this.formGrp.reset();
-    this.ngOnInit();
+    //this.ngOnInit();
   }
 
   onBack() {

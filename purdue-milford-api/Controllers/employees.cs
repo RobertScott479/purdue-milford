@@ -101,7 +101,7 @@ namespace weightech.Controllers
             {
                 var e = db.Employees.ToList();
                 var q = db.Employees.Select(u =>
-                    new EmployeeModel { cutter_number = u.Cutter_number, name = u.Name, role = u.Role, enabled = Convert.ToBoolean(u.Enabled == "1" ? true : false), shift = Convert.ToInt32(u.Shift), employeeCategory = u.EmployeeCategory, hireDate = u.HireDate }
+                    new EmployeeModel { cutter_number = u.Cutter_number, name = u.Name, role = u.Role, enabled = Convert.ToBoolean(u.Enabled == "1" ? true : false), shift = Convert.ToInt32(u.Shift), updatedAt = u.updatedAt, updatedBy = u.updatedBy }
                 ).ToList();
 
                 res.employees = q;
@@ -130,13 +130,13 @@ namespace weightech.Controllers
                {
                    var employee = new Employee
                    {
-                       Cutter_number = e.cutter_number,
+                       Cutter_number = null,
                        Name = e.name,
                        Role = e.role,
                        Shift = e.shift.ToString(),
                        Enabled = e.enabled == true ? "1" : "0",
-                       EmployeeCategory = e.employeeCategory,
-                       HireDate = e.hireDate
+                       updatedAt = e.updatedAt,
+                       updatedBy = e.updatedBy,
                    };
                    db.Employees.Add(employee);
 

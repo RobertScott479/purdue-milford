@@ -77,18 +77,18 @@ export interface RootInterface {
 //   registers: RegisterInterface[];
 // }
 
-export interface StationRootInterface {
-  stations: StationInterface[];
-}
-export interface StationsResInterface extends ErrorResInterface {
-  stations: StationInterface[];
-}
-export interface StationInterface {
-  station: string;
-  enabled: boolean;
-  cutter_number: number;
-  //alternateCutterNumber: number;
-  name?: string;
-  //alternateCutterName?: string;
-  shift: number;
-}
+// export interface StationRootInterface {
+//   stations: StationInterface[];
+// }
+// export interface StationsResInterface extends ErrorResInterface {
+//   stations: StationInterface[];
+// }
+// export interface StationInterface {
+//   station: string;
+//   enabled: boolean;
+//   cutter_number: number;
+//   //alternateCutterNumber: number;
+//   name?: string;
+//   //alternateCutterName?: string;
+//   shift: number;
+// }

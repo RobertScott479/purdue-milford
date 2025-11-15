@@ -59,9 +59,7 @@
           <div class="mat-col">
             <mat-form-field appearance="outline">
               <mat-label>Pattern</mat-label>
-              <mat-select id="pattern" formControlName="pattern" placeholder="Select a pattern here.">
-                <mat-option *ngFor="let pattern of homeService.patterns" [value]="pattern">{{ pattern }}</mat-option>
-              </mat-select>
+              <input matInput maxlength="10" placeholder="" formControlName="pattern" />
               <mat-error>{{ getErrorMessage("pattern") }}</mat-error>
             </mat-form-field>
           </div>
@@ -78,7 +76,7 @@
 
           <div class="mat-col">
             <mat-form-field appearance="outline">
-              <mat-label>Primary Yield Standard</mat-label>
+              <mat-label>Yield Standard</mat-label>
               <input matInput type="number" maxlength="2" placeholder="" formControlName="standardPrimaryYield" />
               <mat-error>{{ getErrorMessage("standardPrimaryYield") }}</mat-error>
             </mat-form-field>

@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Cuts {{ cutService.trimlineService.selectedServerHost }}</mat-card-title>
+    <mat-card-title>Cuts </mat-card-title>
   </mat-card-header>
   <app-mat-progress-spinner [visible]="showSpinner"></app-mat-progress-spinner>
   <mat-card-content>
@@ -102,9 +102,9 @@
       >
         <mat-icon svgIcon="add"></mat-icon> Add New
       </button>
-      <ng-container *ngIf="isAdminOrSuper && !showSpinner">
+      <!-- <ng-container *ngIf="isAdminOrSuper && !showSpinner">
         <button mat-raised-button (click)="onExport()"><mat-icon svgIcon="lan"></mat-icon> Export</button>
-      </ng-container>
+      </ng-container> -->
     </div>
   </mat-card-actions>
 </mat-card>

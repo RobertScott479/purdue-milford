@@ -39,7 +39,7 @@ export class QcLoginComponent implements OnInit, OnDestroy {
     //this.trimlineService.trimline.stopRefreshTimer();
     this.alert.setLight('You are logged out. Enter your # then press Login to begin');
     this.sideNavService.close();
-    this.qcService.activeChecker = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
+    this.qcService.activeChecker = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false };
   }
 
   onKeyPress() {

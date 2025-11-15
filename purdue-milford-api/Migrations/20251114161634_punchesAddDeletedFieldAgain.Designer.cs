@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dg_foods_api.Models;
 
 namespace dg_foods_api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251114161634_punchesAddDeletedFieldAgain")]
+    partial class punchesAddDeletedFieldAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,25 +361,31 @@ namespace dg_foods_api.Migrations
                 {
                     b.Property<int>("Cutter_number")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cutter_number");
+
+                    b.Property<string>("EmployeeCategory")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("employee_category");
 
                     b.Property<string>("Enabled")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("enabled");
+
+                    b.Property<string>("HireDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("hire_date");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
 
                     b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Shift")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("updatedAt")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("shift");
 
                     b.HasKey("Cutter_number");
 
@@ -412,10 +420,10 @@ namespace dg_foods_api.Migrations
                     b.Property<int>("deleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("updatedAt")
+                    b.Property<int>("updateAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("updatedBy")
+                    b.Property<string>("updateBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

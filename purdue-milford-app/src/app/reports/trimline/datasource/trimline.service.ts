@@ -2,10 +2,10 @@ import { Injectable, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { TimeFrame } from '../../report.models';
 import { HomeService } from '../../../home.service';
-import { StationInterface, StationRootInterface, StationsResInterface } from './trimline.model';
+
 import { ErrorResInterface, IFrmGroupHistory } from '../../../models';
 import { HttpClient } from '@angular/common/http';
-import { IExportCriteria } from '../../standard-report/standard-report.component';
+import { IExportCriteria, IFieldName } from '../../standard-report/standard-report.component';
 import { delay, groupBy, Subject, timeout } from 'rxjs';
 
 import { formatDate } from '@angular/common';
@@ -23,6 +23,8 @@ export class TrimlineService {
   moduleID = 'trimline';
   serverGroups = ['trimline'];
   //servers: ServerMapInterface[] = [];
+
+  groupByColumns: IFieldName[] = [];
 
   frmGroup: any;
   showSpinner = signal(false);
@@ -42,11 +44,11 @@ export class TrimlineService {
       line: ['All'],
       report: ['Summary'],
       serverIndex: [-1],
-      timeframe: [TimeFrame.Live],
+      timeframe: [TimeFrame.DateShift, Validators.required],
       date: [new Date('8/1/2025'), Validators.required],
       toDate: [new Date(), Validators.required],
       shift: [1],
-      groupBy: ['cutter_number'],
+      groupBy: [[{ column: 'cutter_number', name: 'Cutter' }], Validators.required],
       fromTime: [
         '12:00 AM',
         [Validators.required, Validators.pattern(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/), this.homeService.timeValidator()],
@@ -116,13 +118,13 @@ export class TrimlineService {
       datetimeframe += '\nTo: ' + formatDate(new Date(formatDate(frm.toDate, 'yyyy-MM-dd ', 'en-US') + frm.toTime), 'M/dd/yyyy h:mm a', 'en-US');
     }
 
-    const groupBy = ''; // 'Grouped By: Server';
+    const groupBy = 'GroupBy: ' + frm.groupBy.map((item: any) => item.name).join('/'); // 'Grouped By: Server';
 
-    let header = frm.report + '\n'; //+ '-' + frm.timeframe.toLocaleLowerCase()
-    const selectedServer = frm.serverIndex === -1 ? 'All Servers' : this.homeService.serverMap.dataSource.data[frm.serverIndex].server;
+    //let header = '';// frm.report + '\n'; //+ '-' + frm.timeframe.toLocaleLowerCase()
+    const selectedServer = ''; // frm.serverIndex === -1 ? 'All Servers' : this.homeService.serverMap.dataSource.data[frm.serverIndex].server;
 
-    header += 'Servers: ' + selectedServer + '\n';
-    header += datetimeframe + '\n' + groupBy + '\n';
+    // header += 'Servers: ' + selectedServer + '\n';
+    let header = datetimeframe + '\n' + groupBy + '\n';
     // header += 'Unassigned stations: ' + (frm.removeUnassignedStations ? 'removed' : 'included') + '\n';
 
     const fileDate =

@@ -29,6 +29,7 @@ import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/but
 import { MatCard, MatCardModule } from '@angular/material/card';
 import { TrimlineService } from '../../datasource/trimline.service';
 import { HomeService } from '../../../../home.service';
+import { AuthService } from '../../../../users/login/auth.service';
 
 @Component({
   selector: 'app-employee-browser',
@@ -77,10 +78,12 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     public employeeService: EmployeeService,
     private router: Router,
     public trimlineService: TrimlineService,
-    public homeService: HomeService
+    public homeService: HomeService,
+    public authService: AuthService
   ) {}
 
   async ngOnInit() {
+    this.homeService.serverMap.loadServerMap('production');
     await this.onServerChange();
     this.employeeService.dataSourceEmployeeList.filterPredicate = this.employeeService.employeefilterPredicate();
     this.setFilter();
@@ -89,14 +92,15 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
       .get('search')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((val: any) => {
-        this.setFilter();
+        //this.setFilter();
+        this.onSelectionChange();
         // this.onSearch(val);
       });
   }
 
   async onServerChange() {
     this.addNewDisabled = true;
-    this.alert.clear();
+    this.alert.setInfo('Station roles allow punching in and out of stations.  Checker role allow logging into QC station');
     this.showSpinner = true;
     const err = await this.employeeService.loadEmployeesAsync();
     this.showSpinner = false;
@@ -112,7 +116,7 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     this.employeeService.dataSourceEmployeeList.filter = JSON.stringify({
       search: frmGrp.get('search').value,
       shift: frmGrp.get('shift').value,
-      activeOnly: true,
+      activeOnly: frmGrp.get('activeOnly').value,
     });
   }
 
@@ -127,7 +131,7 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
   }
 
   onSelectionChange() {
-    this.alert.clear();
+    this.alert.setInfo('');
     this.setFilter();
   }
 
@@ -144,7 +148,7 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     //if (this.userService.canExecute(['Admin', 'Super'], this.router.url)) {
     const dialogData: ConfirmationDialogInterface = {
       title: 'Please Confirm',
-      content: 'Are you sure you want to delete this Employee?',
+      content: 'Are you sure you want to deactivate this Employee?',
       yesButton: 'Yes',
       cancelButton: 'Cancel',
       returnVal: emp,
@@ -154,16 +158,23 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
       //height: '350px',
       data: dialogData,
     });
-
+    const updateBy = this.authService.loadedUser?.username || 'system';
+    const updateAt = Math.floor(Date.now() / 1000);
     dialogRef.afterClosed().subscribe((action) => {
       if (action !== 'Yes') return;
       this.showSpinner = true;
-      this.employeeService.dataSourceEmployeeList.data = this.employeeService.dataSourceEmployeeList.data.filter(
-        (e: EmployeeInterface) => e.cutter_number !== emp.cutter_number
-      );
+      const data = this.employeeService.dataSourceEmployeeList.data;
+      const index = data.findIndex((e: EmployeeInterface) => e.cutter_number === emp.cutter_number);
+      if (index !== -1) {
+        data[index].enabled = false;
+        data[index].updatedBy = updateBy;
+        data[index].updatedAt = updateAt;
+        this.employeeService.dataSourceEmployeeList.data = [...data];
+      }
 
       (async () => {
         const errMsg = await this.employeeService.saveEmployeesAsync();
+        await this.employeeService.loadEmployeesAsync();
         this.showSpinner = false;
         window.scrollTo(0, 0);
         if (errMsg === '') {
@@ -174,59 +185,12 @@ export class EmployeeBrowserComponent implements OnInit, AfterViewInit {
     //}
   }
 
-  isDateValid(dateStr: string) {
-    return !isNaN(new Date(dateStr).getTime());
-  }
-
-  get isAdminOrSuper() {
-    // return this.userService.userInRole(UserRoleEnum.Admin) || this.userService.userInRole(UserRoleEnum.Super);
-    return true;
-  }
-
-  // onExport() {
-  //   this.openDialog();
+  // isDateValid(dateStr: string) {
+  //   return !isNaN(new Date(dateStr).getTime());
   // }
 
-  // openDialog() {
-  //   const employees = this.homeService.copyObject(this.homeService.dataSourceEmployeeList.data);
-
-  //   const dataObj: IExporterData = {
-  //     prompt: `Exporting ${this.homeService.selectedServer.server} employees to all servers...`,
-  //     endPoint: 'api/employees/saveemployees',
-  //     data: { employees: employees as EmployeeInterface[] },
-  //   };
-
-  //   const dialogConfig = new MatDialogConfig();
-
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.autoFocus = true;
-
-  //   const dialogRef = this.dialog.open(ExporterComponent, {
-  //     width: '980px',
-  //     data: dataObj,
-  //     disableClose: true,
-  //     autoFocus: true,
-  //   });
-  //   dialogRef.afterClosed().subscribe((dialogAction) => {
-  //   });
-  // }
-
-  // OnExportCSV() {
-  //   const csv = this.convertToCSV(this.homeService.dataSourceEmployeeList.data);
-  //   const a = document.createElement('a');
-  //   const blob = new Blob([csv], { type: 'text/csv' });
-  //   const url = window.URL.createObjectURL(blob);
-  //   a.href = url;
-  //   a.download = 'cutterExport.csv';
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  // }
-
-  // convertToCSV(objArray: EmployeeInterface[]) {
-  //   let str = 'Cutter #,	Name,	Shift,	Position,	Hire Date,	Category\r\n';
-  //   objArray.forEach((e) => {
-  //     str += `${e.cutter_number},${e.name},${e.shift},${e.role},${e.hireDate},${e.employeeCategory}\r\n`;
-  //   });
-  //   return str;
+  // get isAdminOrSuper() {
+  //   // return this.userService.userInRole(UserRoleEnum.Admin) || this.userService.userInRole(UserRoleEnum.Super);
+  //   return true;
   // }
 }

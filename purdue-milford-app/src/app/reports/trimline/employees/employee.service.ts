@@ -15,8 +15,10 @@ export interface EmployeeInterface {
   role: string;
   shift: number;
   cutter_number: number;
-  employeeCategory: string;
-  hireDate: string;
+  //employeeCategory: string;
+  //hireDate: string;
+  updatedBy?: string;
+  updatedAt?: number;
 }
 
 export interface EmployeeRootInterface {
@@ -48,10 +50,12 @@ export class EmployeeService {
     cutter_number: 0,
     shift: 0,
     enabled: false,
-    employeeCategory: '',
-    hireDate: '',
+    updatedBy: '',
+    updatedAt: 0,
+    //employeeCategory: '',
+    //hireDate: '',
   } as const;
-  selectedEmployee: EmployeeInterface = { name: '', role: '', cutter_number: 0, shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
+  selectedEmployee: EmployeeInterface = { name: '', role: '', cutter_number: 0, shift: 0, enabled: false, updatedBy: '', updatedAt: 0 };
   //employeeRoles = ['A01', 'A02', 'A03', 'Checker'];
 
   constructor(public httpClient: HttpClient, public dialog: MatDialog, public trimlineService: TrimlineService, public fb: FormBuilder) {
@@ -78,14 +82,6 @@ export class EmployeeService {
       const res = (await this.loadEmployees()) ?? { employees: [], errorCode: '-1', errorMessage: 'No response from server' };
       if (res?.errorCode === '0') {
         this.dataSourceEmployeeList.data = res.employees;
-        this.dataSourceEmployeeList.sortingDataAccessor = (item: any, property): any => {
-          switch (property) {
-            case 'hireDate':
-              return new Date(item.hireDate);
-            default:
-              return item[property];
-          }
-        };
         return '';
       } else {
         this.dataSourceEmployeeList.data = [];
@@ -116,6 +112,7 @@ export class EmployeeService {
     try {
       const res = (await this.saveEmployees(employees)) ?? { errorCode: '-1', errorMessage: 'No response from server' };
       if (res.errorCode === '0') {
+        await this.loadEmployeesAsync();
         return '';
       } else {
         this.alert.set(res.errorMessage, AlertTypeEnum.Error);
@@ -128,75 +125,6 @@ export class EmployeeService {
     }
   }
 
-  // async onImport(event: Event) {
-  //   this.alert.clear();
-  //   const target = event.target as HTMLInputElement;
-  //   const reader = new FileReader();
-  //   this.alert.setInfo('Loading file...');
-  //   reader.onload = (e: any) => {
-  //     const csv = e.target.result;
-  //     const rows = csv.split('\n');
-
-  //     let employeeList: EmployeeInterface[] = [];
-  //     try {
-  //       if (rows.length > 1) {
-  //         rows.forEach((e: any, i: number) => {
-  //           if (i > 0 && e) {
-  //             const cols = this.splitCSV(e.replace('\r', ''));
-  //             // if (cols.length === 5) {
-  //             if (isNaN(cols[0])) throw `Cutter number must be integer on line ${i + 1}!`;
-  //             if (isNaN(cols[3])) throw `Shift must be integer on line ${i + 1}!`;
-  //             if (!(cols[4] === 'Cutter' || cols[4] === 'Checker')) throw `Role must be Cutter or Checker on line ${i + 1}!`;
-  //             // if (!this.isDateValid(cols[5])) throw `Invalid date on line ${i + 1}!`;
-  //             // if (!(cols[6] === 'DGF' || cols[5] === 'CC1' || cols[5] === 'CC2')) throw `Unknown Employee Category on line ${i + 1}!`;
-  //             const emp: EmployeeInterface = {
-  //               cutter_number: parseInt(cols[0]),
-  //               name: `${cols[1]} ${cols[2]}`,
-  //               shift: cols[3],
-  //               role: cols[4],
-  //               enabled: true,
-  //               hireDate: cols[5] ?? '',
-  //               employeeCategory: cols[6] ?? 'DGF',
-  //             };
-  //             employeeList.push(emp);
-  //             // } else {
-  //             //   throw `Expected 5 columns. got ${cols.length} on line ${i + 1}`;
-  //             // }
-  //           }
-  //         });
-
-  //         //remove duplicate cutter_numbers
-  //         employeeList = employeeList.filter((value, index, self) => index === self.findIndex((t) => t.cutter_number === value.cutter_number));
-
-  //         (async () => {
-  //           this.homeService.dataSourceEmployeeList.data = employeeList;
-  //           const errMsg = await this.homeService.saveEmployeesAsync();
-  //           if (errMsg === '') {
-  //             this.alert.setSuccess('Employee list loaded successfully.');
-  //           }
-  //         })();
-  //         // console.log(employeeList);
-  //       } else {
-  //         throw 'Nothing to import!';
-  //       }
-  //     } catch (err) {
-  //       this.alert.setError(err);
-  //       //console.log(err);
-  //     } finally {
-  //       this.EmployeeFileInput.nativeElement.value = '';
-  //     }
-  //   };
-
-  //   reader.readAsText(target.files[0]);
-  // }
-
-  // //splits string by comma or quoted block then removes single or double quotes
-  // splitCSV(str: string) {
-  //   return str.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map((val) => {
-  //     return val.replace(/^"(.*)"$/, '$1');
-  //   });
-  // }
-
   employeefilterPredicate() {
     const myFilterPredicate = (data: EmployeeInterface, filter: string): boolean => {
       const filterObject: IEmployeeFilter = JSON.parse(filter);
@@ -204,10 +132,11 @@ export class EmployeeService {
       const result =
         filterObject === undefined ||
         ((data.cutter_number.toString().includes(filterObject.search) ||
+          data.role.toString().includes(filterObject.search) ||
           data.name.toString().toLowerCase().includes(filterObject.search.toLowerCase()) ||
           filterObject.search == '') &&
           (data.shift == filterObject.shift || filterObject.shift == 0) &&
-          (filterObject.activeOnly === false || data.enabled === filterObject.activeOnly));
+          data.enabled === filterObject.activeOnly);
       return result;
     };
     return myFilterPredicate;

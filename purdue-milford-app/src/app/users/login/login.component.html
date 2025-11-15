@@ -3,6 +3,7 @@
     <mat-card-title>Please Log In</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <app-mat-progress-spinner [visible]="showSpinner" [delay]="100"></app-mat-progress-spinner>
     <app-alert [alert]="authService.alert" [alertHidden]="false"></app-alert>
 
     <form [formGroup]="formGrp" autocomplete="on" (keyup.enter)="onSubmit()">
@@ -18,7 +19,7 @@
     </form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-stroked-button color="primary" class="full-width" (click)="onSubmit()">Submit</button>
+    <button [disabled]="showSpinner" mat-stroked-button class="full-width" (click)="onSubmit()">Submit</button>
     <button mat-button class="full-width" (click)="onCancel()">Cancel</button>
 
     <!-- <div style="margin-top:20px;border-top:solid lightgray 1px;padding: 15px;">

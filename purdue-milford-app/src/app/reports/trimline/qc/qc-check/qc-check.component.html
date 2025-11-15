@@ -23,6 +23,12 @@
             <div class="detail-name">Weight</div>
             <div class="detail-value">{{ pieceWeight() }}</div>
           </div>
+
+          <div class="check-detail-block" matRipple (click)="setSamples()">
+            <div class="detail-name">Samples</div>
+            <div class="detail-value">{{ this.checkEventOutput.pieces?.length ?? 0 }}</div>
+          </div>
+
           <div class="check-detail-block">
             <div class="detail-name">Time</div>
             <div class="detail-value">{{ this.checkEventOutput.inspectionTime.toFixed(0) }}</div>

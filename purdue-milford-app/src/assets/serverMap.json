@@ -2,17 +2,17 @@
   "serverMap": [
     {
       "server": "Database Server",
-      "url": "",
+      "url": "http://10.216.36.205",
       "group": "dbserver"
     },
     {
       "server": "Trimline AB",
-      "url": "",
+      "url": "http://10.216.36.201",
       "group": "trimline"
     },
     {
       "server": "Trimline CD",
-      "url": "",
+      "url": "http://10.216.36.202",
       "group": "trimline"
     }
   ],

@@ -14,12 +14,22 @@ import { MatInputModule } from '@angular/material/input';
 
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AlertComponent } from '../../layout/alert/alert.component';
+import { MatProgressSpinnerComponent } from '../../layout/mat-progress-spinner/mat-progress-spinner.component';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, AlertComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    AlertComponent,
+    MatProgressSpinnerComponent,
+  ],
 })
 export class LoginComponent implements OnInit {
   //@ViewChild('username') usernameField: ElementRef;
@@ -33,7 +43,7 @@ export class LoginComponent implements OnInit {
   // alertMessage = '';
   dialogRef = inject<MatDialogRef<LoginComponent>>(MatDialogRef);
   //return = inject<string>(MAT_DIALOG_DATA);
-
+  showSpinner = false;
   constructor(public router: Router, public authService: AuthService, private route: ActivatedRoute, private location: Location) {}
 
   ngOnInit(): void {
@@ -52,7 +62,10 @@ export class LoginComponent implements OnInit {
       this.authService.alert.setError('Username and password are required!');
       return;
     }
+
+    this.showSpinner = true;
     const loggedIn = await this.authService.login(username, password);
+    this.showSpinner = false;
     if (loggedIn) {
       this.dialogRef.close(true);
     }

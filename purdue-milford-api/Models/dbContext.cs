@@ -101,15 +101,8 @@ namespace dg_foods_api.Models
 
                 entity.ToTable("employees");
 
-                entity.Property(e => e.Enabled).HasColumnName("enabled");
 
-                entity.Property(e => e.Name).HasColumnName("name");
 
-                entity.Property(e => e.Shift).HasColumnName("shift");
-
-                entity.Property(e => e.Cutter_number).HasColumnName("cutter_number");
-                entity.Property(e => e.EmployeeCategory).HasColumnName("employee_category");
-                entity.Property(e => e.HireDate).HasColumnName("hire_date");
             });
 
 
@@ -174,7 +167,7 @@ namespace dg_foods_api.Models
 
             modelBuilder.Entity<StationTableModel>(entity =>
             {
-                entity.HasKey(c => c.Id);
+                entity.HasKey(c => c.Station);
                 entity.ToTable("stations");
                 entity.Property(e => e.Enabled).HasColumnName("enabled");
                 // entity.Property(e => e.Cutter_number).HasColumnName("cutter_number").HasDefaultValue(0);

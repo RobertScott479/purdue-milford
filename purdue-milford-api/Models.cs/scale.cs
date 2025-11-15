@@ -12,15 +12,15 @@ namespace dg_foods_api.Models
     }
 
 
-    public class StationModel : StationTableModel
-    {
-        public string Name { get; set; } = "";
-    }
+    // public class StationModel : StationTableModel
+    // {
+    //     public string Name { get; set; } = "";
+    // }
 
     public class StationTableModel
     {
 
-        [Required] public int Id { get; set; }
+        //[Required] public int Id { get; set; }
         [Required] public string Station { get; set; }
 
         [Required] public bool Enabled { get; set; }
@@ -34,7 +34,7 @@ namespace dg_foods_api.Models
 
     public class StationsResModel : ErrorResModel
     {
-        [Required] public List<StationModel> stations { get; set; }
+        [Required] public List<StationTableModel> stations { get; set; }
     }
 
 

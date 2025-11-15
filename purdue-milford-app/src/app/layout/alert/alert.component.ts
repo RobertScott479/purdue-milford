@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 export class AlertComponent implements OnInit {
   @Input() alert: AlertMessage = new AlertMessage();
   @Input() alertHidden = false;
-  //@Input() dismissible: boolean = false;
 
   @Output() ErrorAcknowledgedEvent: EventEmitter<string> = new EventEmitter();
 

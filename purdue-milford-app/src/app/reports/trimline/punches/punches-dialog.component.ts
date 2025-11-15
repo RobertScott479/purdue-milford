@@ -91,7 +91,7 @@ export class PunchesDialogComponent implements OnInit {
 
   async loadEmployees() {
     try {
-      this.employees = this.employeeService.dataSourceEmployeeList.data;
+      this.employees = this.employeeService.dataSourceEmployeeList.filteredData;
       this.employeesLoaded = true;
 
       // Set initial employee value
@@ -184,7 +184,7 @@ export class PunchesDialogComponent implements OnInit {
       id: this.punch.id,
       cutter_number: employee.cutter_number,
       station: station,
-      name: employee ? employee.name : undefined,
+      //cutternName: employee ? employee.name : undefined,
       punchIn: punchIn,
       punchOut: punchOut,
     };
@@ -212,7 +212,7 @@ export class PunchesDialogComponent implements OnInit {
 
   validateStationTimestamps(punchToValidate: IPunch): boolean {
     let isValid = true;
-    this.stationsService.datasourcePunches.data.every((punch) => {
+    this.stationsService.datasourcePunches.filteredData.every((punch) => {
       if (punch.station === punchToValidate.station && (punchToValidate.id === undefined || punch.id !== punchToValidate.id)) {
         if (this.hasPunchOverlap(punchToValidate, punch)) {
           this.alert.setError(`Timestamp conflict with station ${punch.station} for cutter ${punch.cutter_number}`);

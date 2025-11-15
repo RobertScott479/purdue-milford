@@ -1,27 +1,24 @@
 # Purdue Milford
-#### build 5, 11/3/2025
+#### build 7, 11/15/2025
 
 ### Reports:
 
 
 
 - Summary(Current assumption of whats needed)
-    - Server
+    
     - Station 
     - Cutter# 
     - CutterName 
     - Code 
-    - Code Description      *cuts.description*
+    - Description      *cuts.description*
     - In Pounds
-    - GradeA Pounds 
-    - GradeA Yield           *GradeA Pounds / In Pounds*
-    - SYieldA               *(cuts.PrimaryYieldStandard)*
-    - POSYieldA             *Percent Of Standard YieldA   (GradeAYield / cuts.PrimaryYieldStandard)*
-    - GradeB Pounds 
-    - GradeB Yield           *GradeB Pounds / In Pounds*
-    - Total Pounds          *GradeA + GradeB*
-    - Overall Yield         *Total Pounds / In Pounds*
+    - Out Pounds 
+    - Yield           *GradeA Pounds / In Pounds*
+    - Standard Yield               *(cuts.PrimaryYieldStandard)*
+    - POSYield             *Percent Of Standard YieldA   (GradeAYield / cuts.PrimaryYieldStandard)*    
     - AQLScore              *Sum(checks.AQLScore) / count(checks)*
+    - AQL standard          cuts.aql
     - POSAQL                *Percent Of Standard AQL (Sum(checks.AQLScore) / count(checks) / cuts.AQLScoreStandard)*
     - Hours                 
     - PPMH                  *Total Pounds / Hours*
@@ -30,8 +27,7 @@
 
 
     
-- QA (preliminary assumption)
-    - Server
+- QA (preliminary assumption)    
     - Code
     - Description
     - Cutter
@@ -53,13 +49,15 @@
     - Defects10
     - AvgInspectionTime
     - Weight
-    - AqlScore    
+    - AqlScore       
+    - AQL standard          cuts.aql 
+    - POSAQL                *Percent Of Standard AQL (Sum(checks.AQLScore) / count(checks) / cuts.AQLScoreStandard)*
     - TotalDefects
     
 
 
 ### API:
-- GET  /api/scale/summary?start=1747137600&stop=1747184400/groupby=server,product,cutter    *this endpoint is not defined yet*
+- GET  /api/trimline/summary?start=1747137600&stop=1747184400/groupby=server,product,cutter    *this endpoint is not defined yet*
 - POST /api/users/loginuser
 - GET  /api/users/loadusers
 - POST /api/users/saveusers
@@ -70,8 +68,10 @@
 - GET  /api/products/loadcuts
 - POST /api/products/savecuts
 - GET  /api/qc/getCheckEvent 
-- POST /api/qc/setCheckEvent    *todo: add aqlscore the json payload*
-- POST /api/qalog/addevent
+- POST /api/qc/setCheckEvent   
+- GET  /api/punches/load/{productionDate}/{shift}
+- POST /api/punches/save/{productionDate}/{shift}
+
 - GET  /api/qc/summary?start=1747137600&stop=1747184400/groupby=server,product,cutter *this endpoint is not defined yet*
 
 

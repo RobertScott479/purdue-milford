@@ -1,169 +1,190 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-
-import { ConfirmationDialogComponent } from '../../../layout/confirmation-dialog/confirmation-dialog.component';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { delay, timeout } from 'rxjs/operators';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { AlertMessage } from '../../../layout/alert/alert-message';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+
+import { Subscription, timer } from 'rxjs';
+
 import { HomeService } from '../../../home.service';
-import { CommonModule } from '@angular/common';
-
 import { ConfirmationDialogInterface } from '../../../layout/confirmation-dialog/confirmation.model';
+import { ConfirmationDialogComponent } from '../../../layout/confirmation-dialog/confirmation-dialog.component';
+import { StationInterface, StationsService } from './stations.service';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { AlertComponent } from '../../../layout/alert/alert.component';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressSpinnerComponent } from '../../../layout/mat-progress-spinner/mat-progress-spinner.component';
-
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { firstValueFrom, Subscription } from 'rxjs';
-import { StationInterface } from '../datasource/trimline.model';
-import { TrimlineService } from '../datasource/trimline.service';
-import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertComponent } from '../../../layout/alert/alert.component';
+import { MatProgressSpinnerComponent } from '../../../layout/mat-progress-spinner/mat-progress-spinner.component';
+import { MatTab } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { EmployeeService, EmployeeInterface } from '../employees/employee.service';
-import { StationEditDialogComponent } from './station-edit-dialog.component';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { AlertDialogComponent } from '../../../alert-dialog/alert-dialog.component';
-import { ServerMapInterface } from '../../../serverMap';
 import { ServerStatusIndicatorsComponent } from '../../../layout/server-status-indicators/server-status-indicators.component';
-import { StationsService } from './stations.service';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ServerMapInterface } from '../../../serverMap';
+import { TrimlineService } from '../datasource/trimline.service';
 
 @Component({
   selector: 'app-stations',
   templateUrl: './stations.component.html',
   styleUrls: ['./stations.component.scss', '../../../../styles/table.scss'],
-  standalone: true,
   imports: [
-    MatSlideToggleModule,
     CommonModule,
-    MatProgressSpinnerComponent,
+    MatSort,
     MatCardModule,
-    MatButtonModule,
-    AlertComponent,
-    MatListModule,
-    MatFormFieldModule,
     MatSelectModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
+    AlertComponent,
+    FormsModule,
+    MatProgressSpinnerComponent,
     MatTableModule,
     MatIconModule,
-    FormsModule,
-    MatSortModule,
     ServerStatusIndicatorsComponent,
+    MatButtonModule,
+    MatSlideToggleModule,
   ],
 })
-export class StationsComponent implements OnInit, AfterViewInit {
-  slideToggleColor: ThemePalette = 'primary';
-
-  action = 'Edit';
-
-  //bStations: StationInterface[] = [];
-  //stationsLoaded = signal(false);
-
-  employees: EmployeeInterface[] = [];
+export class StationComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort = new MatSort();
+  @Input() ServerChanged = '';
 
-  displayedColumns: string[] = ['enabled', 'station', 'cutter_number', 'name', 'actions'];
-  // @ts-ignore
-  @ViewChild('myTable', { static: true }) myTable: MatTable<StationInterface>;
+  displayedColumns = ['station', 'enabled'];
+  enabledString = ['Off', 'On'];
 
-  //duplicateCutterNumber = new Map<number, string[]>();
-  //primaryCutterList = [];
+  //slideToggleColor: ThemePalette = 'primary';
+
+  //isDirty = false;
+  showSpinner = signal(false);
+
+  //frmGroup: any;
+
+  serverList: ServerMapInterface[] = [];
 
   constructor(
     public dialog: MatDialog,
+    public homeService: HomeService,
+    public stationService: StationsService,
+    public trimlineService: TrimlineService
+  ) {
+    // this.frmGroup = this.fb.group({
+    //   server: [1, Validators.required],
+    // });
+  }
 
-    public trimlineService: TrimlineService,
-    public employeeService: EmployeeService,
-    public stationService: StationsService
-  ) {}
+  async onServerChange() {
+    const canDeactivate = await this.canDeactivate();
+    if (canDeactivate) {
+      //const server = this.serverList.find((s) => s.index === this.frmGroup.controls['server'].value);
+      await this.loadStationsAsync();
+    }
+  }
+
+  async canDeactivate(): Promise<boolean> {
+    if (this.stationService.dirty) {
+      const dialogData: ConfirmationDialogInterface = {
+        title: 'Please Confirm',
+        content: 'You have unsaved changes. Continue anyway?',
+        yesButton: 'Yes',
+        noButton: 'No',
+        returnVal: '',
+      };
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '450px',
+        data: dialogData,
+      });
+
+      const response = await dialogRef.afterClosed().toPromise();
+      if (response === 'No') {
+        return false;
+      } else {
+        this.onCancel();
+        return true;
+      }
+    }
+    return true;
+  }
 
   async ngOnInit() {
-    this.stationService.alert.clear();
-    await this.stationService.loadStations();
+    await this.homeService.serverMap.loadServerMap('production');
+    this.serverList = this.homeService.serverMap.getServersByGroup(['trimline']);
+    this.showSpinner.set(true);
+    await this.loadStationsAsync();
+    this.showSpinner.set(false);
   }
 
   ngAfterViewInit(): void {
-    this.stationService.datasource.sort = this.sort;
+    this.stationService.datasourceStations.sort = this.sort;
   }
 
-  onServerChange() {
-    this.stationService.loadStations();
+  onChange(station: string) {
+    this.stationService.dirty = true;
+    const row = this.stationService.datasourceStations.data.find((s) => s.station === station);
+    if (row) {
+      row.enabled = !row.enabled;
+    }
+
+    this.stationService.alert.setWarning('Station state has changed.  Remember to Save changes.');
   }
 
-  onClear() {
-    this.ngOnInit();
+  async loadStationsAsync(): Promise<boolean> {
+    this.stationService.alert.setInfo('Loading stations...');
+    try {
+      await this.stationService.loadStations();
+
+      return true;
+    } catch (err) {
+      this.stationService.alert.setError('Unable to load stations. ' + this.stationService.alert.getErrorMessage(err));
+      return false;
+    }
   }
 
-  // showAlertDialog(message: string) {
-  //   const dialogRef = this.dialog.open(AlertDialogComponent, {
-  //     width: '400px',
-  //     data: { title: 'Warning', content: message },
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result: any) => {});
-  // }
-
-  // async loadEmployees() {
-  //   const serverIndex = this.trimlineService.frmGroup.get('serverIndex')?.value ?? -1;
+  // async onSaveStations() {
+  //   this.stationService.alert.clear();
+  //   const temp: StationInterface[] = [];
+  //   temp.push(...this.oddStations);
+  //   temp.push(...this.evenStations);
+  //   if (temp.length === 0) return;
   //   try {
-  //     this.trimlineService.blinkIndicator(serverIndex, 'unknown');
-  //     const result = await this.employeeService.loadEmployeesAsync();
-  //     this.trimlineService.blinkIndicator(serverIndex, 'online');
-  //     if (result === '') {
-  //       this.employees = this.employeeService.dataSourceEmployeeList.data.filter((emp) => emp.enabled);
+  //     this.showSpinner.set(true);
+  //     const stations = { stations: temp };
+  //     const res = await this.stationService.saveStations(stations.stations);
+  //     if (res.errorCode === '0') {
+  //       this.showSpinner.set(false);
+  //       this.isDirty = false;
+  //       this.homeService.disableServerSelection = this.isDirty;
+  //       this.stationService.alert.setInfo('Changes saved.');
+  //       window.scrollTo(0, 0);
+  //     } else {
+  //       this.stationService.alert.setError(res.errorMessage);
+  //       window.scrollTo(0, 0);
   //     }
-  //   } catch (error) {
-  //     this.trimlineService.blinkIndicator(serverIndex, 'offline');
-  //     console.error('Error loading employees:', error);
+  //   } catch (err) {
+  //     this.stationService.alert.setError('Unable to confirm save. ' + this.stationService.alert.getErrorMessage(err));
   //   }
   // }
 
-  onEditStation(station: StationInterface) {
-    const shift = station.shift;
-    const dialogRef = this.dialog.open(StationEditDialogComponent, {
-      width: '400px',
-
-      data: station,
-    });
-
-    dialogRef.afterClosed().subscribe((result: StationInterface) => {
-      if (result) {
-        const index = this.stationService.datasource.data.findIndex((s) => s.station === station.station && s.shift === station.shift);
-        if (index !== -1) {
-          this.stationService.datasource.data[index] = result;
-          this.stationService.dirty = true;
-          this.stationService.submitted.set(false);
-          this.stationService.onSave();
-        }
+  async onCancel() {
+    this.stationService.alert.clear();
+    if (this.stationService.dirty) {
+      this.showSpinner.set(true);
+      const successful = await this.loadStationsAsync();
+      this.showSpinner.set(false);
+      if (successful) {
+        this.stationService.dirty = false;
+        window.scrollTo(0, 0);
+        this.stationService.alert.setInfo('Changes canceled.');
       }
-    });
+    } else {
+      this.stationService.alert.setInfo('Nothing to cancel.');
+      window.scrollTo(0, 0);
+    }
   }
 
-  // UpdateAll(enabled: boolean) {
-  //   this.dirty = true;
-  //   this.submitted.set(false);
-  //   this.datasource.data = this.datasource.data.map((e) => ({ ...e, enabled }));
-  // }
-
-  applyFilter(shift: number) {
-    this.stationService.datasource.filter = JSON.stringify({
-      shift: shift,
-    });
-  }
-
-  defaultStations() {
-    const stations = this.stationService.initStationList();
-    this.stationService.datasource.data = stations;
-    this.stationService.dirty = true;
-    this.stationService.submitted.set(false);
-    this.stationService.onSave();
-    return stations;
+  onSaveStations() {
+    this.stationService.onSaveStations();
+    this.stationService.dirty = false;
   }
 }

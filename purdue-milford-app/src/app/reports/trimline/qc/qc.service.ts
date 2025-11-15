@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class QcService {
   lastCheckIndex = 0;
   timeoutDelay = 5000;
-  activeChecker: EmployeeInterface = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false, employeeCategory: '', hireDate: '' };
+  activeChecker: EmployeeInterface = { cutter_number: 0, name: '', role: '', shift: 0, enabled: false };
   constructor(public httpClient: HttpClient) {}
 
   openEventSource(url: string): Observable<any> {

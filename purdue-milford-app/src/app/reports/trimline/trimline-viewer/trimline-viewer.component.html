@@ -5,7 +5,7 @@
   <mat-card-content>
     <form [formGroup]="trimlineService.frmGroup">
       <div class="row-space-between">
-        <div class="mat-col">
+        <!-- <div class="mat-col">
           <mat-form-field appearance="outline">
             <mat-label>Line</mat-label>
             <mat-select #lineSelect class="" formControlName="line" (selectionChange)="trimlineService.onFrmGroupChange()">
@@ -14,12 +14,19 @@
               <mat-option value="CD">CD</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
         <div class="mat-col">
           <mat-form-field appearance="outline">
             <mat-label>GroupBy</mat-label>
-            <mat-select #groupBySelect class="" formControlName="groupBy" (selectionChange)="trimlineService.onFrmGroupChange()" multiple>
-              <mat-option *ngFor="let groupBy of groupByColumns" [value]="groupBy.column">{{ groupBy.name }}</mat-option>
+            <mat-select
+              #groupBySelect
+              class=""
+              formControlName="groupBy"
+              (selectionChange)="trimlineService.onFrmGroupChange()"
+              multiple
+              [compareWith]="compareGroupBy"
+            >
+              <mat-option *ngFor="let groupBy of trimlineService.groupByColumns" [value]="groupBy">{{ groupBy.name }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -121,7 +128,9 @@
   <mat-card-footer>
     <div class="footer-container">
       <div class="button-group">
-        <button mat-raised-button (click)="onRefresh()">Refresh</button>
+        <button [disabled]="trimlineService.frmGroup.invalid || trimlineService.showSpinner()" mat-raised-button (click)="onRefresh()">
+          Refresh
+        </button>
         @if(trimlineService.showExportButton()){
         <button mat-raised-button (click)="trimlineService.onExport()">Export</button>
         }

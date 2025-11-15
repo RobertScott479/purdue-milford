@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { StationsComponent } from './reports/trimline/stations/stations.component';
 import { HomeComponent } from './layout/home/home.component';
 import { TrimlineSummaryComponent } from './reports/trimline/trimline-summary/trimline-summary.component';
 //import { QcCheckComponent } from './reports/trimline/qc/qc-check_sep/qc-check.component';
@@ -23,6 +22,7 @@ import { QcCheckComponent } from './reports/trimline/qc/qc-check/qc-check.compon
 
 import { QaSummaryComponent } from './reports/trimline/qc/qa-summary/qa-summary.component';
 import { PunchesComponent } from './reports/trimline/punches/punches.component';
+import { StationComponent } from './reports/trimline/stations/stations.component';
 
 @Injectable()
 export class SaveFormsGuard {
@@ -45,7 +45,7 @@ export const routes: Routes = [
         data: { expectedRoles: [UserRoleEnum.Admin, UserRoleEnum.Super] },
       },
       { path: 'employeenew', component: EmployeeNewComponent, canDeactivate: [SaveFormsGuard] },
-      { path: 'stations', component: StationsComponent },
+      { path: 'stations', component: StationComponent, canDeactivate: [SaveFormsGuard] },
 
       {
         path: 'cutsbrowser',

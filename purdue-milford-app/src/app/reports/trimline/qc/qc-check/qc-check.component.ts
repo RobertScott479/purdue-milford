@@ -27,6 +27,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { QcSamplesComponent } from '../qc-samples/qc-samples.component';
 
 @Component({
   selector: 'app-qc-check',
@@ -279,75 +280,58 @@ export class QcCheckComponent implements OnInit, OnDestroy {
 
   async newCheckEvent(checkEvent: ICheckEventInput): Promise<boolean> {
     this.checkInProgress = true;
-    //TODO: implement fetchData
-    //const fetched=await this.homeService.fetchData('')
+
     const fetched = true;
     if (!fetched) {
       return false;
     }
 
-    //TODO: get product code from data.json
-    //const code = this.homeService.productionCodes[checkEvent.bank]?.code ?? '';
-    const code = '03080,03080,03080';
-    const cuts = (code + ',,').replace(/\"/g, '').replace(/\s/g, '').split(',');
-    cuts[0] = cuts[0] ? cuts[0] : '';
-    cuts[1] = cuts[1] ? cuts[1] : cuts[0];
-    cuts[2] = cuts[2] ? cuts[2] : cuts[0];
-
-    //TODO: get product code from data.json???
-    const productCode = cuts[this.getCutIndexFromCut(checkEvent.cut)];
+    const productCode = checkEvent.cut ?? 'NULL';
 
     const emp = this.employeeService.getEmployeeName(checkEvent.cutter_number);
 
     this.alert.setInfo(`${checkEvent.station}: ${emp}`);
 
-    if (productCode === '') {
-      this.alert.setError(
-        `data.json has no product code assigned to check event bank# ${checkEvent.bank}.\n Try logging out then back in again after the code change has been made.`
-      );
+    this.cutInfo = this.cutsService.dataSourceCutInfo.data.find((e) => e.code === productCode);
+
+    if (!this.cutInfo) {
+      this.alert.setError(`Code (${productCode}) is not defined in the Cuts page! Correct the issue then login again.`);
       return false;
     } else {
-      this.cutInfo = this.cutsService.dataSourceCutInfo.data.find((e) => e.code === productCode);
+      this.checkEventOutput.checker_cutter_number = this.qcService.activeChecker.cutter_number;
+      this.checkEventOutput.product = productCode;
+      this.cutName = this.cutInfo.cutName;
+      this.checkEventOutput.checkEvent = checkEvent;
+      // this.checkEventOutput.finishedPO = this.qcService.getFinishedPO(checkEvent.cut);
 
-      if (!this.cutInfo) {
-        this.alert.setError(`Product code (${productCode}) is not defined in the product page! Correct the issue then login again.`);
-        return false;
+      this.demeritInfo = [];
+      this.defectsDefined = false;
+
+      this.piecesToCheck = this.cutInfo.sampleSize;
+
+      for (let i = 1; i < 11; i++) {
+        const defect: IDefectInfo = {
+          index: i - 1,
+          sampleSize: this.cutInfo.sampleSize,
+          // @ts-ignore
+          question: this.cutInfo['question' + i],
+          // @ts-ignore
+          confidence: this.cutInfo[`q${i}Confidence`],
+          occurances: 0,
+        };
+        this.demeritInfo.push(defect);
+        if (defect.question.trim() !== 'N/A' && defect.question.trim() !== 'NA') {
+          this.defectsDefined = true;
+        }
+      }
+      if (this.defectsDefined) {
+        this.startCheckTimer();
+        return true;
       } else {
-        this.checkEventOutput.checker_cutter_number = this.qcService.activeChecker.cutter_number;
-        this.checkEventOutput.product = productCode;
-        this.cutName = this.cutInfo.cutName;
-        this.checkEventOutput.checkEvent = checkEvent;
-        // this.checkEventOutput.finishedPO = this.qcService.getFinishedPO(checkEvent.cut);
-
-        this.demeritInfo = [];
-        this.defectsDefined = false;
-
-        this.piecesToCheck = this.cutInfo.sampleSize;
-
-        for (let i = 1; i < 11; i++) {
-          const defect: IDefectInfo = {
-            index: i - 1,
-            sampleSize: this.cutInfo.sampleSize,
-            // @ts-ignore
-            question: this.cutInfo['question' + i],
-            // @ts-ignore
-            confidence: this.cutInfo[`q${i}Confidence`],
-            occurances: 0,
-          };
-          this.demeritInfo.push(defect);
-          if (defect.question.trim() !== 'N/A' && defect.question.trim() !== 'NA') {
-            this.defectsDefined = true;
-          }
-        }
-        if (this.defectsDefined) {
-          this.startCheckTimer();
-          return true;
-        } else {
-          this.alert.setInfo(
-            'No QA questions defined for this product/cut yet. Notify supervisor to add QA questions to the product definition page. Then log out and in again.'
-          );
-          return false;
-        }
+        this.alert.setInfo(
+          'No QA questions defined for this product/cut yet. Notify supervisor to add QA questions to the product definition page. Then log out and in again.'
+        );
+        return false;
       }
     }
   }
@@ -498,6 +482,7 @@ export class QcCheckComponent implements OnInit, OnDestroy {
 
   async onReset() {
     await this.LogQAEvent('Check Reset');
+    this.checkEventOutput.pieces = [];
     for (let i = 0; i < 10; i++) {
       this.demeritInfo[i].occurances = 0;
     }
@@ -536,5 +521,18 @@ export class QcCheckComponent implements OnInit, OnDestroy {
 
   get filterDemeritInfo() {
     return this.demeritInfo.filter((d) => d.question !== 'N/A' && d.question !== 'NA');
+  }
+
+  async setSamples() {
+    const dialogRef = this.dialog.open(QcSamplesComponent, {
+      width: '700px',
+      data: this.checkEventOutput?.pieces?.length.toString() || '0',
+    });
+
+    const sampleCount = await dialogRef.afterClosed().toPromise();
+    this.checkEventOutput.pieces = [];
+    for (let i = 0; i < sampleCount; i++) {
+      this.checkEventOutput.pieces.push({ weight: 0, timestamp: 0 });
+    }
   }
 }

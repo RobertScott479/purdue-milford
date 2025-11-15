@@ -56,18 +56,18 @@ namespace weightech.Controllers
             Random random = new Random();
 
             string[] stations = { "A01", "B01", "A02", "B02", "A03", "B03", "A04", "B04", "A05", "B05", "A06", "B06", "A07", "B07", "A08", "B08", "A09", "B09", "A10", "B10", };
-            string[] cuts = { "Primary", "Cut 1", "Cut 2" };
+            string[] cuts = { "AGrade", "Downgrade" };
             string json = HttpContext.Session.GetString(key);
             if (string.IsNullOrEmpty(json))
             {
-                tm.checkEvent = new CheckEventModel { weight = 0, station = "A01", timestamp = 0, index = 0, cut = "primary", bank = 0 };
+                tm.checkEvent = new CheckEventModel { weight = 0, station = "A01", timestamp = 0, index = 0, cut = cuts[0], bank = 0 };
             }
             else
             {
                 tm = JsonConvert.DeserializeObject<TeguarModel>(json);
                 tm.checkEvent.weight = random.NextDouble() * 10;
                 tm.checkEvent.station = stations[random.Next(0, 19)];
-                tm.checkEvent.cut = cuts[random.Next(0, 2)];
+                tm.checkEvent.cut = cuts[random.Next(0, 1)];
                 tm.checkEvent.timestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 tm.checkEvent.index += 1;
                 tm.checkEvent.index %= 3;
@@ -284,7 +284,7 @@ namespace weightech.Controllers
                 var allProducts = grouped.Select(r => r.product).Where(p => !string.IsNullOrEmpty(p)).Distinct().ToList();
 
                 var employees = db.Employees
-                    .Where(e => allNumbers.Contains(e.Cutter_number))
+                    .Where(e => allNumbers.Contains(e.Cutter_number ?? 0))
                     .ToDictionary(e => e.Cutter_number, e => e.Name);
 
                 var products = db.Cuts.Where(e => allProducts.Contains(e.code))

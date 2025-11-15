@@ -68,15 +68,6 @@ export class TrimlineViewerComponent {
 
   serverList: ServerMapInterface[] = [];
 
-  groupByColumns: IFieldName[] = [
-    { column: 'line', name: 'Line' },
-    { column: 'product', name: 'Code' },
-    { column: 'station', name: 'Station' },
-    { column: 'cutter_number', name: 'Cutter' },
-    { column: 'checker_cutter_number', name: 'Checker' },
-    // { column: 'checker_cutter_number', name: 'Checker' },
-  ];
-
   async ngOnInit() {
     this.route.firstChild?.url.subscribe((url) => {
       if (url[url.length - 1]?.path === 'demo') {
@@ -97,6 +88,10 @@ export class TrimlineViewerComponent {
 
   ngOnDestroy() {
     this.httpCancelService.cancelPendingRequests();
+  }
+
+  compareGroupBy(o1: IFieldName, o2: IFieldName): boolean {
+    return o1 && o2 ? o1.column === o2.column : o1 === o2;
   }
 
   get reportname() {

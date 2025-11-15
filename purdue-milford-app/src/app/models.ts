@@ -12,4 +12,5 @@ export interface IFrmGroupHistory {
   shift: number;
   fromTime: string;
   toTime: string;
+  groupBy: string[];
 }

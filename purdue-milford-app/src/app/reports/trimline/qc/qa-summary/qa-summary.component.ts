@@ -10,16 +10,17 @@ import { TrimlineService } from '../../datasource/trimline.service';
 import { HttpClient } from '@angular/common/http';
 
 export interface ITrimlineQASummary {
-  line: string;
+  //line: string;
   station: string;
   code: string;
   description: string;
-  cutter: number;
+  cutter?: number;
   cutterName: string;
-  checker: number;
+  checker?: number;
   checkerName: string;
   aqlScore: number;
   aqlStandard: number;
+  posAqlScore: number;
   totalChecks: number;
   passedChecks: number;
   passPercent: number;
@@ -57,15 +58,16 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
   grandTotals: ITrimlineQASummary = this.reset();
 
   displayedColumns: (keyof ITrimlineQASummary)[] = [
-    'line',
+    //'line',
     'station',
     'code',
     'description',
     'cutter',
     'cutterName',
-    'checker',
-    'checkerName',
+    //'checker',
+    //'checkerName',
     'aqlScore',
+    //  'aqlStandard',
     'totalChecks',
     'passedChecks',
     'passPercent',
@@ -86,7 +88,18 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
     //'aqlQuestions',
   ];
 
-  constructor() {}
+  groupByColumnsQA: IFieldName[] = [
+    // { column: 'line', name: 'Line' },
+    { column: 'product', name: 'Code' },
+    { column: 'station', name: 'Station' },
+    { column: 'cutter_number', name: 'Cutter' },
+    //  { column: 'checker_cutter_number', name: 'Checker' },
+    // { column: 'checker_cutter_number', name: 'Checker' },
+  ];
+
+  constructor() {
+    this.trimlineService.groupByColumns = this.groupByColumnsQA;
+  }
 
   ngOnInit() {
     this.trimlineService.trimlineViewerTitle.set('QA Summary');
@@ -95,7 +108,8 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
 
     this.trimlineService.showExportButton.set(true);
     this.exportSubscription = this.trimlineService.exportReportEvent$.subscribe((criteria: IExportCriteria) => {
-      this.exportSignal.next(criteria);
+      const criteriaCpy: IExportCriteria = { ...criteria, reportName: 'QA Summary' };
+      this.exportSignal.next(criteriaCpy);
     });
 
     this.refreshSubscription = this.trimlineService.refreshReportEvent$.subscribe(() => {
@@ -117,16 +131,21 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
     const host = this.trimlineService.dbServerHost;
     const frm = this.trimlineService.frmGroup.value;
     const unixTimes = this.trimlineService.homeService.serverMap.getUnixStartStop(frm);
-    const endpoint = `${host}/api/qc/summary?start=${unixTimes.startUnix}&stop=${unixTimes.stopUnix}&groupby=${frm.groupBy.toString()}`;
+    const endpoint = `${host}/api/qc/summary?start=${unixTimes.startUnix}&stop=${unixTimes.stopUnix}&groupby=${frm.groupBy
+      .map((item: any) => item.column)
+      .join(',')}`;
     try {
       this.trimlineService.blinkIndicator(serverIndex, 'unknown');
+      this.trimlineService.showSpinner.set(true);
       const res = await firstValueFrom(this.httpClient.get<ITrimlineQASummary[]>(endpoint, this.trimlineService.homeService.httpOptions));
       this.trimlineService.blinkIndicator(serverIndex, 'online');
+      this.trimlineService.showSpinner.set(false);
       this.datasource.data = res;
       this.grandTotals = this.GrandTotalsUpdate(this.datasource.filteredData);
       return res;
     } catch (error) {
       this.trimlineService.blinkIndicator(serverIndex, 'offline');
+      this.trimlineService.showSpinner.set(false);
       this.datasource.data = [];
       this.grandTotals = this.reset();
       this.trimlineService.homeService.serverMap.showServerOfflineWarning();
@@ -136,16 +155,17 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
 
   public reset(): ITrimlineQASummary {
     const grandTotals = {
-      line: '',
+      //line: '',
       station: '',
       code: '',
       description: '',
-      cutter: 0,
+      cutter: undefined,
       cutterName: '',
-      checker: 0,
+      checker: undefined,
       checkerName: '',
       aqlScore: 0,
       aqlStandard: 0,
+      posAqlScore: 0,
       totalChecks: 0,
       passedChecks: 0,
       passPercent: 0,
@@ -198,6 +218,7 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
     });
     grandTotals.aqlScore = grandTotals.aqlScore / count;
     grandTotals.aqlStandard = grandTotals.aqlStandard / count;
+    grandTotals.posAqlScore = grandTotals.aqlScore / grandTotals.aqlStandard;
     grandTotals.passPercent = (grandTotals.passPercent / grandTotals.totalChecks) * 100;
     grandTotals.avgInspectionTime = grandTotals.avgInspectionTime / count;
     return grandTotals;

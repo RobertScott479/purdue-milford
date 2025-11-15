@@ -142,7 +142,6 @@ export class HomeService {
     });
 
     await dialogRef.afterClosed().toPromise();
-    window.location.reload();
   }
 
   copyObject(obj: any): any {

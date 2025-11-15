@@ -9,10 +9,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace weightech.Controllers
 {
+    public class PunchesWithName : Punches
+    {
+        public string cutterName { get; set; }
+    }
+
+
     public class PunchesReqModel
     {
-        [Required] public int productionDate { get; set; }
-        [Required] public int shift { get; set; }
+        // [Required] public int productionDate { get; set; }
+        // [Required] public int shift { get; set; }
         [Required] public List<Punches> punches { get; set; }
     }
 
@@ -20,7 +26,7 @@ namespace weightech.Controllers
     {
         [Required] public string errorCode { get; set; }
         [Required] public string errorMessage { get; set; }
-        [Required] public List<Punches> punches { get; set; }
+        [Required] public List<PunchesWithName> punches { get; set; }
     }
 
     [Produces("application/json")]
@@ -44,13 +50,37 @@ namespace weightech.Controllers
             {
                 errorCode = "0",
                 errorMessage = "",
-                punches = new List<Punches>()
+                punches = new List<PunchesWithName>()
             };
 
             try
             {
+
                 res.punches = db.Punches
                     .Where(p => p.ProductionDate == productionDate && p.Shift == shift)
+                    .GroupJoin(
+                        db.Employees,
+                        punch => punch.Cutter_number,
+                        employee => employee.Cutter_number,
+                        (punch, employees) => new { punch, employees }
+                    )
+                    .SelectMany(
+                        x => x.employees.DefaultIfEmpty(),
+                        (x, employee) => new PunchesWithName
+                        {
+                            Id = x.punch.Id,
+                            ProductionDate = x.punch.ProductionDate,
+                            Shift = x.punch.Shift,
+                            Cutter_number = x.punch.Cutter_number,
+                            Station = x.punch.Station,
+                            PunchIn = x.punch.PunchIn,
+                            PunchOut = x.punch.PunchOut,
+                            updatedBy = x.punch.updatedBy,
+                            updatedAt = x.punch.updatedAt,
+                            cutterName = employee != null ? employee.Name : "",
+                            deleted = x.punch.deleted
+                        }
+                    )
                     .OrderBy(p => p.Station)
                     .ThenBy(p => p.Cutter_number)
                     .ToList();
@@ -93,7 +123,7 @@ namespace weightech.Controllers
                     {
 
                         punch.Id = null;
-                        punch.updateAt = Convert.ToInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                        punch.updatedAt = Convert.ToInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                         db.Punches.Add(punch);
                     }
                 }
@@ -101,7 +131,7 @@ namespace weightech.Controllers
                 db.SaveChanges();
                 db.Database.CommitTransaction();
 
-                log.write($"SavePunches - Production Date: {req.productionDate}, Count: {req.punches?.Count ?? 0}");
+                log.write($"SavePunches - Production Date: {productionDate}, Count: {req.punches?.Count ?? 0}");
             }
             catch (Exception e)
             {
