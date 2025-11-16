@@ -17,16 +17,16 @@ namespace dg_foods_api.Models
         {
         }
 
-        public virtual DbSet<Bank> Banks { get; set; }
-        public virtual DbSet<Banks2> Banks2s { get; set; }
-        public virtual DbSet<Checker> Checkers { get; set; }
-        public virtual DbSet<Dump> Dumps { get; set; }
+        // public virtual DbSet<Bank> Banks { get; set; }
+        // public virtual DbSet<Banks2> Banks2s { get; set; }
+        // public virtual DbSet<Checker> Checkers { get; set; }
+        // public virtual DbSet<Dump> Dumps { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<CutModel> Cuts { get; set; }
         public virtual DbSet<QcResults> QcResults { get; set; }
         public virtual DbSet<StationTableModel> Stations { get; set; }
-        public virtual DbSet<QaLogModel> qalog { get; set; }
-        public virtual DbSet<BreakAdjustmentModel> BreakAdjustments { get; set; }
+        //public virtual DbSet<QaLogModel> qalog { get; set; }
+        //public virtual DbSet<BreakAdjustmentModel> BreakAdjustments { get; set; }
         public virtual DbSet<UserModel> Users { get; set; }
         public virtual DbSet<Punches> Punches { get; set; }
 
@@ -43,69 +43,17 @@ namespace dg_foods_api.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Bank>(entity =>
-            {
-                entity.HasNoKey();
 
-                entity.ToTable("banks");
-
-                entity.Property(e => e.Code)
-                    .HasColumnType("text")
-                    .HasColumnName("code");
-
-                entity.Property(e => e.Vector).HasColumnName("vector");
-            });
-
-            modelBuilder.Entity<Banks2>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("banks2");
-
-                entity.Property(e => e.Code).HasColumnName("code");
-
-                entity.Property(e => e.NewCode).HasColumnName("new_code");
-
-                entity.Property(e => e.Vector).HasColumnName("vector");
-            });
-
-            modelBuilder.Entity<Checker>(entity =>
-            {
-                entity.HasKey(c => c.Id);
-
-                entity.ToTable("checkers");
-
-                entity.Property(e => e.Name).HasColumnName("name");
-            });
-
-            modelBuilder.Entity<Dump>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("dumps");
-
-                entity.Property(e => e.Cut).HasColumnName("cut");
-
-                entity.Property(e => e.Station).HasColumnName("station");
-
-                entity.Property(e => e.Timestamp).HasColumnName("timestamp");
-
-                entity.Property(e => e.Vector).HasColumnName("vector");
-
-                entity.Property(e => e.Weight).HasColumnName("weight");
-            });
 
             modelBuilder.Entity<Employee>(entity =>
-            {
-                entity.HasKey(c => c.Cutter_number);
+                {
+                    entity.HasKey(c => c.Cutter_number);
 
-                entity.ToTable("employees");
-
-
-
-            });
+                    entity.ToTable("employees");
 
 
+
+                });
 
 
             modelBuilder.Entity<QcResults>(entity =>
@@ -170,10 +118,7 @@ namespace dg_foods_api.Models
                 entity.HasKey(c => c.Station);
                 entity.ToTable("stations");
                 entity.Property(e => e.Enabled).HasColumnName("enabled");
-                // entity.Property(e => e.Cutter_number).HasColumnName("cutter_number").HasDefaultValue(0);
-                // //entity.Property(e => e.AlternateCutterNumber).HasColumnName("alternate_cutter_number").HasDefaultValue(0);
-                // entity.Property(e => e.Shift).HasColumnName("shift").HasDefaultValue(1);
-                // entity.HasIndex(e => new { e.Station, e.Shift }).IsUnique();
+
             });
 
 
@@ -183,11 +128,7 @@ namespace dg_foods_api.Models
           });
 
 
-            modelBuilder.Entity<BreakAdjustmentModel>(entity =>
-          {
-              entity.HasKey(c => c.bank);
-              entity.Property(c => c.bank).ValueGeneratedNever();
-          });
+
 
 
             modelBuilder.Entity<CutModel>(entity =>

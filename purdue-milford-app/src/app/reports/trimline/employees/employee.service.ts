@@ -66,8 +66,8 @@ export class EmployeeService {
     });
   }
 
-  loadEmployees() {
-    const host = this.trimlineService.dbServerHost;
+  loadEmployees(host: string) {
+    //const host = this.trimlineService.dbServerHost;
     return this.httpClient
       .get<EmployeesResInterface>(`${host}/api/employees/loademployees`)
       .pipe(timeout(this.trimlineService.homeService.timeoutDelay))
@@ -75,11 +75,11 @@ export class EmployeeService {
       .toPromise();
   }
 
-  async loadEmployeesAsync(): Promise<string> {
+  async loadEmployeesAsync(host = this.trimlineService.dbServerHost): Promise<string> {
     this.alert.clear();
 
     try {
-      const res = (await this.loadEmployees()) ?? { employees: [], errorCode: '-1', errorMessage: 'No response from server' };
+      const res = (await this.loadEmployees(host)) ?? { employees: [], errorCode: '-1', errorMessage: 'No response from server' };
       if (res?.errorCode === '0') {
         this.dataSourceEmployeeList.data = res.employees;
         return '';

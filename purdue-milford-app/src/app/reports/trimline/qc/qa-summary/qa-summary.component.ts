@@ -37,6 +37,7 @@ export interface ITrimlineQASummary {
   avgInspectionTime: number;
   weight: number;
   totalDefects: number;
+  sampleCount: number;
 }
 
 @Component({
@@ -69,8 +70,8 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
     'aqlScore',
     //  'aqlStandard',
     'totalChecks',
-    'passedChecks',
-    'passPercent',
+    //'passedChecks',
+    //'passPercent',
     'defects1',
     'defects2',
     'defects3',
@@ -84,6 +85,7 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
     'avgInspectionTime',
     'weight',
     'totalDefects',
+    'sampleCount',
     //'totalSamples',
     //'aqlQuestions',
   ];
@@ -182,6 +184,7 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
       avgInspectionTime: 0,
       weight: 0,
       totalDefects: 0,
+      sampleCount: 0,
     };
 
     return grandTotals;
@@ -215,6 +218,7 @@ export class QaSummaryComponent implements OnInit, OnDestroy {
       grandTotals.avgInspectionTime += e.avgInspectionTime;
       grandTotals.weight += e.weight;
       grandTotals.totalDefects += e.totalDefects;
+      grandTotals.sampleCount += e.sampleCount;
     });
     grandTotals.aqlScore = grandTotals.aqlScore / count;
     grandTotals.aqlStandard = grandTotals.aqlStandard / count;

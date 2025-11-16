@@ -40,31 +40,31 @@ namespace dg_foods_api.Models
 
 
 
-    public class BreakAdjustmentRootModel
-    {
-        [Required] public List<BreakAdjustmentModel> breakAdjustments { get; set; }
-    }
+    // public class BreakAdjustmentRootModel
+    // {
+    //     [Required] public List<BreakAdjustmentModel> breakAdjustments { get; set; }
+    // }
 
-    public class BreakAdjustmentModel
-    {
+    // public class BreakAdjustmentModel
+    // {
 
-        // [Required] public int Id { get; set; }
-        [Required] public int bank { get; set; }
-        [Required] public int adjustment { get; set; }
-    }
+    //     // [Required] public int Id { get; set; }
+    //     [Required] public int bank { get; set; }
+    //     [Required] public int adjustment { get; set; }
+    // }
 
 
 
-    public class BreakAdjustmentsResModel : ErrorResModel
-    {
-        [Required] public List<BreakAdjustmentModel> Banks { get; set; }
-    }
+    // public class BreakAdjustmentsResModel : ErrorResModel
+    // {
+    //     [Required] public List<BreakAdjustmentModel> Banks { get; set; }
+    // }
 
-    public class CodeChangeModel
-    {
-        [Required] public string product { get; set; } = "";
-        [Required] public string po { get; set; } = "";
-        [Required] public string department { get; set; } = "";
-    }
+    // public class CodeChangeModel
+    // {
+    //     [Required] public string product { get; set; } = "";
+    //     [Required] public string po { get; set; } = "";
+    //     [Required] public string department { get; set; } = "";
+    // }
 
 }

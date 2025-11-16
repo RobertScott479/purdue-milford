@@ -35,19 +35,19 @@ export class CutsService {
     );
   }
 
-  loadCutsAsync(url: string = this.trimlineService.dbServerHost): Promise<CutsResInterface> {
+  loadCutsAsync(host: string = this.trimlineService.dbServerHost): Promise<CutsResInterface> {
     return firstValueFrom(
       this.httpClient
-        .get<CutsResInterface>(`${url}/api/products/loadcuts`)
+        .get<CutsResInterface>(`${host}/api/products/loadcuts`)
         .pipe(delay(0))
         .pipe(timeout(this.trimlineService.homeService.timeoutDelay))
     );
   }
 
-  async loadCutsAsync1(): Promise<string> {
+  async loadCutsAsync1(host: string = this.trimlineService.dbServerHost): Promise<string> {
     try {
       this.alert.clear();
-      const res = await this.loadCutsAsync();
+      const res = await this.loadCutsAsync(host);
       this.dataSourceCutInfo.data = res.cuts;
       return '';
       // console.log(this.dataSourceCutInfo.data);

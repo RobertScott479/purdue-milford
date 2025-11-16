@@ -55,11 +55,11 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'cutterName', name: 'Cutter Name' },
     { column: 'checker', name: 'Checker' },
     { column: 'checkerName', name: 'Checker Name' },
-    { column: 'aqlScore', name: 'AQL Score', format: '1.0-2', footerfield: true },
-    { column: 'aqlStandard', name: 'AQL Standard', format: '1.0-2', footerfield: true },
+    { column: 'aqlScore', name: 'AQL Score', format: '1.0-0', footerfield: true },
+    { column: 'aqlStandard', name: 'AQL Standard', format: '1.0-0', footerfield: true },
     //posAqlScore
     { column: 'posAqlScore', name: 'POS AQL', format: '1.0-2', footerfield: true },
-    { column: 'in_lbs', name: 'In Pounds', format: '1.0-0', footerfield: true },
+    { column: 'in_lbs', name: 'In Pounds', format: '1.0-0', footerfield: false },
     { column: 'out_lbs', name: 'Out Pounds', format: '1.0-0', footerfield: true },
     { column: 'yield', name: 'Yield', format: '1.0-2', footerfield: true },
     { column: 'standardYield', name: 'STD Yield', format: '1.0-2', footerfield: true },
@@ -68,9 +68,10 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'total_lbs', name: 'Total Pounds', format: '1.0-0', footerfield: true },
     { column: 'overall_yield', name: 'Overall Yield', format: '1.0-2', footerfield: true },
     { column: 'hours', name: 'Hours', format: '1.0-2', footerfield: true },
-    { column: 'ppmh', name: 'PPMH', format: '1.0-2', footerfield: true },
+    { column: 'ppmh', name: 'PPMH', format: '1.0-0', footerfield: true },
     { column: 'sppmh', name: 'STD PPMH', format: '1.0-2', footerfield: true },
     { column: 'posPpmh', name: 'POS PPMH', format: '1.0-2', footerfield: true },
+    { column: 'pcpm', name: 'PcPM', format: '1.0-0', footerfield: true },
 
     //summary copy
     { column: 'serverName', name: 'Server' },
@@ -101,7 +102,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'avgInspectionTime', name: 'Avg Inspection Time', format: '1.0-2', footerfield: true },
     { column: 'weight', name: 'Weight', format: '1.0-2', footerfield: true },
     { column: 'totalDefects', name: 'Total Defects', format: '1.0-0', footerfield: true },
-    { column: 'totalSamples', name: 'Total Samples', format: '1.0-0', footerfield: true },
+    { column: 'sampleCount', name: 'Total Samples', format: '1.0-0', footerfield: true },
     { column: 'defects1', name: '1', format: '1.0-0', footerfield: true },
     { column: 'defects2', name: '2', format: '1.0-0', footerfield: true },
     { column: 'defects3', name: '3', format: '1.0-0', footerfield: true },
@@ -207,7 +208,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
         const f = this.fieldNames.find((f) => f.column === dc);
         if (f) {
           const value = this.getNestedValue(this.grandTotals, f.column);
-          if (value && f.format) {
+          if (value && f.format && f.footerfield) {
             if (f.format.includes('Date:')) {
               const format = f.format.slice(f.format.indexOf(':') + 1);
               const formattedValue = formatDate((value as number) * 1000, format, 'en-US').replace(/,/g, '');
@@ -217,7 +218,7 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
               cols.push(formattedValue);
             }
           } else {
-            cols.push(value);
+            cols.push(f.footerfield ? value : '');
             if (!value) {
               //  console.log('missing GT value: ' + dc);
             }

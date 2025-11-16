@@ -50,6 +50,7 @@ namespace dg_foods_api.Models
         [Required] public string finishedPO { get; set; }
         [Required] public double aqlScore { get; set; }
         [Required] public double aqlStandard { get; set; }
+        [Required] public int sampleCount { get; set; }
     }
 
 

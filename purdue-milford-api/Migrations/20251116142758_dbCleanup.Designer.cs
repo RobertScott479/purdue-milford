@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dg_foods_api.Models;
 
 namespace dg_foods_api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251116142758_dbCleanup")]
+    partial class dbCleanup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +119,6 @@ namespace dg_foods_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("product");
-
-                    b.Property<int>("sampleCount")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("station")
                         .IsRequired()
@@ -313,11 +312,16 @@ namespace dg_foods_api.Migrations
                     b.Property<int>("Cutter_number")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ProductionDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PunchIn")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("PunchOut")
-                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Shift")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Station")

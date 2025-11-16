@@ -5,44 +5,7 @@
 10.216.36.205   milford-db
 
 
-Build 2, rss, 10/31/2025
-setup pages mostly done: cuts,cutters, stations, users
-qc login and qc check mostly done.
-todo: design report details like: 
-
-station, 
-cutter#, 
-cutterName, 
-Code, 
-Code Description
-gradeA(lbs), 
-gradeAYield,
-SYieldA,
-POSYieldA
-gradeB(lbs), 
-gradeBYield,
-overallYield
-AQLScore,
-Hours,
-PPMH,
-SPPMH,
-POSPPMH,
-
-
-
-
-Build 1, rss, 10/24/2025
-first commit of purdue milford.
-todo: qc station like dg without weights and PO's??
-change products??
-central database is the plan
-stations assignments primary and alternate
-
-
-Reports:
--	Summary
--   ???
-
-
-
-
+Build 9, rss, 11/16/2025
+reports and setup(cuts,cutters,punches) are centralize on dbserver.
+station enable/disable and qc station operation are all local, including calls to loademployees,loadcuts, getcheckEvent and saveCheckEvent. 
+QC Teguar will need to store a local copy of cuts and employees tables in case the network is down and a call to the dbserver cant be made.

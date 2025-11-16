@@ -47,6 +47,7 @@ export interface ICheckEventTeguar {
   finishedPO: string;
   aqlScore: number;
   aqlStandard: number;
+  sampleCount: number;
 }
 
 export interface ICheckEventOutput extends ICheckEventTeguar {

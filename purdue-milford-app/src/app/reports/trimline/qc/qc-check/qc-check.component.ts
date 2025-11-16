@@ -57,7 +57,7 @@ export class QcCheckComponent implements OnInit, OnDestroy {
   showSpinner = false;
   //checker_cutter_number = 0;
   checkerName = '';
-  disableCheck = true;
+  disableCheck = false;
 
   cutInfo: ICutInfo | undefined;
   cutName: string = '';
@@ -76,6 +76,7 @@ export class QcCheckComponent implements OnInit, OnDestroy {
     finishedPO: '123',
     aqlScore: 0,
     aqlStandard: 0,
+    sampleCount: 0,
   };
 
   demeritInfo: IDefectInfo[] = [];
@@ -117,14 +118,14 @@ export class QcCheckComponent implements OnInit, OnDestroy {
       //should never get here unless user bypassed the qclogin.
       this.alert.setError('Checker invalid!');
     } else {
-      (async () => {
-        const err = await this.cutsService.loadCutsAsync1();
-        this.disableCheck = !(checkerValid && err === '');
-        if (!this.disableCheck) {
-          this.alert.setInfo('Waiting for check event...');
-          this.startPolling(3000);
-        }
-      })();
+      //  (async () => {
+
+      // this.disableCheck = !(checkerValid && err === '');
+      // if (!this.disableCheck) {
+      this.alert.setInfo('Waiting for check event...');
+      this.startPolling(3000);
+      // }
+      //})();
     }
   }
 
@@ -142,6 +143,7 @@ export class QcCheckComponent implements OnInit, OnDestroy {
       finishedPO: '123',
       aqlScore: 0,
       aqlStandard: 0,
+      sampleCount: 0,
     };
   }
 
@@ -415,35 +417,40 @@ export class QcCheckComponent implements OnInit, OnDestroy {
     return res;
   }
 
-  calculateAQLScore(): number {
-    let aqlScore = 0;
-    let ConfidenceLevel99CheckFailed = false;
-    let aqlAccumulator = 100;
+  // calculateAQLScore(): number {
+  //   let aqlScore = 0;
+  //   let ConfidenceLevel99CheckFailed = false;
+  //   let aqlAccumulator = 100;
 
-    return aqlScore;
-  }
+  //   return aqlScore;
+  // }
 
   async submit() {
     try {
+      if (this.checkEventOutput.sampleCount == 0) {
+        this.alert.setError('Sample count cannot be zero.');
+        return;
+      }
       let passed = true;
       let hasCriticalDefect = false;
       this.checkEventOutput.aqlScore = 1.0;
       for (let i = 0; i < this.demeritInfo.length; i++) {
         this.checkEventOutput.defects[i] = this.demeritInfo[i].occurances;
         const occurances = this.demeritInfo[i].occurances;
-        const sampleSize = this.demeritInfo[i].sampleSize;
+        //const sampleSize = this.demeritInfo[i].sampleSize;
+        const sampleSize = this.checkEventOutput.sampleCount;
         const confidence = this.demeritInfo[i].confidence;
         const MinAcceptable = sampleSize - sampleSize * (confidence / 100);
         passed = occurances > MinAcceptable ? false : passed;
         if (confidence > 0) {
-          if (occurances > MinAcceptable) {
+          if (occurances > 0 && confidence === 100) {
             hasCriticalDefect = true;
           }
 
           if (hasCriticalDefect) {
             this.checkEventOutput.aqlScore = 0;
           } else {
-            this.checkEventOutput.aqlScore -= occurances / sampleSize;
+            this.checkEventOutput.aqlScore -= sampleSize > 0 ? occurances / sampleSize : 0;
           }
         }
       }
@@ -483,6 +490,7 @@ export class QcCheckComponent implements OnInit, OnDestroy {
   async onReset() {
     await this.LogQAEvent('Check Reset');
     this.checkEventOutput.pieces = [];
+    this.checkEventOutput.sampleCount = 0;
     for (let i = 0; i < 10; i++) {
       this.demeritInfo[i].occurances = 0;
     }
@@ -498,25 +506,26 @@ export class QcCheckComponent implements OnInit, OnDestroy {
   }
 
   async LogQAEvent(Event: string) {
-    if (this.checkEventOutput.product === '') return;
-    const check: ICheckEventOutput = this.checkEventOutput;
-    const qaEvent: QaLogModel = {
-      checker_cutter_number: check.checker_cutter_number,
-      cutter_number: check.checkEvent.cutter_number,
-      product: check.product,
-      cut: check.checkEvent.cut,
-      station: check.checkEvent.station,
-      weight: check.checkEvent.weight,
-      index: check.checkEvent.index,
-      timestamp: Math.floor(new Date().getTime() / 1000),
-      description: Event,
-      inspectionTime: check.inspectionTime,
-    };
-    try {
-      const res = await this.qcService.httpClient.post<ErrorResInterface>(`/api/qalog/addevent`, qaEvent).toPromise();
-    } catch (err) {
-      this.alert.setError(err);
-    }
+    console.log(`QA Event: ${Event}`);
+    // if (this.checkEventOutput.product === '') return;
+    // const check: ICheckEventOutput = this.checkEventOutput;
+    // const qaEvent: QaLogModel = {
+    //   checker_cutter_number: check.checker_cutter_number,
+    //   cutter_number: check.checkEvent.cutter_number,
+    //   product: check.product,
+    //   cut: check.checkEvent.cut,
+    //   station: check.checkEvent.station,
+    //   weight: check.checkEvent.weight,
+    //   index: check.checkEvent.index,
+    //   timestamp: Math.floor(new Date().getTime() / 1000),
+    //   description: Event,
+    //   inspectionTime: check.inspectionTime,
+    // };
+    // try {
+    //   const res = await this.qcService.httpClient.post<ErrorResInterface>(`/api/qalog/addevent`, qaEvent).toPromise();
+    // } catch (err) {
+    //   this.alert.setError(err);
+    // }
   }
 
   get filterDemeritInfo() {
@@ -526,13 +535,13 @@ export class QcCheckComponent implements OnInit, OnDestroy {
   async setSamples() {
     const dialogRef = this.dialog.open(QcSamplesComponent, {
       width: '700px',
-      data: this.checkEventOutput?.pieces?.length.toString() || '0',
+      data: this.checkEventOutput.sampleCount > 0 ? this.checkEventOutput.sampleCount.toString() : '',
     });
 
     const sampleCount = await dialogRef.afterClosed().toPromise();
-    this.checkEventOutput.pieces = [];
-    for (let i = 0; i < sampleCount; i++) {
-      this.checkEventOutput.pieces.push({ weight: 0, timestamp: 0 });
-    }
+    this.checkEventOutput.sampleCount = sampleCount;
+    // for (let i = 0; i < sampleCount; i++) {
+    //   this.checkEventOutput.pieces.push({ weight: 0, timestamp: 0 });
+    // }
   }
 }

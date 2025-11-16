@@ -12,6 +12,7 @@ import { SideNavService } from '../../../../layout/sidenav/sidenav.service';
 import { TrimlineService } from '../../datasource/trimline.service';
 import { EmployeeService } from '../../employees/employee.service';
 import { ErrorResInterface } from '../../../../models';
+import { CutsService } from '../../cuts/cuts.service';
 
 @Component({
   selector: 'app-qc-login',
@@ -29,7 +30,8 @@ export class QcLoginComponent implements OnInit, OnDestroy {
     private httpClient: HttpClient,
     private router: Router,
     private trimlineService: TrimlineService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    public cutsService: CutsService
   ) {}
 
   ngOnInit(): void {
@@ -56,24 +58,43 @@ export class QcLoginComponent implements OnInit, OnDestroy {
 
   async onQCLogin(pin: string) {
     const cutter_number = parseInt(pin);
-    //expect this to timeout or 404 on the production system as there is no loginchecker endpoint on the production system.
-    //only purpose of this si that it adds a login event to backend api log.
-    try {
-      //const res = await this.httpClient.post<ErrorResInterface>(`/api/qc/loginchecker`, { checker_cutter_number: cutter_number, Id: 0 }, this.homeService.httpOptions).pipe(timeout(200)).toPromise();
-    } catch (error) {}
 
-    const errMsg = await this.employeeService.loadEmployeesAsync();
-    if (errMsg === '') {
-      const checker = this.employeeService.dataSourceEmployeeList.data.find((e) => e.cutter_number == cutter_number && e.role === 'Checker');
-      if (checker) {
-        this.qcService.activeChecker = checker;
-        this.router.navigate(['/qc-check']);
-      } else {
-        this.alert.setError(`${pin} is not a valid checker number.`);
-      }
+    if (cutter_number === 99999) {
+      this.alert.setWarning(`Anonymous Checker login.`);
+      this.qcService.activeChecker = { cutter_number: 99999, name: 'Anonymous', role: 'Checker', shift: 0, enabled: true };
+      this.router.navigate(['/qc-check']);
     } else {
-      this.employeeService.dataSourceEmployeeList.data = [];
-      this.alert.setError(errMsg);
+      let errMsg = await this.employeeService.loadEmployeesAsync('');
+      if (errMsg === '') {
+        let err = await this.cutsService.loadCutsAsync1('');
+      }
+      if (errMsg === '') {
+        const checker = this.employeeService.dataSourceEmployeeList.data.find((e) => e.cutter_number == cutter_number && e.role === 'Checker');
+
+        if (checker) {
+          this.qcService.activeChecker = checker;
+          this.router.navigate(['/qc-check']);
+        } else {
+          this.alert.setError(`${pin} is not a valid checker number.`);
+        }
+      } else {
+        //this.employeeService.dataSourceEmployeeList.data = [];
+        this.alert.setError(errMsg);
+      }
     }
   }
+
+  // async loadCutsQCAsync(): Promise<string> {
+  //   try {
+  //     this.alert.clear();
+  //     const res = await this.cutsService.loadCutsAsync();
+  //     this.cutsService.dataSourceCutInfo.data = res.cuts;
+  //     return '';
+  //   }catch (err) {
+  //     this.cutsService.dataSourceCutInfo.data = [];
+  //     this.alert.setError('Unable to load product cuts. ' + this.alert.getErrorMessage(err));
+  //     return this.alert.getErrorMessage(err);
+  //   } finally {
+  //   }
+  // }
 }

@@ -33,6 +33,7 @@ namespace weightech.Controllers
         public double Ppmh { get; set; }
         public double Sppmh { get; set; }
         public double PosPpmh { get; set; }
+        public int Pcpm { get; set; }
     }
 
     [Produces("application/json")]
@@ -190,7 +191,8 @@ namespace weightech.Controllers
                     Hours = 8, // TODO: Calculate from punch data
                     Ppmh = 12.5, // TODO: Calculate pounds per man hour
                     Sppmh = 10, // TODO: Standard PPMH
-                    PosPpmh = 125 // TODO: Percentage of standard PPMH
+                    PosPpmh = 125, // TODO: Percentage of standard PPMH
+                    Pcpm = 10 // TODO: piece count per minute
                 };
 
 
@@ -213,7 +215,8 @@ namespace weightech.Controllers
                     Hours = 8, // TODO: Calculate from punch data
                     Ppmh = 12.5, // TODO: Calculate pounds per man hour
                     Sppmh = 10, // TODO: Standard PPMH
-                    PosPpmh = 125 // TODO: Percentage of standard PPMH
+                    PosPpmh = 125, // TODO: Percentage of standard PPMH
+                    Pcpm = 20 // TODO: piece count per minute
                 };
 
                 var result3 = new ITrimlineSummaryRes
@@ -235,7 +238,8 @@ namespace weightech.Controllers
                     Hours = 8, // TODO: Calculate from punch data
                     Ppmh = 1.37, // TODO: Calculate pounds per man hour
                     Sppmh = 1, // TODO: Standard PPMH
-                    PosPpmh = 73 // TODO: Percentage of standard PPMH
+                    PosPpmh = 73, // TODO: Percentage of standard PPMH
+                    Pcpm = 30 // TODO: piece count per minute
                 };
 
                 var resultList = new List<ITrimlineSummaryRes> { result, result2, result3 };

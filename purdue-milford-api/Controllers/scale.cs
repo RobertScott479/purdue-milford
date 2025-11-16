@@ -29,61 +29,7 @@ namespace weightech.Controllers
             db = _db;
         }
 
-        [HttpPost("codechange")]
-        public ActionResult<ErrorResModel> codechange([FromBody] string code)
-        {
-            System.Threading.Thread.Sleep(500);
-            if (code != "")
-            {
-                return Ok(new ErrorResModel { errorCode = "0", errorMessage = $"New Meat In code {code} applied" });
-            }
-            else
-            {
-                return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Old Meat Out applied" });
-            }
 
-        }
-
-
-        [HttpPost("newmeatin")]
-        public ActionResult<ErrorResModel> newmeatin([FromBody] CodeChangeModel codeChange)
-        {
-            System.Threading.Thread.Sleep(500);
-            return Ok(new ErrorResModel { errorCode = "0", errorMessage = $"New Meat In code {codeChange.product} applied" });
-        }
-
-
-        [HttpPost("oldmeatout")]
-        public ActionResult<ErrorResModel> oldmeatout()
-        {
-            System.Threading.Thread.Sleep(500);
-            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Old Meat Out applied" });
-
-        }
-
-        [HttpPost("cleanout")]
-        public ActionResult<ErrorResModel> cleanout()
-        {
-            System.Threading.Thread.Sleep(500);
-            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Cleanout Started..." });
-
-        }
-
-
-        [HttpPost("shiftchange")]
-        public ActionResult<ErrorResModel> shiftchange([FromBody] int shiftNum)
-        {
-            System.Threading.Thread.Sleep(500);
-            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Shift changed to " + shiftNum });
-        }
-
-
-        [HttpPost("clear")]
-        public ActionResult<ErrorResModel> clear(int index)
-        {
-            // Console.Write(index);
-            return Ok(new ErrorResModel { errorCode = "0", errorMessage = "Totals cleared successfully at " + DateTime.Now });
-        }
 
         [HttpGet("loadstations")]
         public ActionResult<StationsResModel> loadStations()
@@ -148,29 +94,6 @@ namespace weightech.Controllers
         }
 
 
-        [HttpPost("applybreakadjustments")]
-        public ActionResult<ErrorResModel> applybreakadjustments([FromBody] BreakAdjustmentRootModel req)
-        {
-
-            ErrorResModel res = new ErrorResModel { errorCode = "0", errorMessage = "" };
-            db.Database.BeginTransaction();
-            try
-            {
-                db.BreakAdjustments.RemoveRange(db.BreakAdjustments);
-                db.SaveChanges();
-
-                db.AddRange(req.breakAdjustments);
-                db.SaveChanges();
-                db.Database.CommitTransaction();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The process failed: {0}", e.ToString());
-                res.errorCode = "1";
-                res.errorMessage = e.Message + " " + e.InnerException?.Message;
-            }
-            return Ok(res);
-        }
 
 
 

@@ -27,6 +27,7 @@ export interface ITrimlineSummary {
   ppmh: number;
   sppmh: number;
   posPpmh: number;
+  pcpm: number;
 }
 
 @Component({
@@ -63,6 +64,7 @@ export class TrimlineSummaryComponent {
     //'posAqlScore',
     'hours',
     'ppmh',
+    'pcpm',
     //'sppmh',
     //'posPpmh',
   ];
@@ -159,6 +161,7 @@ export class TrimlineSummaryComponent {
       ppmh: 0,
       sppmh: 0,
       posPpmh: 0,
+      pcpm: 0,
     };
 
     return grandTotals;
@@ -179,6 +182,7 @@ export class TrimlineSummaryComponent {
       grandTotals.aqlStandard += e.aqlStandard;
       grandTotals.hours += e.hours;
       grandTotals.sppmh += e.sppmh;
+      grandTotals.pcpm += e.pcpm;
     });
     grandTotals.yield = grandTotals.in_lbs > 0 ? (grandTotals.out_lbs / grandTotals.in_lbs) * 100 : 0;
     grandTotals.standardYield = count > 0 ? grandTotals.standardYield / count : 0;
@@ -190,6 +194,7 @@ export class TrimlineSummaryComponent {
     grandTotals.ppmh = grandTotals.hours > 0 ? grandTotals.out_lbs / grandTotals.hours : 0;
     grandTotals.sppmh = grandTotals.sppmh / count;
     grandTotals.posPpmh = grandTotals.sppmh ? grandTotals.ppmh / grandTotals.sppmh : 0;
+    grandTotals.pcpm = grandTotals.pcpm > 0 ? grandTotals.pcpm / count : 0;
     return grandTotals;
   }
 

@@ -43,8 +43,8 @@ namespace weightech.Controllers
             log = new Logger(configuration, _db, "punches.log");
         }
 
-        [HttpGet("load/{productionDate}/{shift}")]
-        public ActionResult<PunchesResModel> LoadPunches(int productionDate, int shift)
+        [HttpGet("loadpunches")]
+        public ActionResult<PunchesResModel> LoadPunches([FromQuery] int start, [FromQuery] int stop)
         {
             PunchesResModel res = new PunchesResModel
             {
@@ -57,7 +57,7 @@ namespace weightech.Controllers
             {
 
                 res.punches = db.Punches
-                    .Where(p => p.ProductionDate == productionDate && p.Shift == shift)
+                    .Where(p => p.PunchIn >= start && p.PunchIn <= stop && p.PunchOut >= start && p.PunchOut <= stop)
                     .GroupJoin(
                         db.Employees,
                         punch => punch.Cutter_number,
@@ -69,8 +69,8 @@ namespace weightech.Controllers
                         (x, employee) => new PunchesWithName
                         {
                             Id = x.punch.Id,
-                            ProductionDate = x.punch.ProductionDate,
-                            Shift = x.punch.Shift,
+                            // ProductionDate = x.punch.ProductionDate,
+                            // Shift = x.punch.Shift,
                             Cutter_number = x.punch.Cutter_number,
                             Station = x.punch.Station,
                             PunchIn = x.punch.PunchIn,
@@ -85,7 +85,7 @@ namespace weightech.Controllers
                     .ThenBy(p => p.Cutter_number)
                     .ToList();
 
-                log.write($"LoadPunches - Production Date: {productionDate}, Shift: {shift}, Count: {res.punches.Count}");
+                log.write($"LoadPunches - Start: {start}, Stop: {stop}, Count: {res.punches.Count}");
             }
             catch (Exception e)
             {
@@ -97,8 +97,8 @@ namespace weightech.Controllers
             return Ok(res);
         }
 
-        [HttpPost("save/{productionDate}/{shift}")]
-        public ActionResult<ErrorResModel> SavePunches(int productionDate, int shift, [FromBody] PunchesReqModel req)
+        [HttpPost("savepunches")]
+        public ActionResult<ErrorResModel> SavePunches([FromQuery] int start, [FromQuery] int stop, [FromBody] PunchesReqModel req)
         {
             ErrorResModel res = new ErrorResModel { errorCode = "0", errorMessage = "" };
 
@@ -108,7 +108,7 @@ namespace weightech.Controllers
 
                 // Remove existing punches for this production date
                 var existingPunches = db.Punches
-                    .Where(p => p.ProductionDate == productionDate && p.Shift == shift)
+                    .Where(p => p.PunchIn >= start && p.PunchIn <= stop && p.PunchOut >= start && p.PunchOut <= stop)
                     .ToList();
 
                 if (existingPunches.Any())
@@ -131,7 +131,7 @@ namespace weightech.Controllers
                 db.SaveChanges();
                 db.Database.CommitTransaction();
 
-                log.write($"SavePunches - Production Date: {productionDate}, Count: {req.punches?.Count ?? 0}");
+                log.write($"SavePunches - Start: {start}, Stop: {stop}, Count: {req.punches?.Count ?? 0}");
             }
             catch (Exception e)
             {

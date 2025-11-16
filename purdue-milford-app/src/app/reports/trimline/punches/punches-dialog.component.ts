@@ -54,19 +54,19 @@ export class PunchesDialogComponent implements OnInit {
   employeesLoaded = false;
 
   dialogRef = inject<MatDialogRef<PunchesDialogComponent>>(MatDialogRef);
-  data = inject<{ punch: IPunch; shift: IShift; action: 'edit' | 'add'; shiftTime: IUnixStartStop }>(MAT_DIALOG_DATA);
+  data = inject<{ punch: IPunch; action: 'edit' | 'add'; shiftTime: IUnixStartStop }>(MAT_DIALOG_DATA);
   punch: IPunch = this.data.punch;
-  shift: IShift = this.data.shift;
+  //shift: IShift = this.data.shift;
   action: 'edit' | 'add' = this.data.action;
   shiftTime: IUnixStartStop = this.data.shiftTime;
   employeeService = inject(EmployeeService);
   stationsService = inject(StationsService);
   fb = inject(FormBuilder);
-  stations = this.stationsService.initStations(this.shift.number);
+  stations = this.stationsService.initStations();
 
   constructor() {
     this.punch = this.data.punch;
-    this.shift = this.data.shift;
+    //  this.shift = this.data.shift;
     this.action = this.data.action;
     this.shiftTime = this.data.shiftTime;
 

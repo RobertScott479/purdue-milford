@@ -106,12 +106,21 @@ export class PunchesComponent implements OnInit, AfterViewInit {
     return hours.toFixed(2);
   }
 
+  getUnixStartStop(): IUnixStartStop {
+    const date = this.frmGrp.controls.dateControl.value ?? new Date();
+    const shiftNumber = this.frmGrp.controls.shiftControl.value ?? 0;
+    const shiftInfo =
+      this.homeService.serverMap.appConfig.shifts.find((s) => s.number === shiftNumber) ??
+      ({ number: 0, name: '', start: { hour: 0, minute: 0, offset: 0 }, stop: { hour: 0, minute: 0, offset: 0 } } as IShift);
+    const shiftTime = this.homeService.serverMap.getUnixStartStopFromIShift(date, shiftInfo);
+    return shiftTime;
+  }
+
   async applyFilter() {
     this.stationService.alert.setInfo('Credit is given to cutters based on time they were punched into a given station.');
     this.stationService.datasourcePunches.filter = JSON.stringify({ deleted: 0 });
-    const date = this.frmGrp.controls.dateControl.value ?? new Date();
-    const shift = this.frmGrp.controls.shiftControl.value ?? 0;
-    await this.stationService.loadPunches(this.homeService.getUnixTimestampDateOnly(date), shift);
+    const shiftTime = this.getUnixStartStop();
+    await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
   }
 
   async onCreateTimesheet() {
@@ -163,19 +172,21 @@ export class PunchesComponent implements OnInit, AfterViewInit {
     });
 
     // Save to backend
-    this.httpClient.post<IPunchesResponse>(`/api/punches/save/${productionDate}/${shift.number}`, { punches }).subscribe({
-      next: () => {
-        // this.stationService.datasourcePunches.data = [...punches];
-        (async () => {
-          await this.stationService.loadPunches(productionDate, shift.number);
-          console.log('Punch saved successfully');
-        })();
-      },
-      error: (error: any) => {
-        console.error('Error saving punch:', error);
-        this.homeService.showAlert('Error', 'Failed to save timesheet. server unreachable.');
-      },
-    });
+    this.httpClient
+      .post<IPunchesResponse>(`/api/punches/savepunches?start=${shiftTime.startUnix}&stop=${shiftTime.stopUnix}`, { punches })
+      .subscribe({
+        next: () => {
+          // this.stationService.datasourcePunches.data = [...punches];
+          (async () => {
+            await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
+            console.log('Punch saved successfully');
+          })();
+        },
+        error: (error: any) => {
+          console.error('Error saving punch:', error);
+          this.homeService.showAlert('Error', 'Failed to save timesheet. server unreachable.');
+        },
+      });
 
     //console.log(punches);
     return punches;
@@ -183,9 +194,7 @@ export class PunchesComponent implements OnInit, AfterViewInit {
 
   onEditPunch(punch: IPunch) {
     const punchCopy = this.homeService.copyObject(punch) as IPunch;
-    const shift = this.homeService.serverMap.appConfig.shifts.find((s) => s.number === this.frmGrp.controls.shiftControl.value);
-    if (shift === undefined) return;
-    this.editPunch(punchCopy, shift);
+    this.editPunch(punchCopy);
   }
 
   onAddPunch() {
@@ -206,12 +215,12 @@ export class PunchesComponent implements OnInit, AfterViewInit {
       updatedAt: this.homeService.getUnixTimestampDateOnly(new Date()),
     };
 
-    this.editPunch(newPunch, shift, 'add');
+    this.editPunch(newPunch, 'add');
   }
 
-  editPunch(punch: IPunch, shift: IShift, action: 'edit' | 'add' = 'edit') {
-    const shiftTime = this.homeService.serverMap.getUnixStartStopFromIShift(this.homeService.getDateFromUnixTimestamp(punch.productionDate), shift);
-
+  editPunch(punch: IPunch, action: 'edit' | 'add' = 'edit') {
+    //const shiftTime = this.homeService.serverMap.getUnixStartStopFromIShift(productionDate, shift);
+    const shiftTime = this.getUnixStartStop();
     if (punch.punchIn === 0) {
       punch.punchIn = shiftTime.startUnix;
     }
@@ -221,7 +230,7 @@ export class PunchesComponent implements OnInit, AfterViewInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '520px';
-    dialogConfig.data = { punch, shift, action, shiftTime };
+    dialogConfig.data = { punch, action, shiftTime };
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
@@ -250,18 +259,20 @@ export class PunchesComponent implements OnInit, AfterViewInit {
         // Save to backend
         const punches = this.stationService.datasourcePunches.data;
 
-        this.httpClient.post<IPunchesResponse>(`/api/punches/save/${punch.productionDate}/${shift.number}`, { punches }).subscribe({
-          next: () => {
-            (async () => {
-              await this.stationService.loadPunches(punch.productionDate, shift.number);
-              console.log('Punch saved successfully');
-            })();
-          },
-          error: (error: any) => {
-            console.error('Error saving punch:', error);
-            this.homeService.showAlert('Error', 'Failed to save timesheet. server unreachable.');
-          },
-        });
+        this.httpClient
+          .post<IPunchesResponse>(`/api/punches/savepunches?start=${shiftTime.startUnix}&stop=${shiftTime.stopUnix}`, { punches })
+          .subscribe({
+            next: () => {
+              (async () => {
+                await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
+                console.log('Punch saved successfully');
+              })();
+            },
+            error: (error: any) => {
+              console.error('Error saving punch:', error);
+              this.homeService.showAlert('Error', 'Failed to save timesheet. server unreachable.');
+            },
+          });
       }
     });
   }
@@ -285,8 +296,8 @@ export class PunchesComponent implements OnInit, AfterViewInit {
         let data = this.stationService.datasourcePunches.data;
         const count = data.filter((p: IPunch) => p.station === punch.station).length;
         const index = data.findIndex((p: IPunch) => p.id === punch.id);
-        const updateBy = this.authService.loadedUser?.username || 'system';
-        const updateAt = this.homeService.getUnixTimestampDateOnly(new Date());
+        const updatedBy = this.authService.loadedUser?.username || 'system';
+        const updatedAt = this.homeService.getUnixTimestampDateOnly(new Date());
 
         if (index !== -1) {
           //if multiple punches exist for the station, delete the punch, else clear the punch info
@@ -296,23 +307,26 @@ export class PunchesComponent implements OnInit, AfterViewInit {
           } else {
             data = data.map((p: IPunch) => {
               if (p.id === punch.id) {
-                return { ...p, deleted: 1, updateBy, updateAt };
+                return { ...p, deleted: 1, updatedBy, updatedAt };
               }
               return p;
             });
           }
-          this.httpClient.post<IPunchesResponse>(`/api/punches/save/${punch.productionDate}/${punch.shift}`, { punches: data }).subscribe({
-            next: () => {
-              (async () => {
-                await this.stationService.loadPunches(punch.productionDate, punch.shift);
-                console.log('Punch saved successfully');
-              })();
-            },
-            error: (error: any) => {
-              this.homeService.showAlert('Error', 'Failed to delete punch. server unreachable.');
-              console.error('Error deleting punch:', error);
-            },
-          });
+          const shiftTime = this.getUnixStartStop();
+          this.httpClient
+            .post<IPunchesResponse>(`/api/punches/savepunches?start=${shiftTime.startUnix}&stop=${shiftTime.stopUnix}`, { punches: data })
+            .subscribe({
+              next: () => {
+                (async () => {
+                  await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
+                  console.log('Punch saved successfully');
+                })();
+              },
+              error: (error: any) => {
+                this.homeService.showAlert('Error', 'Failed to delete punch. server unreachable.');
+                console.error('Error deleting punch:', error);
+              },
+            });
         }
       }
     });
@@ -342,8 +356,8 @@ export class PunchesComponent implements OnInit, AfterViewInit {
         }
         const productionDate = this.homeService.getUnixTimestampDateOnly(frm.dateControl ?? new Date());
         const shiftControlValue = this.frmGrp.get('shiftControl')?.value ?? 0;
-        const updateBy = this.authService.loadedUser?.username || 'system';
-        const updateAt = this.homeService.getUnixTimestampDateOnly(new Date());
+        const updatedBy = this.authService.loadedUser?.username || 'system';
+        const updatedAt = this.homeService.getUnixTimestampDateOnly(new Date());
 
         // Filter out punches for the selected date and shift
         // const filteredData = data.filter((p: IPunch) => {
@@ -351,22 +365,43 @@ export class PunchesComponent implements OnInit, AfterViewInit {
         // });
 
         const deletedData = data.map((p: IPunch) => {
-          return { ...p, deleted: 1, updateBy, updateAt };
+          return { ...p, deleted: 1, updatedBy, updatedAt };
         });
 
         // Save to backend
-        this.httpClient.post<IPunchesResponse>(`/api/punches/save/${productionDate}/${shiftControlValue}`, { punches: deletedData }).subscribe({
-          next: () => {
-            (async () => {
-              await this.stationService.loadPunches(productionDate, shiftControlValue);
-              console.log('Timesheet deleted successfully');
-            })();
-          },
-          error: (error: any) => {
-            console.error('Error deleting timesheet:', error);
-          },
-        });
+        const shiftTime = this.getUnixStartStop();
+        this.httpClient
+          .post<IPunchesResponse>(`/api/punches/savepunches?start=${shiftTime.startUnix}&stop=${shiftTime.stopUnix}`, { punches: deletedData })
+          .subscribe({
+            next: () => {
+              (async () => {
+                await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
+                console.log('Timesheet deleted successfully');
+              })();
+            },
+            error: (error: any) => {
+              console.error('Error deleting timesheet:', error);
+            },
+          });
       }
     });
   }
+
+  // savePunches(punches: IPunch[], shiftTime: { startUnix: number; stopUnix: number }) {
+  //       this.httpClient
+  //     .post<IPunchesResponse>(`/api/punches/savepunches?start=${shiftTime.startUnix}&stop=${shiftTime.stopUnix}`, { punches })
+  //     .subscribe({
+  //       next: () => {
+  //         // this.stationService.datasourcePunches.data = [...punches];
+  //         (async () => {
+  //           await this.stationService.loadPunches(shiftTime.startUnix, shiftTime.stopUnix);
+  //           console.log('Punch saved successfully');
+  //         })();
+  //       },
+  //       error: (error: any) => {
+  //         console.error('Error saving punch:', error);
+  //         this.homeService.showAlert('Error', 'Failed to save timesheet. server unreachable.');
+  //       },
+  //     });
+  // }
 }

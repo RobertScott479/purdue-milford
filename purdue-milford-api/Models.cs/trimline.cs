@@ -33,7 +33,7 @@ public class ITrimlineSummaryRes
 
 public class ITrimlineQASummaryRes
 {
-    [Required] public string Line { get; set; }
+    //[Required] public string Line { get; set; }
     [Required] public string Station { get; set; }
     [Required] public string Code { get; set; }
     [Required] public string Description { get; set; }
@@ -60,6 +60,7 @@ public class ITrimlineQASummaryRes
     [Required] public int AvgInspectionTime { get; set; }
     [Required] public int Weight { get; set; }
     [Required] public int TotalDefects { get; set; }
+    [Required] public int SampleCount { get; set; }
 }
 
 
@@ -95,6 +96,7 @@ public class QcResults
     public string finished_po { get; set; } = string.Empty;
     public double aqlScore { get; set; }
     public double aqlStandard { get; set; }
+    public int sampleCount { get; set; }
 }
 
 

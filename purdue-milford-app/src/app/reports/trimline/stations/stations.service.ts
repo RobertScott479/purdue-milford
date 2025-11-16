@@ -59,7 +59,7 @@ export class StationsService {
   stationNames: string[] = [];
 
   constructor(public trimlineService: TrimlineService, private httpClient: HttpClient, public homeService: HomeService) {
-    this.stationNames = this.initStations(0).map((s) => s.station);
+    this.stationNames = this.initStations().map((s) => s.station);
   }
 
   saveStations(data: StationInterface[]) {
@@ -127,7 +127,7 @@ export class StationsService {
         this.trimlineService.frmGroup.get('serverIndex')?.enable();
 
         if (res.stations.length === 0) {
-          this.datasourceStations.data = this.initStations(0);
+          this.datasourceStations.data = this.initStations();
         } else {
           this.datasourceStations.data = res.stations;
         }
@@ -144,7 +144,7 @@ export class StationsService {
     this.showSpinner.set(false);
   }
 
-  initStations(shift: number): StationInterface[] {
+  initStations(): StationInterface[] {
     const stationList: StationInterface[] = [];
     const lines = ['A', 'B'];
     lines.forEach((l) => {
@@ -159,17 +159,17 @@ export class StationsService {
     return stationList;
   }
 
-  initStationList(): StationInterface[] {
-    const stationList: StationInterface[] = [];
-    stationList.push(...this.initStations(1));
-    stationList.push(...this.initStations(2));
-    return stationList;
-  }
+  // initStationList(): StationInterface[] {
+  //   const stationList: StationInterface[] = [];
+  //   stationList.push(...this.initStations(1));
+  //   stationList.push(...this.initStations(2));
+  //   return stationList;
+  // }
 
-  async loadPunches(productionDateUnix: number, shift: number) {
+  async loadPunches(startUnix: number, stopUnix: number) {
     //const productionDate = this.homeService.getUnixTimestampDateOnly(date);
     const host = this.homeService.serverMap.getServersByGroup(['dbserver'])[0]?.url ?? '';
-    const endpoint = `${host}/api/punches/load/${productionDateUnix}/${shift}`;
+    const endpoint = `${host}/api/punches/loadpunches?start=${startUnix}&stop=${stopUnix}`;
 
     try {
       const res = await firstValueFrom(this.httpClient.get<IPunchesResponse>(endpoint, this.homeService.httpOptions));

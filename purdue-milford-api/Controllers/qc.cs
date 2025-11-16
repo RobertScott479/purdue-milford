@@ -91,7 +91,7 @@ namespace weightech.Controllers
                 json = JsonConvert.SerializeObject(tm);
                 HttpContext.Session.SetString(key, json);
                 var ts = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-                response.checkEvent = new CheckEventModel { cutter_number = 9007, bank = 0, cut = cuts[random.Next(0, 3)], index = 412, station = "I01", timestamp = ts, weight = 1.2000000476837158 };
+                response.checkEvent = new CheckEventModel { cutter_number = 9007, bank = 0, cut = cuts[random.Next(0, 1)], index = 412, station = "I01", timestamp = ts, weight = 1.2000000476837158 };
                 log.write($"getCheckEvent {tm.status}");
             }
             else
@@ -155,7 +155,8 @@ namespace weightech.Controllers
                     pieces = req.pieces != null ? JsonConvert.SerializeObject(req.pieces) : string.Empty,
                     finished_po = req.finishedPO ?? string.Empty,
                     aqlScore = req.aqlScore,
-                    aqlStandard = req.aqlStandard
+                    aqlStandard = req.aqlStandard,
+                    sampleCount = req.sampleCount
                 };
 
                 db.QcResults.Add(qcResult);
@@ -232,7 +233,8 @@ namespace weightech.Controllers
                         inspect_time = q.inspect_time,
                         weight = q.weight,
                         aqlScore = q.aqlScore,
-                        aqlStandard = q.aqlStandard
+                        aqlStandard = q.aqlStandard,
+                        sampleCount = q.sampleCount
                     })
                     .ToList();
 
@@ -273,7 +275,9 @@ namespace weightech.Controllers
                         avgInspectionTime = g.Average(x => x.inspect_time),
                         totalWeight = g.Sum(x => x.weight),
                         avgAqlScore = g.Average(x => x.aqlScore),
-                        avgAqlStandard = g.Average(x => x.aqlStandard)
+                        avgAqlStandard = g.Average(x => x.aqlStandard),
+                        sampleCount = g.Sum(x => x.sampleCount)
+
                     };
                 }).ToList();
 
@@ -293,7 +297,7 @@ namespace weightech.Controllers
                 // Map to response model
                 var response = grouped.Select(r => new ITrimlineQASummaryRes
                 {
-                    Line = r.line,
+                    //Line = r.line,
                     Station = r.station,
                     Code = r.product,
                     Description = !string.IsNullOrEmpty(r.product) && products.ContainsKey(r.product) ? products[r.product] : "",
@@ -319,7 +323,8 @@ namespace weightech.Controllers
                     Defects10 = r.totalDefects10,
                     AvgInspectionTime = (int)r.avgInspectionTime,
                     Weight = (int)r.totalWeight,
-                    TotalDefects = r.totalDefects
+                    TotalDefects = r.totalDefects,
+                    SampleCount = r.sampleCount
                 }).ToList();
 
                 return Ok(response);
@@ -342,44 +347,44 @@ namespace weightech.Controllers
             return Ok(res);
         }
 
-        [HttpGet("getWeightSSE")]
-        public async Task GetWeightSSE()
-        {
-            try
-            {
-                // await Task.Delay(10000);
-                log.write("GetWeightSSE Started.");
-                Response.Headers.Add("Content-Type", "text/event-stream");
-                Response.Headers.Add("Connection", "keep-alive");
-                Response.Headers.Add("Cache-Control", "no-cache");
-                //  Response.Headers.Add("X-Accel-Buffering", "no");
-                var random = new Random();
-                var id = 0;
-                PieceWightModel payload = new PieceWightModel { weight = random.Next(5, 50) };
-                var json = JsonConvert.SerializeObject(payload);
-                await Response.WriteAsync($"data: {json}\nid:{++id}\n\n");
-                await Response.Body.FlushAsync();
+        // [HttpGet("getWeightSSE")]
+        // public async Task GetWeightSSE()
+        // {
+        //     try
+        //     {
+        //         // await Task.Delay(10000);
+        //         log.write("GetWeightSSE Started.");
+        //         Response.Headers.Add("Content-Type", "text/event-stream");
+        //         Response.Headers.Add("Connection", "keep-alive");
+        //         Response.Headers.Add("Cache-Control", "no-cache");
+        //         //  Response.Headers.Add("X-Accel-Buffering", "no");
+        //         var random = new Random();
+        //         var id = 0;
+        //         PieceWightModel payload = new PieceWightModel { weight = random.Next(5, 50) };
+        //         var json = JsonConvert.SerializeObject(payload);
+        //         await Response.WriteAsync($"data: {json}\nid:{++id}\n\n");
+        //         await Response.Body.FlushAsync();
 
-                while (!HttpContext.RequestAborted.IsCancellationRequested)
-                {
-                    payload.weight = random.Next(5, 50);
-                    json = JsonConvert.SerializeObject(payload);
-                    var packet = $"data: {json}\nid:{++id}\n\n";
-                    await Response.WriteAsync(packet);
-                    await Response.Body.FlushAsync();
-                    await Task.Delay(2000);
-                }
-                log.write("GetWeightSSE canceled.");
-            }
-            catch (TaskCanceledException e)
-            {
-                log.write(e.Message + " " + e.InnerException?.Message);
-            }
-            catch (Exception e)
-            {
-                log.write(e.Message + " " + e.InnerException?.Message);
-            }
-        }
+        //         while (!HttpContext.RequestAborted.IsCancellationRequested)
+        //         {
+        //             payload.weight = random.Next(5, 50);
+        //             json = JsonConvert.SerializeObject(payload);
+        //             var packet = $"data: {json}\nid:{++id}\n\n";
+        //             await Response.WriteAsync(packet);
+        //             await Response.Body.FlushAsync();
+        //             await Task.Delay(2000);
+        //         }
+        //         log.write("GetWeightSSE canceled.");
+        //     }
+        //     catch (TaskCanceledException e)
+        //     {
+        //         log.write(e.Message + " " + e.InnerException?.Message);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         log.write(e.Message + " " + e.InnerException?.Message);
+        //     }
+        // }
     }
 
 }
