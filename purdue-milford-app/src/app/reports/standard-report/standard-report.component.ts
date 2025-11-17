@@ -61,14 +61,14 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
     { column: 'posAqlScore', name: 'POS AQL', format: '1.0-2', footerfield: true },
     { column: 'in_lbs', name: 'In Pounds', format: '1.0-0', footerfield: false },
     { column: 'out_lbs', name: 'Out Pounds', format: '1.0-0', footerfield: true },
-    { column: 'yield', name: 'Yield', format: '1.0-2', footerfield: true },
+    { column: 'yield', name: 'Yield', format: '1.0-2', footerfield: false },
     { column: 'standardYield', name: 'STD Yield', format: '1.0-2', footerfield: true },
     { column: 'posYield', name: 'POS Yield', format: '1.0-2', footerfield: true },
 
     { column: 'total_lbs', name: 'Total Pounds', format: '1.0-0', footerfield: true },
     { column: 'overall_yield', name: 'Overall Yield', format: '1.0-2', footerfield: true },
-    { column: 'hours', name: 'Hours', format: '1.0-2', footerfield: true },
-    { column: 'ppmh', name: 'PPMH', format: '1.0-0', footerfield: true },
+    { column: 'hours', name: 'Hours', format: '1.0-2', footerfield: false },
+    { column: 'ppmh', name: 'PPMH', format: '1.0-0', footerfield: false },
     { column: 'sppmh', name: 'STD PPMH', format: '1.0-2', footerfield: true },
     { column: 'posPpmh', name: 'POS PPMH', format: '1.0-2', footerfield: true },
     { column: 'pcpm', name: 'PcPM', format: '1.0-0', footerfield: true },
@@ -186,7 +186,9 @@ export class StandardReportComponent implements OnInit, AfterViewInit, OnDestroy
               cols.push(formattedValue);
             }
           } else {
-            cols.push(value);
+            //if value contains a comma wrap in quotes
+            const valueStr = value.toString();
+            cols.push(valueStr.includes(',') ? `"${valueStr}"` : valueStr);
             if (!value) {
               //  console.log('missing value: ' + dc);
             }

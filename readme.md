@@ -1,5 +1,5 @@
 # Purdue Milford
-#### build 9, 11/16/2025
+#### build 10, 11/16/2025
 
 ### Reports:
 
@@ -85,3 +85,4 @@
 - reports and setup(cuts,cutters,punches) are centralize on dbserver.
 - qc station operation is all local, including calls to loademployees, loadcuts, getcheckEvent and saveCheckEvent. 
 - qc Teguar will need to store a local copy of cuts and employees tables in case the network is down and a call to the dbserver cant be made.
+- build 10 allows for commas in cutter names.  the export will wrap the names in double quotes to prevent parsing the names.

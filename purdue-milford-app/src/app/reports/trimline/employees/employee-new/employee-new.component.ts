@@ -71,7 +71,7 @@ export class EmployeeNewComponent implements OnInit, OnDestroy {
   ) {
     this.formGrp = this.fb.group({
       cutter_number: [0, Validators.required],
-      name: ['', [Validators.required, Validators.pattern(/^((?!,).)*$/m)]],
+      name: ['', [Validators.required]], //, Validators.pattern(/^((?!,).)*$/m)
       role: ['', [Validators.required]],
       enabled: [true],
       shift: [this.employeeService.frmGrpEmployeeFilters.get('shift').value, Validators.required],

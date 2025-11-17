@@ -5,7 +5,13 @@
 10.216.36.205   milford-db
 
 
+Build 10, rss, 11/17/2025
+allow for commas in the cutter names.  on the export names with commas will be wrapped in double quotes to prevent parsing.
+
+
 Build 9, rss, 11/16/2025
 reports and setup(cuts,cutters,punches) are centralize on dbserver.
 station enable/disable and qc station operation are all local, including calls to loademployees,loadcuts, getcheckEvent and saveCheckEvent. 
 QC Teguar will need to store a local copy of cuts and employees tables in case the network is down and a call to the dbserver cant be made.
+
+

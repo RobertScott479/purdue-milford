@@ -224,7 +224,7 @@ namespace weightech.Controllers
                     //  Line = "",
                     Station = "A01",
                     Cutter = 1,
-                    CutterName = "Maria",
+                    CutterName = " Arzate, Maria",
                     Code = "Downgrade",
                     Description = "GradeB Thighs",
                     In_lbs = 100,
