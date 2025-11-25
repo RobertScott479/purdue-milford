@@ -14,4 +14,5 @@ reports and setup(cuts,cutters,punches) are centralize on dbserver.
 station enable/disable and qc station operation are all local, including calls to loademployees,loadcuts, getcheckEvent and saveCheckEvent. 
 QC Teguar will need to store a local copy of cuts and employees tables in case the network is down and a call to the dbserver cant be made.
 
-
+Build 11, rss, 11/25/2025
+updated the shift times in serverMap.json
