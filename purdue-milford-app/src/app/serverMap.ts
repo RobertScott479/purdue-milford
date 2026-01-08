@@ -184,8 +184,8 @@ export class ServerMap {
       //   console.log('ServerMap already loaded as', this.serverMapMode);
       return;
     }
-    // this.serverMapMode = mode;
-    this.serverMapMode = 'demo'; //remove me for production.
+    this.serverMapMode = mode;
+    //this.serverMapMode = 'demo'; //remove me for production.
 
     const res = await this.httpClient.get<IAppConfig>(this.serverMapUrl).toPromise();
     if (!res) {

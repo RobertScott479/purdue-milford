@@ -16,3 +16,7 @@ QC Teguar will need to store a local copy of cuts and employees tables in case t
 
 Build 11, rss, 11/25/2025
 updated the shift times in serverMap.json
+
+Build 12, rss, 1/8/2026
+app was locked in demo mode.  this has been corrected.
+todo: renamed purdue to perdue???

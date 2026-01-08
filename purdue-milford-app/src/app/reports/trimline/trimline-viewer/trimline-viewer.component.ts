@@ -99,7 +99,7 @@ export class TrimlineViewerComponent {
   }
 
   get timeFrame() {
-    return this.trimlineService.frmGroup.get('timeframe')?.value ?? TimeFrame.Live;
+    return this.trimlineService.frmGroup.get('timeframe')?.value ?? TimeFrame.DateShift;
   }
 
   get shifts() {
